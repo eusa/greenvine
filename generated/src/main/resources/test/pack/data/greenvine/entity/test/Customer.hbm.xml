@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Customer"
+        entity-name="test.pack.data.greenvine.entity.test.Customer" 
+        table="TEST.TBL_CUSTOMER"
+        mutable="true">
+	    <composite-id name="personIdentity" class="test.pack.data.greenvine.entity.test.PersonIdentity">
+            <key-property name="firstName" column="FK_FIRST_NAME" type="string"/>
+            <key-property name="lastName" column="FK_LAST_NAME" type="string"/>
+            <generator class="foreign">
+                 <param name="property">person</param>
+            </generator>
+        </composite-id>
+        <property name="loyaltyPoints" type="integer">
+            <column name="LOYALTY_POINTS" not-null="true" sql-type="INTEGER" />
+        </property>
+		<one-to-one name="person" class="test.pack.data.greenvine.entity.test.Person" fetch="select" lazy="proxy" cascade="none" outer-join="auto" constrained="true" />
+        <set name="consignments" inverse="true" lazy="true" cascade="all" sort="natural" table="TEST.TBL_CONSIGNMENT">
+            <key>
+                <column name="FK_FIRST_NAME" not-null="true" />
+                <column name="FK_LAST_NAME" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.test.Consignment" />
+        </set>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Customer as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Customer as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

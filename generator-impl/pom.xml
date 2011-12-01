@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>project</artifactId>
+		<groupId>net.sourceforge.greenvine</groupId>
+		<version>0.5.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>generator-impl</artifactId>
+	<name>generator-impl</name>
+	<packaging>jar</packaging>
+	<dependencies>
+	
+		<!-- JUnit -->
+		<dependency>
+      		<groupId>junit</groupId>
+      		<artifactId>junit</artifactId>
+      		<version>4.8</version>
+			<scope>test</scope>
+    	</dependency>
+	
+	    <!-- Spring Context -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>3.0.6.RELEASE</version>
+		</dependency>
+		
+		<!-- Generator -->
+		<dependency>
+			<groupId>net.sourceforge.greenvine</groupId>
+			<artifactId>generator</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+		
+		<!-- Templates -->
+		<dependency>
+			<groupId>net.sourceforge.greenvine</groupId>
+			<artifactId>generator-templates</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+		
+		<!-- Reverse Engineer -->
+		<dependency>
+			<groupId>net.sourceforge.greenvine</groupId>
+			<artifactId>reverseengineer</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

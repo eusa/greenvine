@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+    
+        <!--  Database configuration -->
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property> 
+        <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
+      
+        <!-- Cache configuration -->
+        <property name="hibernate.cache.use_first_level_cache">true</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.SingletonEhCacheProvider</property>
+        <property name="net.sf.ehcache.configurationResourceName">/greenvine-ehcache.xml</property>   
+        <property name="hibernate.cache.use_structured_entries">true</property>
+        <property name="hibernate.cache.use_minimal_puts">false</property>
+        
+        <!-- Transaction configuration -->
+        <property name="hibernate.transaction.factory_class">org.springframework.orm.hibernate3.SpringTransactionFactory</property>      
+        
+        <!-- Debug logging of SQL statements -->
+        <property name="hibernate.show_sql">true</property>
+    
+        <!-- Enable Hibernate statistics generation -->
+        <property name="hibernate.generate_statistics">true</property>
+      
+        <!-- Mapping files -->
+        <mapping resource="test/pack/data/greenvine/entity/dbo/Contract.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/dbo/Desk.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/dbo/Employee.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/dbo/Group.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/dbo/Stand.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/dbo/Umbrella.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/dbo/User.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Activity.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Address.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Bug.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Consignment.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Customer.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/ParkingPermit.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/ParkingPermitPayment.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Passport.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Person.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Profile.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Timesheet.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Type.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/User.hbm.xml" />
+        <mapping resource="test/pack/data/greenvine/entity/test/Vehicle.hbm.xml" />
+        
+        <!--  L2 cache configuration -->
+        <class-cache class="test.pack.data.greenvine.entity.dbo.Contract" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.dbo.Desk" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.dbo.Employee" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.dbo.Group" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.dbo.Stand" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.dbo.Umbrella" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.dbo.User" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Activity" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Address" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Bug" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Consignment" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Customer" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.ParkingPermit" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.ParkingPermitPayment" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Passport" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Person" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Profile" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Timesheet" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Type" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.User" usage="read-write" /> 
+        <class-cache class="test.pack.data.greenvine.entity.test.Vehicle" usage="read-write" /> 
+        
+    </session-factory>
+</hibernate-configuration>

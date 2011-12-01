@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+    default-autowire="byName">
+
+#foreach ($catalog in $model.catalogs)    
+    <!-- ${catalog.name} Hibernate transaction manager  -->
+    <bean id="${catalog.name}HibernateTransactionManager" 
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    </bean>
+    
+    <!-- Hibernate SessionFactory -->
+    <bean id="${catalog.name}SessionFactory"
+        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref local="${catalog.name}DataSource" />
+        </property>
+        <property 
+            name="configLocation" 
+            value="classpath:${catalog.name}-hibernate.cfg.xml"/>
+    </bean>
+
+#end    
+</beans>

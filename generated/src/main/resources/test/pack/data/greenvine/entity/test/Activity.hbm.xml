@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Activity"
+        entity-name="test.pack.data.greenvine.entity.test.Activity" 
+        table="TEST.TBL_ACTIVITY"
+        mutable="true">
+	    <id name="activityId" type="integer">
+	        <column name="ACTIVITY_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" not-null="true" sql-type="VARCHAR(255)" />
+        </property>
+        <property name="hours" type="big_decimal">
+            <column name="HOURS" not-null="true" sql-type="DECIMAL(4, 1)" />
+        </property>
+		<many-to-one name="timesheet" class="test.pack.data.greenvine.entity.test.Timesheet" fetch="select" lazy="proxy" cascade="none" outer-join="auto">  
+         	<column name="FK_DATE" not-null="true" />
+         	<column name="FK_EMPLOYEE_ID" not-null="true" />
+        </many-to-one>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Activity as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Activity as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

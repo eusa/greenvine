@@ -1,0 +1,19 @@
+package ${comparatorType.packageName};
+
+import java.util.Comparator;
+import ${entityType};
+
+import javax.annotation.Generated;
+
+@Generated("net.sourceforge.greenvine.generator.impl.java.entity.EntityPropertyComparatorGenerator")
+public class ${comparatorType.className} implements Comparator<${entityType.className}> {
+
+    @Override
+	public int compare(${entityType.className} thisObj, ${entityType.className} thatObj) {
+        int cmp = thisObj.get${javaHelper.firstToUpperCase($propertyName)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($propertyName)}());
+        if (cmp != 0)
+            return cmp;
+        return thisObj.get${javaHelper.firstToUpperCase($entity.identity.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($entity.identity.name)}());
+	}
+	
+}

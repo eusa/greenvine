@@ -1,0 +1,41 @@
+DROP ALL OBJECTS;
+
+#foreach($schema in $database.schemaNames)
+CREATE SCHEMA "$schema";
+#end
+
+##create tables
+#foreach ($table in $database.tables)
+create table "${database.name}"."${table.name.schemaName}"."${table.name.objectName}" (
+#foreach($column in $table.columns)
+	"${column.name}" ${column.columnType}#if($column.specification) ${column.specification}#end#if($column.notNull) not null#end#if($velocityHasNext),
+#end 
+#end 
+
+);
+
+#end
+##create primary key constraints for tables
+#foreach ($table in $database.tables)
+#if ($table.primaryKey)
+alter table "${database.name}"."${table.name.schemaName}"."${table.name.objectName}"
+    add constraint "${table.primaryKey.name.schemaName}"."${table.primaryKey.name.objectName}" primary key (#foreach($column in $table.primaryKey.columns)"$column.name"#if($velocityHasNext),#end#end);
+
+#end
+#end
+##create unique constraints for tables
+#foreach ($table in $database.tables)
+#foreach ($uniqueKey in $table.uniqueKeys)
+alter table "${database.name}"."${table.name.schemaName}"."${table.name.objectName}"
+    add constraint "${uniqueKey.name.schemaName}"."${uniqueKey.name.objectName}" unique (#foreach($column in $uniqueKey.columns)"$column.name"#if($velocityHasNext),#end#end);
+
+#end
+#end
+##create foreign keys from relationships
+#foreach ($table in $database.tables)
+#foreach ($foreignKey in $table.importedForeignKeys)
+alter table "${database.name}"."${table.name.schemaName}"."${table.name.objectName}"
+    add constraint "${foreignKey.name.schemaName}"."${foreignKey.name.objectName}" foreign key (#foreach($columnConstraint in $foreignKey.columnConstraints)"$columnConstraint.referencingColumn.name"#if($velocityHasNext),#end#end) references "${database.name}"."${foreignKey.referencedTable.name.schemaName}"."${foreignKey.referencedTable.name.objectName}"(#foreach($columnConstraint in $foreignKey.columnConstraints)"${columnConstraint.referencedColumn.name}"#if($velocityHasNext),#end#end);
+
+#end
+#end

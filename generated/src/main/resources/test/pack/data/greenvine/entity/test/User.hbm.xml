@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.User"
+        entity-name="test.pack.data.greenvine.entity.test.User" 
+        table="TEST.TBL_USER"
+        mutable="true">
+	    <id name="username" type="string">
+	        <column name="USERNAME" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="password" type="string">
+            <column name="PASSWORD" not-null="true" sql-type="VARCHAR(50)" />
+        </property>
+		<one-to-one name="profile" class="test.pack.data.greenvine.entity.test.Profile" fetch="select" lazy="proxy" cascade="all" outer-join="auto" constrained="false" property-ref="user"/>
+        <set name="ownerBugs" inverse="true" lazy="true" cascade="all" sort="natural" table="TEST.TBL_BUGS">
+            <key>
+                <column name="OWNER" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.test.Bug" />
+        </set>
+        <set name="reporterBugs" inverse="true" lazy="true" cascade="all" sort="natural" table="TEST.TBL_BUGS">
+            <key>
+                <column name="REPORTER" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.test.Bug" />
+        </set>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.User as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.User as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

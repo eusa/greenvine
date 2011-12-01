@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Vehicle"
+        entity-name="test.pack.data.greenvine.entity.test.Vehicle" 
+        table="TEST.TBL_VEHICLE"
+        mutable="true">
+	    <id name="regNumber" type="string">
+	        <column name="REG_NUMBER" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="model" type="string">
+            <column name="MODEL" not-null="true" sql-type="VARCHAR(400)" />
+        </property>
+        <set name="parkingPermits" inverse="true" lazy="true" cascade="all" sort="natural" table="TEST.TBL_PARKING_PERMIT">
+            <key>
+                <column name="FK_REG_NUMBER" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.test.ParkingPermit" />
+        </set>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Vehicle as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Vehicle as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

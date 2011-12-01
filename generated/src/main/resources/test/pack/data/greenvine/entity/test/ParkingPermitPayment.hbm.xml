@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.ParkingPermitPayment"
+        entity-name="test.pack.data.greenvine.entity.test.ParkingPermitPayment" 
+        table="TEST.TBL_PARKING_PERMIT_PAYMENT"
+        mutable="true">
+	    <composite-id name="parkingPermitIdentity" class="test.pack.data.greenvine.entity.test.ParkingPermitIdentity">
+            <key-property name="date" column="FK_PARKING_PERMIT_DATE" type="date"/>
+            <key-property name="regNumber" column="FK_REG_NUMBER" type="string"/>
+            <generator class="foreign">
+                 <param name="property">parkingPermit</param>
+            </generator>
+        </composite-id>
+        <property name="paymentDate" type="timestamp">
+            <column name="PAYMENT_DATE" not-null="true" sql-type="TIMESTAMP" />
+        </property>
+		<one-to-one name="parkingPermit" class="test.pack.data.greenvine.entity.test.ParkingPermit" fetch="select" lazy="proxy" cascade="none" outer-join="auto" constrained="true" />
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.ParkingPermitPayment as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.ParkingPermitPayment as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

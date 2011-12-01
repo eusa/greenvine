@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.dbo.User"
+        entity-name="test.pack.data.greenvine.entity.dbo.User" 
+        table="DBO.TBL_USER"
+        mutable="true">
+	    <id name="userId" type="integer">
+	        <column name="USER_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <natural-id mutable="false">
+            <property name="username" type="string">
+                <column name="USERNAME" not-null="true" sql-type="VARCHAR(255)" />
+            </property>
+        </natural-id>
+        <property name="password" type="string">
+            <column name="PASSWORD" not-null="true" sql-type="VARCHAR(255)" />
+        </property>
+		<one-to-one name="employee" class="test.pack.data.greenvine.entity.dbo.Employee" fetch="select" lazy="proxy" cascade="all" outer-join="auto" constrained="false" property-ref="user"/>
+		<set name="groups" inverse="false" lazy="true" cascade="none" sort="natural" table="DBO.TBL_GROUP_USER">
+            <key>
+                <column name="FK_USER_ID" not-null="true" />
+            </key>
+            <many-to-many class="test.pack.data.greenvine.entity.dbo.Group">
+				<column name="FK_GROUP_ID" />
+            </many-to-many>    
+        </set>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.User as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.User as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

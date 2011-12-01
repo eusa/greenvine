@@ -1,0 +1,260 @@
+package ${entityType.packageName};
+
+#foreach($import in $imports)
+import ${import};
+#end
+#foreach($uniqueDependency in $uniqueDependencies)
+import ${uniqueDependency};
+import ${uniqueDependency}TestUtils;
+#end
+
+public class ${entityType.className}TestUtils {
+    
+    public static ${entityType.className} createDefaultInstance() {
+    
+        // Create new entity
+        ${entityType.className} create = new ${entityType.className}();
+                    
+        // Set identity
+        create.set${javaHelper.firstToUpperCase($identityName)}(getDefaultIdentity());
+#if($entity.simpleNaturalIdentity)
+        
+        // Set natural identity
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(getDefaultNaturalIdentity());
+#elseif($entity.componentNaturalIdentity)
+
+        // Set natural identity
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(getDefaultNaturalIdentity());
+#end        
+
+        // Populate simple properties
+#foreach($prop in $entity.simpleProperties)
+        create.set${javaHelper.firstToUpperCase($prop.name)}(${javaHelper.getDefaultDataForProperty($prop)});
+#end
+#if ($dependencies.size() > 0)
+                
+        // Populate dependencies
+#foreach($mapEntry in $dependencies.entrySet())
+        ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)} ${mapEntry.key} = ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)}TestUtils.createDefaultInstance();
+        create.set${javaHelper.firstToUpperCase($mapEntry.key)}($mapEntry.key);
+#end
+#end
+
+        // Return instance
+        return create;
+
+    }
+    
+    public static ${identityType.className} getDefaultIdentity() {
+    
+#if($identity.class.simpleName == "SimpleIdentityImpl")
+        return ${javaHelper.getDefaultDataForProperty($identity)};                
+#else
+#set ($complexIdentity = $identity)
+        ${identityType.className} ${entity.identity.name} = new ${identityType.className}();
+#foreach($property in $identity.simpleProperties) 
+        ${entity.identity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getDefaultDataForProperty($property)});
+#end
+#foreach($property in $identity.manyToOnes) 
+        ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)} ${property.name} = ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)}TestUtils.createDefaultInstance();
+        ${entity.identity.name}.set${javaHelper.firstToUpperCase($property.name)}($property.name);
+#end
+        return ${entity.identity.name};
+#end
+    
+    }
+
+#if($entity.simpleNaturalIdentity)
+    public static ${naturalIdentityType.className} getDefaultNaturalIdentity() {
+        return ${javaHelper.getDefaultDataForProperty($entity.simpleNaturalIdentity)}; 
+    }               
+#elseif ($entity.componentNaturalIdentity)
+    public static ${naturalIdentityType.className} getDefaultNaturalIdentity() {
+#set ($complexIdentity = $entity.componentNaturalIdentity)
+        ${naturalIdentityType.className} ${complexIdentity.name} = new ${naturalIdentityType.className}();
+#foreach($property in $complexIdentity.simpleProperties) 
+        ${complexIdentity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getDefaultDataForProperty($property)});
+#end
+#foreach($property in $complexIdentity.manyToOnes) 
+        ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)} ${property.name} = ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)}TestUtils.createDefaultInstance();
+        ${complexIdentity.name}.set${javaHelper.firstToUpperCase($property.name)}($property.name);
+#end
+        return ${complexIdentity.name};
+    }
+#end
+    
+    
+#if($identity.class.simpleName == "ComponentIdentityImpl")
+#set ($complexIdentity = $identity)    
+    public static void populateAssignedIdentityFields(${identityType.className} ${entity.identity.name}) {
+    
+#foreach($property in $complexIdentity.simpleProperties)
+#if ($property.keyGenerationStrategy.name()=="ASSIGNED") 
+        ${entity.identity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getDefaultDataForProperty($property)});
+#end
+#end
+#foreach($property in $identity.manyToOnes) 
+        ${javaHelper.firstToUpperCase($property.relatedEntity.name)} ${property.name} = ${javaHelper.firstToUpperCase($property.relatedEntity.name)}TestUtils.createDefaultInstance();
+        ${entity.identity.name}.set${javaHelper.firstToUpperCase($property.name)}($property.name);
+#end
+          
+    }
+#end
+    
+    public static ${entityType.className} createRandomInstance() {
+    
+        // create new entity
+        ${entityType.className} create = new ${entityType.className}();
+                    
+        // set identity
+        create.set${javaHelper.firstToUpperCase($identityName)}(getRandomIdentity());
+#if($entity.simpleNaturalIdentity)
+        
+        // Set natural identity
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(getRandomNaturalIdentity());
+#elseif($entity.componentNaturalIdentity)
+
+        // Set natural identity
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(getRandomNaturalIdentity());
+#end            
+        
+        // populate simple properties
+#foreach($prop in $entity.simpleProperties)
+        create.set${javaHelper.firstToUpperCase($prop.name)}(${javaHelper.getUpdateDataForProperty($prop)});
+#end
+#if ($dependencies.size() > 0)
+                
+        // populate dependencies
+#foreach($mapEntry in $dependencies.entrySet())
+        ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)} ${mapEntry.key} = ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)}TestUtils.createRandomInstance();
+        create.set${javaHelper.firstToUpperCase($mapEntry.key)}($mapEntry.key);
+#end
+#end
+
+        // return instance
+        return create;
+
+    }
+    
+    public static ${identityType.className} getRandomIdentity() {
+    
+#if($identity.class.simpleName == "SimpleIdentityImpl")
+        return ${javaHelper.getUpdateDataForProperty($identity)};                
+#else
+#set ($complexIdentity = $identity)
+        ${identityType.className} ${entity.identity.name} = new ${identityType.className}();
+#foreach($property in $complexIdentity.simpleProperties) 
+        ${entity.identity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getUpdateDataForProperty($property)});
+#end
+#foreach($property in $identity.manyToOnes) 
+        ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)} ${property.name} = ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)}TestUtils.createRandomInstance();
+        ${entity.identity.name}.set${javaHelper.firstToUpperCase($property.name)}($property.name);
+#end
+        return ${entity.identity.name};
+#end
+    
+    }
+
+#if($entity.simpleNaturalIdentity)
+    public static ${naturalIdentityType.className} getRandomNaturalIdentity() {
+        return ${javaHelper.getUpdateDataForProperty($entity.simpleNaturalIdentity)}; 
+    }               
+#elseif ($entity.componentNaturalIdentity)
+    public static ${naturalIdentityType.className} getRandomNaturalIdentity() {
+#set ($complexIdentity = $entity.componentNaturalIdentity)
+        ${naturalIdentityType.className} ${complexIdentity.name} = new ${naturalIdentityType.className}();
+#foreach($property in $complexIdentity.simpleProperties) 
+        ${complexIdentity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getUpdateDataForProperty($property)});
+#end
+#foreach($property in $complexIdentity.manyToOnes) 
+        ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)} ${property.name} = ${javaHelper.firstToUpperCase($property.relatedEntity.name.objectName)}TestUtils.createRandomInstance();
+        ${complexIdentity.name}.set${javaHelper.firstToUpperCase($property.name)}($property.name);
+#end
+        return ${complexIdentity.name};
+    }
+#end  
+    /**
+    * Creates a deep copy
+    * of the object including 
+    * all dependent fields. 
+    */
+    public static ${entityType.className} clone(${entityType.className} ${entity.name.objectName}){
+
+        ${entityType.className} _${entity.name.objectName} = new ${entityType.className}();
+        
+#if($identity.class.simpleName == "ComponentIdentityImpl")
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($identity.name)}() != null) {
+            ${identityType.className} ${identity.name} = ${entity.name.objectName}.get${javaHelper.firstToUpperCase($identity.name)}();
+            ${identityType.className} _${identity.name} = new ${identityType.className}();
+#foreach($property in $identity.simpleProperties)
+            _${identity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getQualifiedJavaType($property).getDefensiveCopyLiteral(${javaHelper.getAccessorForField($identity.name, $property.name)})});
+#end
+#foreach($property in $identity.manyToOnes)
+        if (${identity.name}.get${javaHelper.firstToUpperCase($property.name)}() != null) {
+            _${identity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.firstToUpperCase($property.relation.parentEntity.name.objectName)}TestUtils.clone(${identity.name}.get${javaHelper.firstToUpperCase($property.name)}()));
+        }
+#end
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($identity.name)}(_${identity.name});
+        }
+#else
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($identity.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($identity.name)}(${entity.name.objectName}.get${javaHelper.firstToUpperCase($identity.name)}());   
+        }
+#end
+#if($entity.naturalIdentity)
+#if($entity.componentNaturalIdentity)
+#set($identity = $entity.componentNaturalIdentity)
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($identity.name)}() != null) {
+            ${naturalIdentityType.className} ${identity.name} = ${entity.name.objectName}.get${javaHelper.firstToUpperCase($identity.name)}();
+            ${naturalIdentityType.className} _${identity.name} = new ${naturalIdentityType.className}();
+#foreach($property in $identity.simpleProperties)
+            _${identity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getQualifiedJavaType($property).getDefensiveCopyLiteral(${javaHelper.getAccessorForField($identity.name, $property.name)})});
+#end
+#foreach($property in $identity.manyToOnes)
+        if (${identity.name}.get${javaHelper.firstToUpperCase($property.name)}() != null) {
+            _${identity.name}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.firstToUpperCase($property.relation.parentEntity.name.objectName)}TestUtils.clone(${identity.name}.get${javaHelper.firstToUpperCase($property.name)}()));
+        }
+#end
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($identity.name)}(_${identity.name});
+        }
+#elseif ($entity.simpleNaturalIdentity)
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(${entity.name.objectName}.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}());   
+        }
+#else
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(${javaHelper.firstToUpperCase($entity.naturalIdentity.relation.parentEntity.name.objectName)}TestUtils.clone(${entity.name.objectName}.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}()));
+        }
+#end
+#end
+#foreach($property in $entity.simpleProperties)
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getQualifiedJavaType($property).getDefensiveCopyLiteral(${javaHelper.getAccessorForField($entity.name, $property.name)})});
+        }
+#end
+#if ($entity.constrainedIdentity)
+#set ($property = $entity.constrainedIdentity)
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.firstToUpperCase($property.relation.parentEntity.name.objectName)}TestUtils.clone(${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}()));
+        }
+#end
+#foreach($property in $entity.oneToOneChilds)
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.firstToUpperCase($property.relation.parentEntity.name.objectName)}TestUtils.clone(${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}()));
+        }
+#end
+#foreach($property in $entity.oneToOneParents)
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.firstToUpperCase($property.relation.childEntity.name.objectName)}TestUtils.clone(${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}()));
+        }
+#end
+#foreach($property in $entity.manyToOnes)
+        if (${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}() != null) {
+            _${entity.name.objectName}.set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.firstToUpperCase($property.relation.parentEntity.name.objectName)}TestUtils.clone(${entity.name.objectName}.get${javaHelper.firstToUpperCase($property.name)}()));
+        }
+#end
+
+        return _${entity.name.objectName};
+    }
+    
+}

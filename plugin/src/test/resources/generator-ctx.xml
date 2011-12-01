@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+  
+    <bean id="threadConfig" class="net.sourceforge.greenvine.generator.runner.impl.ThreadConfig">
+        <property name="generatorThreads" value="2" />
+        <property name="templateThreads" value="2" />
+    </bean>
+    
+    <bean id="sourceConfig" class="net.sourceforge.greenvine.generator.runner.impl.SourceConfig">
+        <property name="basePackage" value="test.pack" />
+        <property name="dataPackage" value="data" />
+        <property name="daoSuffix" value="Dao" />
+    </bean>
+ 
+    <!-- Template factory -->
+    <bean id="templateFactory" class="net.sourceforge.greenvine.generator.template.impl.VelocityTemplateFactory" />
+
+    <!-- Entity generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/EntityTemplate.vm" />
+        <property name="exportDirectory" value="src/main/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.EntityGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+     
+    <!-- Component identity generator --> 
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/EntityComponentIdentityTemplate.vm" />
+        <property name="exportDirectory" value="src/main/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.EntityComponentIdentityGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Component natural identity generator --> 
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/EntityComponentIdentityTemplate.vm" />
+        <property name="exportDirectory" value="src/main/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.EntityComponentNaturalIdentityGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Entity test utils generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/EntityTestUtilsTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.EntityTestUtilsGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Entity unit test generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/EntityUnitTestTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.EntityUnitTestGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+  
+    <!-- JPA persistence.xml generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/jpa/JpaPersistenceConfigTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/META-INF/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.jpa.JpaPersistenceConfigGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+  
+    <!-- Hibernate mapping generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/hibernate/HibernateEntityMappingTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.hibernate.HibernateEntityMappingGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+  
+    <!-- Hibernate config generators -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/hibernate/HibernateConfigTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.hibernate.HibernateConfigGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Ehcache config generators -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/hibernate/HibernateEhcacheConfigTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.hibernate.HibernateEhcacheConfigGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+
+    <!-- Unitils properties generators -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/unitils/UnitilsPropertiesH2Template.vm" />
+        <property name="exportDirectory" value="src/test/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.unitils.UnitilsPropertiesGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Hibernate entity integration test case -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/hibernate/HibernateEntityIntegrationTestTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.hibernate.HibernateEntityIntegrationTestGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Hibernate entity integration test case -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/jpa/JpaEntityIntegrationTestTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.jpa.JpaEntityIntegrationTestGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring datasource context generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/spring/SpringDatasourceContextTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.spring.SpringDatasourceContextGenerator"/>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+
+    <!-- Spring context generator for Hibernate -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/springhibernate/SpringHibernateContextTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.springhibernate.SpringHibernateContextGenerator"/>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+
+    <!-- Spring context generator for JPA -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/entity/springjpa/SpringJpaContextTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.entity.springjpa.SpringJpaContextGenerator"/>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+
+    <!-- DAO interface generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/DaoInterfaceTemplate.vm" />
+        <property name="exportDirectory" value="src/main/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.DaoInterfaceGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring/Hibernate DAO implementation generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springhibernate/SpringHibernateDaoImplTemplate.vm" />
+        <property name="exportDirectory" value="src/main/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springhibernate.SpringHibernateDaoImplGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring/JPA DAO implementation generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springjpa/SpringJpaDaoImplTemplate.vm" />
+        <property name="exportDirectory" value="src/main/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springjpa.SpringJpaDaoImplGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring/Hibernate DAO unit test case generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springhibernate/SpringHibernateDaoImplUnitTestTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springhibernate.SpringHibernateDaoImplUnitTestGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring/Hibernate DAO integration test case generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springhibernate/SpringHibernateDaoImplIntegrationTestTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springhibernate.SpringHibernateDaoImplIntegrationTestGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring/JPA DAO unit test case generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springjpa/SpringJpaDaoImplUnitTestTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springjpa.SpringJpaDaoImplUnitTestGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring/JPA DAO integration test case generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springjpa/SpringJpaDaoImplIntegrationTestTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springjpa.SpringJpaDaoImplIntegrationTestGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- DbUnbit data generator for integration tests -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/data/dbunit/DataTemplate.vm" />
+        <property name="exportDirectory" value="src/test/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.data.dbunit.IntegrationTestDataGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- DbUnbit data generator for functional tests -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/data/dbunit/DataTemplate.vm" />
+        <property name="exportDirectory" value="src/test/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.data.dbunit.FunctionalTestDataGenerator">
+                 <!-- Number of rows for each table to generate -->
+                 <constructor-arg><value>100</value></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring context generator for Hibernate DAO -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springhibernate/SpringHibernateDaoContextTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springhibernate.SpringHibernateDaoContextGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Spring context generator for JPA DAO -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/dao/springjpa/SpringJpaDaoContextTemplate.vm" />
+        <property name="exportDirectory" value="src/main/resources/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.dao.springjpa.SpringJpaDaoContextGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Database generator for H2 -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/database/DatabaseH2Template.vm" />
+        <property name="exportDirectory" value="src/main/database/h2/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.database.DatabaseGenerator"/>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Database generator for MySQL -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/database/DatabaseMySQLTemplate.vm" />
+        <property name="exportDirectory" value="src/main/database/mysql/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.database.DatabaseGenerator"/>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+    
+    <!-- Maven POM generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/maven/PomTemplate.vm" />
+        <property name="exportDirectory" value="/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.maven.PomGenerator">
+                <constructor-arg><ref bean="sourceConfig" /></constructor-arg>
+            </bean>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+
+    <!-- Special class for H2 support in Unitils generator -->
+    <bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+        <property name="templatePath" value="net/sourceforge/greenvine/generator/impl/java/unitils/UnitilsH2DbSupportTemplate.vm" />
+        <property name="exportDirectory" value="src/test/java/" />
+        <property name="generator">
+            <bean class="net.sourceforge.greenvine.generator.impl.java.unitils.UnitilsH2DbSupportGenerator"/>
+        </property>
+        <property name="templateFactory" ref="templateFactory" />
+    </bean>
+
+</beans>

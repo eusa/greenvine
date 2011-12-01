@@ -1,0 +1,170 @@
+package ${identityType.packageName};
+
+import java.io.Serializable;
+#foreach($import in $javaHelper.getAllImportsForIdentityComponent($complexIdentity))
+import $import;
+#end
+
+## Dirty but effective - review later
+import javax.persistence.*;
+import javax.annotation.Generated;
+
+@Generated("net.sourceforge.greenvine.generator.impl.java.entity.EntityComponentIdentityGenerator")
+@Embeddable    
+public class ${identityType.className} implements Comparable<${identityType.className}>, Serializable {
+
+private static final long serialVersionUID = ${javaHelper.generateSerialVersionUID()}L;
+
+## Simple property fields
+#foreach($property in $complexIdentity.simpleProperties)        
+    /**
+    * ${property.name} property
+    */
+    private ${javaHelper.getQualifiedJavaType($property).className} ${property.name};
+
+#end
+## Many-to-one property fields
+#foreach($property in $complexIdentity.manyToOnes)        
+    /**
+    * ${property.name} property
+    */
+    private ${javaHelper.getEntityType($property.relatedEntity).className} ${property.name};
+
+#end      
+##Simple property accessors and mutators
+#foreach($property in $complexIdentity.simpleProperties)
+#set($propertyType = $javaHelper.getQualifiedJavaType($property))         
+    /**
+    * Accessor for ${property.name} field
+    * returns the value of the ${property.name} field
+    */
+    @Basic(fetch = FetchType.EAGER,#if($property.notNull) optional = false#else optional = true#end)
+#if($property.column)
+    @Column(name = "$property.column.name", #if($property.notNull) nullable = false#else nullable = true#end, columnDefinition = "${property.column.columnType}${property.column.specification}")
+#end
+#if($propertyType.class.simpleName == "TemporalJavaType")
+    @Temporal(TemporalType.${propertyType.temporalType})
+#end
+    public ${javaHelper.getQualifiedJavaType($property).className} get${javaHelper.firstToUpperCase($property.name)}() {
+        return this.${property.name};
+    }
+              
+    /**
+    * Mutator for the ${property.name} field
+    * @param  sets the value of the ${property.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($property.name)}(${javaHelper.getQualifiedJavaType($property).className} ${property.name}) {
+        this.${property.name} = ${property.name};
+    }    
+
+#end
+##Many-to-one property accessors and mutators
+#foreach($manyToOne in $complexIdentity.manyToOnes)        
+    /**
+    * Accessor for ${manyToOne.name} field
+    * returns the value of the ${manyToOne.name} field
+    */
+    @ManyToOne(targetEntity = ${javaHelper.getRelatedEntityType($manyToOne)}.class, fetch = FetchType.LAZY, #if($manyToOne.notNull) optional = false#else optional = true#end)
+    @JoinColumns( {
+#foreach($col in $manyToOne.relation.foreignKey.columnConstraints)
+        @JoinColumn(name = "$col.referencingColumn.name", referencedColumnName = "$col.referencedColumn.name", #if($manyToOne.notNull) nullable = false#else nullable = true#end)#if($velocityHasNext), 
+#end
+#end
+
+    } )
+    public ${javaHelper.getEntityType($manyToOne.relatedEntity).className} get${javaHelper.firstToUpperCase($manyToOne.name)}() {
+        return this.${manyToOne.name};
+    }
+              
+    /**
+    * Mutator for the ${manyToOne.name} field
+    * @param  sets the value of the ${manyToOne.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($manyToOne.name)}(${javaHelper.getEntityType($manyToOne.relatedEntity)} ${manyToOne.name}) {
+        this.${manyToOne.name} = ${manyToOne.name};
+    }    
+
+#end
+##equals() method
+    @Override
+    public boolean equals(Object that) {
+        
+        // Check references for equality
+        if ( this == that ) return true;
+        
+        // Check for null
+        if (that == null) return false;
+
+        // Check candidate is an instance of ${identityType.className}
+        if ( !(that instanceof ${identityType.className}) ) return false;
+
+        // Safely cast to ${javaHelper.firstToUpperCase($complexIdentity.name)}
+        ${identityType.className} thatObj = (${identityType.className})that;
+
+        // Equality is based on all property values
+        return
+#foreach($property in $complexIdentity.simpleProperties)
+            this.get${javaHelper.firstToUpperCase($property.name)}() == null ? thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null : this.get${javaHelper.firstToUpperCase($property.name)}().equals(thatObj.get${javaHelper.firstToUpperCase($property.name)}())&&
+#end
+#foreach($property in $complexIdentity.manyToOnes)
+            this.get${javaHelper.firstToUpperCase($property.name)}() == null ? thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null : this.get${javaHelper.firstToUpperCase($property.name)}().equals(thatObj.get${javaHelper.firstToUpperCase($property.name)}())&&
+#end
+            true;
+    }
+
+##hashCode() method
+    @Override
+    public int hashCode() {
+        
+        int hash = 7;
+        
+        // Hash is based on all properties
+#foreach($property in $complexIdentity.simpleProperties)
+        hash = 31 * hash + (null == get${javaHelper.firstToUpperCase($property.name)}() ? 0 : get${javaHelper.firstToUpperCase($property.name)}().hashCode());
+#end
+#foreach($property in $complexIdentity.manyToOnes)
+        hash = 31 * hash + (null == get${javaHelper.firstToUpperCase($property.name)}() ? 0 : get${javaHelper.firstToUpperCase($property.name)}().hashCode());
+#end
+
+        return hash;
+    }
+        
+##toString() method
+    @Override        
+    public String toString() {
+        String str = "${javaHelper.firstToUpperCase($complexIdentity.name)}:";
+#foreach($property in $complexIdentity.simpleProperties)
+        str +=  ("${property.name} = " + (null == get${javaHelper.firstToUpperCase($property.name)}() ? "null" : get${javaHelper.firstToUpperCase($property.name)}().toString())) + ", ";
+#end
+#foreach($property in $complexIdentity.manyToOnes)
+        str +=  ("${property.name} = " + (null == get${javaHelper.firstToUpperCase($property.name)}() ? "null" : get${javaHelper.firstToUpperCase($property.name)}().toString())) + ", ";
+#end
+        return str.substring(0, str.lastIndexOf(", "));
+    }
+    
+##compareTo() method    
+    @Override
+    public int compareTo(${identityType.className} thatObj) {
+    
+        int cmp;
+
+#foreach($property in $complexIdentity.simpleProperties)
+        cmp = this.get${javaHelper.firstToUpperCase($property.name)}() == null ?
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 0 : -1) :
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 1 : this.get${javaHelper.firstToUpperCase($property.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($property.name)}())
+                );
+        if (cmp !=  0)
+            return cmp;
+#end
+#foreach($property in $complexIdentity.manyToOnes)
+        cmp = this.get${javaHelper.firstToUpperCase($property.name)}() == null ?
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 0 : -1) :
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 1 : this.get${javaHelper.firstToUpperCase($property.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($property.name)}())
+                );
+        if (cmp !=  0)
+            return cmp;
+#end
+
+        return cmp;    
+    }   
+}

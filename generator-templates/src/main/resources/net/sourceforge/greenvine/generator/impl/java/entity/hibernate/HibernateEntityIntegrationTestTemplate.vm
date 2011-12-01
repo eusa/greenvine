@@ -1,0 +1,178 @@
+package ${entityType.packageName};
+
+import java.util.List;
+#foreach($import in $imports)
+import ${import};
+#end
+
+import org.junit.Assert;
+#if ($containsBinary)
+import org.junit.Ignore;
+#end
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.unitils.UnitilsJUnit4TestClassRunner;
+import org.unitils.dbunit.annotation.DataSet;
+import org.unitils.dbunit.annotation.ExpectedDataSet;
+import org.unitils.orm.hibernate.annotation.HibernateSessionFactory;
+
+import ${entityType};
+import ${entityType}TestUtils;
+#foreach($uniqueDependency in $uniqueDependencies)
+import ${javaHelper.getEntityType($uniqueDependency)};
+import ${javaHelper.getEntityType($uniqueDependency)}TestUtils;
+#end
+
+@HibernateSessionFactory("hibernate.cfg.xml")
+@RunWith(UnitilsJUnit4TestClassRunner.class)
+public class ${entityType.className}HibernateIntegrationTest {
+    
+    @HibernateSessionFactory
+    private SessionFactory factory;
+#if (!$entity.readOnly) 
+   
+    @Test
+#if ($containsBinary)
+	@Ignore
+#end
+    @DataSet("${entityType.className}BeforeCreateDataSet.xml")
+    @ExpectedDataSet("${entityType.className}AfterCreateDataSet.xml")
+    public void testCreate${entityType.className}() throws Exception {
+    
+        // Create new entity
+        ${entityType.className} create = new ${entityType.className}();
+#if ($entity.simpleIdentity)
+#if ($entity.simpleIdentity.keyGenerationStrategy)
+#if ($entity.simpleIdentity.keyGenerationStrategy.name() == "ASSIGNED")
+                    
+        // Set identity
+        create.set${javaHelper.firstToUpperCase($entity.identity.name)}(${javaHelper.getDefaultDataForProperty($entity.simpleIdentity)});
+#end
+#end
+#elseif ($entity.componentIdentity)
+
+        // Set identity
+        ${identityType.className} ${entity.identity.name} = new ${identityType.className}();
+        ${entityType.className}TestUtils.populateAssignedIdentityFields($entity.identity.name);
+        create.set${javaHelper.firstToUpperCase($entity.identity.name)}($entity.identity.name);
+         
+#end
+#if ($entity.naturalIdentity)
+
+        // Set natural identity
+#if ($entity.simpleNaturalIdentity) 
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(${javaHelper.getDefaultDataForProperty($entity.simpleNaturalIdentity)});
+#elseif ($entity.componentNaturalIdentity)
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(${entityType.className}TestUtils.getDefaultNaturalIdentity());
+#end
+#end 
+#if ($entity.simplePropertyCount > 0)      
+  
+        // populate simple properties
+#foreach($prop in $entity.simpleProperties)
+#if($prop.notNull)
+        create.set${javaHelper.firstToUpperCase($prop.name)}(${javaHelper.getDefaultDataForProperty($prop)});
+#end
+#end
+#end
+        // Get Hibernate Session
+        Session session = factory.getCurrentSession();
+#if ($dependencies.size() > 0)
+                
+        // populate dependencies
+#foreach($mapEntry in $dependencies.entrySet())
+        ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)} ${mapEntry.key} = (${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)})session.get(${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)}.class, ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)}TestUtils.getDefaultIdentity());
+        create.set${javaHelper.firstToUpperCase($mapEntry.key)}($mapEntry.key);
+#end
+#end
+
+        // create in database        
+        session.persist(create); 
+
+    }
+    
+    @Test
+#if ($containsBinary)
+	@Ignore
+#end
+    @DataSet("${entityType.className}BeforeUpdateDataSet.xml")
+    @ExpectedDataSet("${entityType.className}AfterUpdateDataSet.xml")
+    public void testUpdate${entityType.className}() throws Exception {
+        
+        // Get Hibernate Session
+        Session session = factory.getCurrentSession();
+        
+        // Load and modify
+        ${entityType.className} result = (${entityType.className})session.get(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+#foreach($prop in $entity.simpleProperties)
+#if($prop.notNull)
+        result.set${javaHelper.firstToUpperCase($prop.name)}(${javaHelper.getUpdateDataForProperty($prop)});
+#end
+#end
+        // update
+        session.save(result);
+
+    }
+    
+    @Test
+    @DataSet("${entityType.className}BeforeDeleteDataSet.xml")
+    @ExpectedDataSet("${entityType.className}AfterDeleteDataSet.xml")
+    public void testRemove${entityType.className}() throws Exception {
+        
+        // Get Hibernate Session
+        Session session = factory.getCurrentSession();
+        
+        // delete
+        ${entityType.className} result = (${entityType.className})session.get(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        session.delete(result);
+
+    }
+#end
+    
+    @Test
+    @DataSet("${entityType.className}FindAllDataSet.xml")
+    @SuppressWarnings("unchecked")
+    public void testFindAll${entityType.className}s() throws Exception {
+
+        // Get Hibernate Session
+        Session session = factory.getCurrentSession();
+        
+        // Create query
+        Query query = session.createQuery("from ${entityType}");
+        
+        // Get results 
+        List<${entityType.className}> results = query.list();
+        
+        Assert.assertNotNull(results);
+        Assert.assertEquals(Integer.valueOf(100), Integer.valueOf(results.size()));
+    }
+
+
+	@Test
+	@DataSet("${entityType.className}FindDataSet.xml")
+    public void testFind${entityType.className}ByIdentity() throws Exception {
+    
+        // Get Hibernate Session
+        Session session = factory.getCurrentSession();
+        
+        // Get object from Hibernate
+        ${entityType.className} result  = (${entityType.className})session.get(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        
+        // Test properties
+        Assert.assertNotNull(result);
+#foreach($prop in $entity.simpleProperties)
+#set($propertyType = $javaHelper.getQualifiedJavaType($prop))  
+#if($propertyType.facetNames.contains("Binary"))
+        Assert.assertArrayEquals(${javaHelper.getDefaultDataForProperty($prop)}, result.get${javaHelper.firstToUpperCase($prop.name)}());
+#else
+        Assert.assertEquals(${javaHelper.getDefaultDataForProperty($prop)}, result.get${javaHelper.firstToUpperCase($prop.name)}());
+#end
+#end
+
+    }
+    
+}

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="target/xsd/dataset.xsd" 
+    xmlns:DBO="DBO"    
+    xmlns:TEST="TEST">
+    <DBO:TBL_USER PASSWORD="s" USERNAME="s" USER_ID="1" />
+    <DBO:TBL_EMPLOYEE DAILY_WORKING_HOURS="200.2" EMAIL="s" EMPLOYEE_ID="1" FIRST_NAME="t" FK_USER_ID="1" HOURLY_COST="200000000000000.0002" LAST_NAME="t" />
+</dataset>
+
+ 
+
+ 
+ 

@@ -1,0 +1,167 @@
+package ${daoImplType.packageName};
+
+import java.util.List;
+#foreach($import in $imports)
+import ${import};
+#end
+
+import org.junit.Assert;
+#if ($containsBinary)
+import org.junit.Ignore;
+#end
+
+#if($dependencies.entrySet().size() > 0)
+import org.hibernate.Session;
+#end
+import org.hibernate.SessionFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.unitils.UnitilsJUnit4TestClassRunner;
+import org.unitils.dbunit.annotation.DataSet;
+import org.unitils.dbunit.annotation.ExpectedDataSet;
+import org.unitils.inject.annotation.InjectInto;
+import org.unitils.inject.annotation.TestedObject;
+import org.unitils.orm.hibernate.annotation.HibernateSessionFactory;
+
+import ${entityType};
+import ${entityType}TestUtils;
+#foreach($uniqueDependency in $uniqueDependencies)
+import ${javaHelper.getEntityType($uniqueDependency)};
+import ${javaHelper.getEntityType($uniqueDependency)}TestUtils;
+#end
+
+@HibernateSessionFactory("hibernate.cfg.xml")
+@RunWith(UnitilsJUnit4TestClassRunner.class)
+public class ${daoImplType.className}IntegrationTest {
+    
+    @TestedObject
+    private ${daoImplType.className} ${entity.name.objectName}Dao = null;
+
+#if($dependencies.entrySet().size() == 0)
+    @SuppressWarnings("unused")
+#end
+    @HibernateSessionFactory
+    @InjectInto(property = "sessionFactory")
+    private SessionFactory sessionFactory;
+    
+#if (!$entity.readOnly)  
+    @Test
+#if ($containsBinary)
+	@Ignore
+#end
+    @DataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}BeforeCreateDataSet.xml")
+    @ExpectedDataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}AfterCreateDataSet.xml")
+    public void testCreate${entityType.className}() throws Exception {
+    
+        // Create new entity
+        ${entityType.className} create = new ${entityType.className}();
+#if ($entity.simpleIdentity)
+#if ($entity.simpleIdentity.keyGenerationStrategy)
+#if ($entity.simpleIdentity.keyGenerationStrategy.name() == "ASSIGNED")
+                    
+        // Set identity
+        create.set${javaHelper.firstToUpperCase($entity.identity.name)}(${javaHelper.getDefaultDataForProperty($entity.simpleIdentity)});                
+#end
+#end
+#elseif ($entity.componentIdentity)
+
+        // Set identity
+        ${identityType.className} ${entity.identity.name} = new ${identityType.className}();
+        ${entityType.className}TestUtils.populateAssignedIdentityFields($entity.identity.name);
+        create.set${javaHelper.firstToUpperCase($entity.identity.name)}($entity.identity.name); 
+#end
+#if ($entity.naturalIdentity)
+
+        // Set natural identity
+#if ($entity.simpleNaturalIdentity) 
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(${javaHelper.getDefaultDataForProperty($entity.simpleNaturalIdentity)});
+#elseif ($entity.componentNaturalIdentity)
+        create.set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(${entityType.className}TestUtils.getDefaultNaturalIdentity());
+#end
+#end 
+#if ($entity.simplePropertyCount > 0)
+                 
+        // Populate simple properties
+#foreach($prop in $entity.simpleProperties)
+#if($prop.notNull)
+        create.set${javaHelper.firstToUpperCase($prop.name)}(${javaHelper.getDefaultDataForProperty($prop)});
+#end
+#end
+#end
+#if($dependencies.entrySet().size() > 0)
+
+        // Populate dependencies
+        Session session = sessionFactory.getCurrentSession();
+        
+#foreach($mapEntry in $dependencies.entrySet())
+        ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)} ${mapEntry.key} = (${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)})session.load(${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)}.class, ${javaHelper.firstToUpperCase($mapEntry.value.name.objectName)}TestUtils.getDefaultIdentity());
+        create.set${javaHelper.firstToUpperCase($mapEntry.key)}($mapEntry.key);
+#end
+#end
+
+        // Create in database                    
+        ${entity.name.objectName}Dao.create${entityType.className}(create);
+    
+    }
+    
+    @Test
+#if ($containsBinary)
+	@Ignore
+#end
+    @DataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}BeforeUpdateDataSet.xml")
+    @ExpectedDataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}AfterUpdateDataSet.xml")
+    public void testUpdate${entityType.className}() throws Exception {
+        
+        // Load entity and modify
+        ${entityType.className} update = ${entity.name.objectName}Dao.load${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+#foreach($prop in $entity.simpleProperties)
+#if($prop.notNull)
+        update.set${javaHelper.firstToUpperCase($prop.name)}(${javaHelper.getUpdateDataForProperty($prop)});
+#end
+#end
+
+        // Update entity
+        ${entity.name.objectName}Dao.update${entityType.className}(update);
+                    
+    }
+    
+    @Test
+    @DataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}BeforeDeleteDataSet.xml")
+    @ExpectedDataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}AfterDeleteDataSet.xml")
+    public void testRemove${entityType.className}() throws Exception {
+
+        // Delete by id
+        ${entity.name.objectName}Dao.remove${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+
+    }
+    
+#end
+    @Test
+    @DataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}FindAllDataSet.xml")
+    public void testFindAll${entityType.className}s() throws Exception {
+    
+        List<${entityType.className}> results = ${entity.name.objectName}Dao.findAll${entityType.className}s();
+        Assert.assertNotNull(results);
+        Assert.assertEquals(Integer.valueOf(100), Integer.valueOf(results.size()));
+        
+    }
+
+
+    @Test
+    @DataSet("/${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}FindDataSet.xml")
+    public void testLoad${entityType.className}ByIdentity() throws Exception {
+
+        ${entityType.className} result = ${entity.name.objectName}Dao.load${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+        Assert.assertNotNull(result);
+#foreach($prop in $entity.simpleProperties)
+#set($propertyType = $javaHelper.getQualifiedJavaType($prop))  
+#if($propertyType.facetNames.contains("Binary"))
+        Assert.assertArrayEquals(${javaHelper.getDefaultDataForProperty($prop)}, result.get${javaHelper.firstToUpperCase($prop.name)}());
+#else
+        Assert.assertEquals(${javaHelper.getDefaultDataForProperty($prop)}, result.get${javaHelper.firstToUpperCase($prop.name)}());
+#end
+#end
+
+    }
+
+}

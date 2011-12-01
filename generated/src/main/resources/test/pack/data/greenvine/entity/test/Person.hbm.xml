@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Person"
+        entity-name="test.pack.data.greenvine.entity.test.Person" 
+        table="TEST.TBL_PERSON"
+        mutable="true">
+        <composite-id name="personIdentity" class="test.pack.data.greenvine.entity.test.PersonIdentity">
+            <key-property name="firstName" column="FIRST_NAME" type="string"/>
+            <key-property name="lastName" column="LAST_NAME" type="string"/>
+        </composite-id>
+        <property name="birthday" type="date">
+            <column name="BIRTHDAY" not-null="true" sql-type="DATE" />
+        </property>
+		<one-to-one name="customer" class="test.pack.data.greenvine.entity.test.Customer" fetch="select" lazy="proxy" cascade="all" outer-join="auto" constrained="false"/>
+		<one-to-one name="passport" class="test.pack.data.greenvine.entity.test.Passport" fetch="select" lazy="proxy" cascade="all" outer-join="auto" constrained="false" property-ref="person"/>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Person as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Person as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

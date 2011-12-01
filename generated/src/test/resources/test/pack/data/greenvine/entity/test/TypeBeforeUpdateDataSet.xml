@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="target/xsd/dataset.xsd" 
+    xmlns:DBO="DBO"    
+    xmlns:TEST="TEST">
+    <TEST:TBL_TYPES TYPE_1="1" TYPE_10="01:01:01" TYPE_12="2009-01-01" TYPE_13="2009-01-01 01:01:01" TYPE_14="dGVzdDE=" TYPE_16="s" TYPE_17="s" TYPE_18="dGVzdDE=" TYPE_19="s" TYPE_2="true" TYPE_20="s" TYPE_3="1" TYPE_4="1" TYPE_5="1" TYPE_6="1" TYPE_7="10000000.01" TYPE_8="10000000000000000.1" TYPE_9="1000000.1" />
+</dataset>
+
+ 
+
+ 
+ 

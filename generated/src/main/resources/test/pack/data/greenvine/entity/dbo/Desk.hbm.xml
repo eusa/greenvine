@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.dbo.Desk"
+        entity-name="test.pack.data.greenvine.entity.dbo.Desk" 
+        table="DBO.TBL_DESK"
+        mutable="true">
+	    <id name="deskId" type="integer">
+	        <column name="DESK_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="code" type="string">
+            <column name="CODE" not-null="true" sql-type="VARCHAR(5)" />
+        </property>
+        <join table="DBO.TBL_DESK_EMPLOYEE" 
+	        optional="true">
+	        <key unique="true">
+                <column name="FK_DESK_ID" />
+	        </key>   
+	        <many-to-one name="employee"
+	            class="test.pack.data.greenvine.entity.dbo.Employee" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+	            outer-join="auto">
+				<column name="FK_EMPLOYEE_ID" />
+	        </many-to-one>
+	    </join>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Desk as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Desk as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

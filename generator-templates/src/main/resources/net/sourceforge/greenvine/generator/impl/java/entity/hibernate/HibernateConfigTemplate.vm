@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+    
+        <!--  Database configuration -->
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property> 
+        <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
+      
+        <!-- Cache configuration -->
+        <property name="hibernate.cache.use_first_level_cache">true</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.SingletonEhCacheProvider</property>
+##        <property name="net.sf.ehcache.configurationResourceName">/hibernate-ehcache.xml</property>   
+        <property name="net.sf.ehcache.configurationResourceName">/${catalog.name}-ehcache.xml</property>   
+        <property name="hibernate.cache.use_structured_entries">true</property>
+        <property name="hibernate.cache.use_minimal_puts">false</property>
+        
+        <!-- Transaction configuration -->
+        <property name="hibernate.transaction.factory_class">org.springframework.orm.hibernate3.SpringTransactionFactory</property>      
+##        <!-- 
+##        Commented due to removal of JOTM in Spring 3.0 
+##        Can't use JTA for Hibernate Search 
+##        with automatic index updates
+##        <property name="hibernate.transaction.manager_lookup_class">org.springframework.orm.hibernate3.LocalTransactionManagerLookup</property>
+##        -->
+        
+        <!-- Debug logging of SQL statements -->
+        <property name="hibernate.show_sql">true</property>
+    
+        <!-- Enable Hibernate statistics generation -->
+        <property name="hibernate.generate_statistics">true</property>
+      
+        <!-- Mapping files -->
+#foreach ($catalog in $model.catalogs)    
+#foreach ($entity in $catalog.entities)
+#set($entityType = $javaHelper.getEntityType($entity))       
+        <mapping resource="${javaHelper.packageToUnixPath($entityType.packageName)}/${entityType.className}.hbm.xml" />
+#end
+#end
+        
+        <!--  L2 cache configuration -->
+#foreach ($catalog in $model.catalogs)    
+#foreach ($entity in $catalog.entities)
+#set($entityType = $javaHelper.getEntityType($entity)) 
+#if (!$entity.readOnly)
+        <class-cache class="${entityType}" usage="read-write" /> 
+#else      
+        <class-cache class="${entityType}" usage="read-only" /> 
+#end
+#end
+#end
+        
+    </session-factory>
+</hibernate-configuration>

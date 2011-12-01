@@ -1,0 +1,22 @@
+database.driverClassName=org.h2.Driver
+database.url=jdbc:h2:mem:${catalog.database.name};DB_CLOSE_DELAY=-1
+database.dialect=h2
+database.userName=username
+database.password=password
+database.schemaNames=PUBLIC, #foreach($schema in $catalog.database.schemaNames)${schema}#if($velocityHasNext), #end
+#end 
+
+database.storedIndentifierCase.h2=auto
+database.identifierQuoteString.h2=auto
+org.unitils.core.dbsupport.DbSupport.implClassName.h2=org.unitils.core.dbsupport.H2DbSupport
+org.dbunit.dataset.datatype.IDataTypeFactory.implClassName=org.dbunit.ext.h2.H2DataTypeFactory
+
+updateDataBaseSchema.enabled=true
+dbMaintainer.fromScratch.enabled=true
+dbMaintainer.generateDataSetStructure.enabled=true
+dataSetStructureGenerator.xsd.dirName=target/xsd
+dbMaintainer.autoCreateExecutedScriptsTable=true
+org.unitils.dbmaintainer.script.ScriptSource.implClassName=org.unitils.dbmaintainer.script.impl.DefaultScriptSource
+dbMaintainer.script.locations=src/main/database/h2/${catalog.database.name}/
+dbMaintainer.script.fileExtensions=sql
+dbMaintainer.keepRetryingAfterError.enabled=true

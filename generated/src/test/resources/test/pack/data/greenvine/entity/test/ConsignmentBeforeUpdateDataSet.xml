@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="target/xsd/dataset.xsd" 
+    xmlns:DBO="DBO"    
+    xmlns:TEST="TEST">
+    <TEST:TBL_PERSON BIRTHDAY="2009-01-01" FIRST_NAME="s" LAST_NAME="s" />
+    <TEST:TBL_CUSTOMER FK_FIRST_NAME="s" FK_LAST_NAME="s" LOYALTY_POINTS="1" />
+    <TEST:TBL_ADDRESS ADDRESS_ID="1" HOUSE_NUMBER="s" POST_CODE="s" STREET_NAME="s" />
+    <TEST:TBL_CONSIGNMENT CONSIGNMENT_DATE="2009-01-01" CONSIGNMENT_ID="1" FK_ADDRESS_ID="1" FK_FIRST_NAME="s" FK_LAST_NAME="s" />
+</dataset>
+
+ 
+
+ 
+ 

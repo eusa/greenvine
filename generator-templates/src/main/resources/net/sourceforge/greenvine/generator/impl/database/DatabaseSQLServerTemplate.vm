@@ -1,0 +1,38 @@
+##drop tables
+#foreach ($table in $reversedTables)
+drop table "${database.Name}"."${databaseHelper.getSchemaFromFQName($table.name)}"."${databaseHelper.getTableFromFQName($table.Name)}"
+go
+
+#end
+##create tables
+-- Create tables
+#foreach ($table in $database.table)
+create table "${database.Name}"."${databaseHelper.getSchemaFromFQName($table.name)}"."${databaseHelper.getTableFromFQName($table.Name)}" (
+#foreach($column in $table.column)
+	${column.name} ${dbVendorTypeMappingHelper.getVendorSpecificTypeFromColumnType($column.type)}${databaseHelper.getSpecificationForColumn($column)} #if($column.notNull)not null#end, 
+#end
+	constraint PK_${databaseHelper.getTableFromFQName($table.name)} primary key (#foreach($columnRef in $table.primaryKey.columnRef)"$columnRef.name"#if($velocityHasNext),#end#end)
+)
+go
+
+#end
+##create unique constraints for tables
+-- Create unique constraints
+#foreach ($table in $database.table)
+#foreach ($uniqueKey in $table.uniqueKey)
+alter table "${database.name}"."${databaseHelper.getSchemaFromFQName($table.name)}"."${databaseHelper.getTableFromFQName($table.name)}"
+    add constraint "${uniqueKey.name}" unique(#foreach($columnRef in $uniqueKey.columnRef)"$columnRef.name"#if($velocityHasNext),#end#end)
+go
+
+#end
+#end
+##create foreign keys from relationships
+-- Create foreign key constraints
+#foreach ($table in $database.table)
+#foreach ($foreignKey in $table.foreignKey)
+alter table "${database.name}"."${databaseHelper.getSchemaFromFQName($table.name)}"."${databaseHelper.getTableFromFQName($table.name)}"
+    add constraint "${foreignKey.name}" foreign key (#foreach($columnConstraint in $foreignKey.columnConstraint)"$columnConstraint.referencingColumn"#if($velocityHasNext),#end#end) references "${database.name}"."${databaseHelper.getSchemaFromFQName($foreignKey.referencedTable)}"."${databaseHelper.getTableFromFQName($foreignKey.referencedTable)}"(#foreach($columnConstraint in $foreignKey.columnConstraint)"$columnConstraint.referencedColumn"#if($velocityHasNext),#end#end)
+go
+
+#end
+#end

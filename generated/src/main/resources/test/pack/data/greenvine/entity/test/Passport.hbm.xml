@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Passport"
+        entity-name="test.pack.data.greenvine.entity.test.Passport" 
+        table="TEST.TBL_PASSPORT"
+        mutable="true">
+	    <id name="passportNr" type="string">
+	        <column name="PASSPORT_NR" />
+	        <generator class="assigned" />
+	    </id>
+        <natural-id mutable="false">
+		    <many-to-one name="person" class="test.pack.data.greenvine.entity.test.Person" fetch="select" lazy="proxy" cascade="none" outer-join="auto">
+         	    <column name="FK_FIRST_NAME" not-null="true" />
+         	    <column name="FK_LAST_NAME" not-null="true" />
+		    </many-to-one>
+        </natural-id>
+        <property name="expiryDate" type="date">
+            <column name="EXPIRY_DATE" not-null="true" sql-type="DATE" />
+        </property>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Passport as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Passport as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

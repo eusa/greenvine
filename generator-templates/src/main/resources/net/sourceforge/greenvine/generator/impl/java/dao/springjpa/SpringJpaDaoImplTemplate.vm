@@ -1,0 +1,73 @@
+package ${daoImplType.packageName};
+
+import java.util.List;
+
+import org.springframework.orm.jpa.support.JpaDaoSupport;
+import org.springframework.stereotype.Repository;
+
+import ${daoType};
+import ${entityType};
+import ${identityType};
+
+import javax.annotation.Generated;
+
+@Generated("net.sourceforge.greenvine.generator.impl.java.dao.springjpa.SpringJpaDaoImplGenerator")
+@Repository
+public class ${daoImplType.className} extends JpaDaoSupport implements ${daoType.className} {
+
+     /* (non-Javadoc)
+     * @see ${daoType}#load${entityType.className}(${identityType.className})
+     */
+    @Override
+    public ${entityType.className} load${entityType.className}(${identityType.className} ${entity.identity.name}) {
+        return getJpaTemplate().getReference(${entityType.className}.class, ${entity.identity.name});
+    }
+    
+    /* (non-Javadoc)
+     * @see ${daoType}#find${entityType.className}(${identityType.className})
+     */
+    @Override
+    public ${entityType.className} find${entityType.className}(${identityType.className} ${entity.identity.name}) {
+        return getJpaTemplate().find(${entityType.className}.class, ${entity.identity.name});
+    }
+
+    /* (non-Javadoc)
+     * @see ${daoType}#findAll${entityType.className}s()
+     */
+    @Override
+    @SuppressWarnings("unchecked") 
+    public List<${entityType.className}> findAll${entityType.className}s() {
+        return getJpaTemplate().find("from #if ($entity.name.namespace)${entity.name.namespace}.#end${entityType.className} as o order by o.id");
+    }
+    
+#if (!$entity.readOnly)
+    /* (non-Javadoc)
+     * @see ${daoType}#update${entityType.className}(${entityType.className})
+     */
+    @Override 
+    public void update${entityType.className}(${entityType.className} ${entity.name.objectName}) {
+        getJpaTemplate().merge(${entity.name.objectName});
+
+    }
+    
+    /* (non-Javadoc)
+     * @see ${daoType}#create${entityType.className}(${entityType.className})
+     */
+    @Override
+    public void create${entityType.className}(${entityType.className} ${entity.name.objectName}) {
+        getJpaTemplate().persist(${entity.name.objectName});
+
+    }
+
+    /* (non-Javadoc)
+     * @see ${daoType}#remove${entityType.className}(${identityType.className})
+     */
+    @Override
+    public void remove${entityType.className}(${identityType.className} ${entity.identity.name}) {
+         ${entityType.className} ${entity.name.objectName} = getJpaTemplate().getReference(${entityType.className}.class, ${entity.identity.name});
+         getJpaTemplate().remove(${entity.name.objectName});
+
+    }
+
+#end
+}

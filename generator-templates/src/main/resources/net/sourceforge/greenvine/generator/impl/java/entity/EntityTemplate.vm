@@ -1,0 +1,773 @@
+package ${entityType.packageName};
+
+import java.io.Serializable;
+#if($entity.collectionFieldCount > 0)
+import java.util.Collection;
+import java.util.TreeSet;
+#end
+#foreach($import in $javaHelper.getAllImportsForEntity($entity))
+import ${import};
+#end
+
+## Dirty but effective
+import javax.persistence.*;
+import javax.annotation.Generated;
+
+@Generated("net.sourceforge.greenvine.generator.impl.java.entity.EntityGenerator")
+@Entity(name = "#if ($entity.name.namespace)${entity.name.namespace}.#end${entityType.className}")
+@Table(name = "${table.name}"#if($table.uniqueKeyCount > 0), uniqueConstraints = { #foreach($unique in $table.uniqueKeys)@UniqueConstraint(columnNames = { #foreach($columnRef in $unique.columns)"${columnRef.name}"#if($velocityHasNext), #end#end })#if($velocityHasNext), #end#end }#end)  
+public class ${entityType.className} implements Comparable<${entityType.className}>, Serializable {
+
+    private static final long serialVersionUID = ${javaHelper.generateSerialVersionUID()}L;
+
+## Identity field
+    /**
+    * Identity field
+    */
+    private ${identityType.className} ${identityName};
+
+## NaturalIdentity field
+#if ($entity.naturalIdentity)
+    /**
+    * NaturalIdentity field
+    */
+    private ${naturalIdentityType.className} ${entity.naturalIdentity.name};
+
+#end
+## Simple fields
+#foreach($property in $entity.simpleProperties)
+#set($propertyType = $javaHelper.getQualifiedJavaType($property))
+    /**
+    * ${property.name} field
+    */
+    private ${propertyType.className}#if($propertyType.facetNames.contains("Binary"))[]#end ${property.name};
+    
+#end
+## Constrained one-to-one field
+#if ($entity.constrainedIdentity)
+#set ($oneToOne = $entity.constrainedIdentity)
+    /**
+    * ${oneToOne.name} constrained identity field
+    */
+    private ${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name};
+    
+#end
+## One-to-one owner and inverse fields
+#foreach($oneToOne in $entity.oneToOneChilds)        
+    /**
+    * ${oneToOne.name} field
+    */
+    private ${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name};    
+
+#end
+#foreach($oneToOne in $entity.oneToOneParents)        
+    /**
+    * ${oneToOne.name} field
+    */
+    private ${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name};    
+
+#end
+## Many-to-one fields
+#foreach($manyToOne in $entity.manyToOnes)        
+    /**
+    * ${manyToOne.name} field
+    */
+    private ${javaHelper.getRelatedEntityType($manyToOne).className} ${manyToOne.name};    
+
+#end
+## One-to-many fields
+#foreach($oneToMany in $entity.oneToManies)        
+    /**
+    * ${oneToMany.name} field
+    */  
+    private Collection<${javaHelper.getRelatedEntityType($oneToMany).className}> ${oneToMany.name} = new TreeSet<${javaHelper.getRelatedEntityType($oneToMany).className}>();    
+
+#end
+## Many-to-many association fields
+#foreach($manyToMany in $entity.manyToManies)        
+    /**
+    * ${manyToMany.name} field
+    */
+    private Collection<${javaHelper.getRelatedEntityType($manyToMany).className}> ${manyToMany.name} = new TreeSet<${javaHelper.getRelatedEntityType($manyToMany).className}>();
+
+#end  
+## One-to-one association fields
+#foreach($oneToOne in $entity.oneToOneAssociations)        
+    /**
+    * ${oneToOne.name} field
+    */
+    private ${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name};
+
+#end
+## Many-to-one association fields
+#foreach($manyToOne in $entity.manyToOneAssociations)        
+    /**
+    * ${manyToOne.name} field
+    */
+    private ${javaHelper.getRelatedEntityType($manyToOne).className} ${manyToOne.name};    
+
+#end
+## One-to-many association fields
+#foreach($oneToMany in $entity.oneToManyAssociations)        
+    /**
+    * ${oneToMany.name} field
+    */  
+    private Collection<${javaHelper.getRelatedEntityType($oneToMany).className}> ${oneToMany.name} = new TreeSet<${javaHelper.getRelatedEntityType($oneToMany).className}>();    
+
+#end
+##Constructors    
+    /**
+    * Default constructor
+    */
+    public ${entityType.className}() {
+    }
+    
+    /**
+    * Simple Property constructor
+    */
+    public ${entityType.className}(${identityType.className} ${identityName}#if ($entity.naturalIdentity), ${naturalIdentityType.className} ${entity.naturalIdentity.name}#end#if($entity.simplePropertyCount > 0), #end#foreach($property in $entity.simpleProperties)#set($propertyType = $javaHelper.getQualifiedJavaType($property))${propertyType.className}#if($propertyType.facetNames.contains("Binary"))[]#end ${property.name}#if($velocityHasNext), #end#end) {
+        this.${identityName} = ${identityName};
+#if ($entity.naturalIdentity)
+        this.${entity.naturalIdentity.name} = ${entity.naturalIdentity.name};
+#end
+#foreach($property in $entity.simpleProperties)
+        this.${property.name} = ${property.name};
+#end
+    }
+
+#if($entity.oneToOneChildCount > 0 || $entity.oneToOneParentCount > 0 || $entity.manyToOneCount > 0 || $entity.oneToManyCount > 0 || $entity.manyToManyCount > 0 || $entity.oneToManyAssociationCount > 0 || $entity.manyToOneAssociationCount > 0 || $entity.oneToOneAssociationCount > 0)
+    /**
+    * Full Property constructor
+    */
+    public ${entityType.className}(${identityType.className} ${identityName}#if ($entity.naturalIdentity), ${naturalIdentityType.className} ${entity.naturalIdentity.name}#end#if ($entity.constrainedIdentity), ${javaHelper.getRelatedEntityType($entity.constrainedIdentity).className} ${entity.identity.name}#end#if($entity.simplePropertyCount > 0), #end#foreach($property in $entity.simpleProperties)#set($propertyType = $javaHelper.getQualifiedJavaType($property))${propertyType.className}#if($propertyType.facetNames.contains("Binary"))[]#end ${property.name}#if($velocityHasNext), #end#end#if($entity.oneToOneChildCount > 0), #end#foreach($property in $entity.oneToOneChilds)${javaHelper.getRelatedEntityType($property).className} ${property.name}#if($velocityHasNext), #end#end#if($entity.oneToOneParentCount > 0), #end#foreach($property in $entity.oneToOneParents)${javaHelper.getRelatedEntityType($property).className} ${property.name}#if($velocityHasNext), #end#end#if($entity.manyToOneCount > 0), #end#foreach($property in $entity.manyToOnes)${javaHelper.getRelatedEntityType($property).className} ${property.name}#if($velocityHasNext), #end#end#if($entity.oneToManyCount > 0), #end#foreach($property in $entity.oneToManies)Collection<${javaHelper.getRelatedEntityType($property).className}> ${property.name}#if($velocityHasNext), #end#end#if($entity.manyToManyCount > 0), #end#foreach($property in $entity.manyToManies)Collection<${javaHelper.getRelatedEntityType($property).className}> ${property.name}#if($velocityHasNext), #end#end#if($entity.oneToOneAssociationCount > 0), #end#foreach($property in $entity.oneToOneAssociations)${javaHelper.getRelatedEntityType($property).className} ${property.name}#if($velocityHasNext), #end#end#if($entity.manyToOneAssociationCount > 0), #end#foreach($property in $entity.manyToOneAssociations)${javaHelper.getRelatedEntityType($property).className} ${property.name}#if($velocityHasNext), #end#end#if($entity.oneToManyAssociationCount > 0), #end#foreach($property in $entity.oneToManyAssociations)Collection<${javaHelper.getRelatedEntityType($property).className}> ${property.name}#if($velocityHasNext), #end#end) {
+        this.${identityName} = ${identityName};
+#if ($entity.naturalIdentity)
+        this.${entity.naturalIdentity.name} = ${entity.naturalIdentity.name};
+#end
+#if ($entity.constrainedIdentity)
+        this.${entity.identity.name} = ${entity.identity.name};
+#end
+#foreach($property in $entity.simpleProperties)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.oneToOneChilds)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.oneToOneParents)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.manyToOnes)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.oneToManies)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.manyToManies)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.oneToOneAssociations)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.manyToOneAssociations)
+        this.${property.name} = ${property.name};
+#end
+#foreach($property in $entity.oneToManyAssociations)
+        this.${property.name} = ${property.name};
+#end
+    }
+#end
+
+## Identity field accessors and mutators    
+    /**
+    * Accessor for the identity field
+    * @returns the value of the identity field
+    */
+#if($identity.class.simpleName == "SimpleIdentityImpl")
+    @Id
+#if($identity.keyGenerationStrategy)
+#if($identity.keyGenerationStrategy.name() !=  'ASSIGNED')
+    @GeneratedValue(strategy = GenerationType.${identity.keyGenerationStrategy.name()})
+#end
+#end
+#if($entity.constrainedIdentity)
+    @Column(name = "${entity.identity.findColumnMappedToField($identity).name}", nullable = false)
+#else
+    @Column(name = "${identity.column.name}", nullable = false)
+#end
+#else
+	@EmbeddedId
+	@AttributeOverrides( {
+#foreach($property in $identity.simpleProperties)
+#if($entity.constrainedIdentity)
+        @AttributeOverride(name = "${property.name}", column = @Column(name = "${entity.identity.findColumnMappedToField($property).name}"))#if($velocityHasNext), 
+#end
+#else
+        @AttributeOverride(name = "${property.name}", column = @Column(name = "${property.column.name}"))#if($velocityHasNext), 
+#end
+#end
+#end
+
+    } ) ## end attribute overrides
+    
+#if ($identity.manyToOneCount > 0)
+	@AssociationOverrides( {
+#foreach($property in $identity.manyToOnes)
+        @AssociationOverride(name = "${property.name}", 
+            joinColumns = {
+#foreach($col in $property.relation.foreignKey.columnConstraints)
+                @JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", #if($col.referencingColumn.notNull) nullable = false#else nullable = true#end)#if($velocityHasNext), 
+#end
+#end
+
+             }
+         )#if($velocityHasNext), 
+#end
+
+    } )	## end association overrides
+    
+#end
+#end
+#end
+    public ${identityType.className} get${javaHelper.firstToUpperCase($identityName)}() {
+        return this.${identityName};
+    }
+    
+    /**
+    * Mutator for the identity field
+    * @param sets the value of the identity field
+    */
+    public void set${javaHelper.firstToUpperCase($identityName)}(${identityType.className} ${identityName}) {
+        this.${identityName} = ${identityName};
+    }
+
+## NaturalIdentity field accessors and mutators
+#if ($entity.naturalIdentity)    
+    /**
+    * Accessor for the natural identity field ${entity.naturalIdentity.name}
+    * @returns the value of the field ${entity.naturalIdentity.name}
+    */
+    ##// Note: not supported by JPA
+    ##// but by Hibernate
+    // @NaturalId 
+#if($entity.simpleNaturalIdentity)
+#end
+#if($entity.oneToOneNaturalIdentity)
+#set ($oneToOne = $entity.oneToOneNaturalIdentity)
+    /**
+    * Accessor for ${oneToOne.name} field
+    * @return the value of the ${oneToOne.name} field. 
+    */
+    @OneToOne(targetEntity = ${javaHelper.getRelatedEntityType($oneToOne)}.class, fetch = FetchType.LAZY, #if($oneToOne.notNull) optional = false#else optional = true#end)
+    @JoinColumns( {
+#foreach($col in $oneToOne.relation.foreignKey.columnConstraints)
+        @JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", #if($col.referencingColumn.notNull) nullable = false#else nullable = true#end)#if($velocityHasNext), 
+#end
+#end
+    
+    } )
+#end
+#if ($entity.componentNaturalIdentity)
+	@Embedded
+#if ($entity.componentNaturalIdentity.simplePropertyCount > 0)
+	@AttributeOverrides( {
+#foreach($property in $entity.componentNaturalIdentity.simpleProperties)
+        @AttributeOverride(name = "${property.name}", column = @Column(name = "${property.column.name}"))#if($velocityHasNext), 
+#end
+#end
+
+    } )	## end attribute overrides
+    
+#end
+#if ($entity.componentNaturalIdentity.manyToOneCount > 0)
+	@AssociationOverrides( {
+#foreach($property in $entity.componentNaturalIdentity.manyToOnes)
+        @AssociationOverride(name = "${property.name}", 
+            joinColumns = {
+#foreach($col in $property.relation.foreignKey.columnConstraints)
+                @JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", #if($col.referencingColumn.notNull) nullable = false#else nullable = true#end)#if($velocityHasNext), 
+#end
+#end
+
+             }
+         )#if($velocityHasNext), 
+#end
+
+    } )	## end association overrides
+    
+#end
+#end
+#end
+    public ${naturalIdentityType.className} get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}() {
+        return this.${entity.naturalIdentity.name};
+    }
+    
+    /**
+    * Mutator for the natural identity field ${entity.naturalIdentity.name}
+    * @param sets the value of the ${entity.naturalIdentity.name} field
+    */
+    public void set${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}(${naturalIdentityType.className} ${entity.naturalIdentity.name}) {
+        this.${entity.naturalIdentity.name} = ${entity.naturalIdentity.name};
+    }
+
+#end
+##Simple field accessors and mutators
+#foreach($property in $entity.simpleProperties)
+#set($propertyType = $javaHelper.getQualifiedJavaType($property))      
+    /**
+    * Accessor for ${property.name} field
+    * returns the value of the ${property.name} field
+    */
+    @Basic(fetch = FetchType.EAGER,#if($property.notNull) optional = false#else optional = true#end)
+#if($property.column)
+    @Column(name = "${property.column.name}", #if($property.column.notNull) nullable = false#else nullable = true#end, columnDefinition = "${property.column.columnType}${property.column.specification}")
+#end
+#if ($propertyType.facetNames.contains("Lob"))
+    @Lob
+#end
+#if($propertyType.facetNames.contains("Temporal"))
+    @Temporal(TemporalType.${propertyType.temporalType})
+#end
+    public ${propertyType.className}#if($propertyType.facetNames.contains("Binary"))[]#end get${javaHelper.firstToUpperCase($property.name)}() {
+        return this.${property.name};
+    }
+          
+    /**
+    * Mutator for the ${property.name} field
+    * @param  sets the value of the ${property.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($property.name)}(${propertyType.className}#if($propertyType.facetNames.contains("Binary"))[]#end ${property.name}) {
+      this.${property.name} = ${property.name};
+    }
+          
+#end
+## Constrained one-to-one field
+#if ($entity.constrainedIdentity)
+#set ($oneToOne = $entity.constrainedIdentity)
+    /**
+    * Accessor for ${oneToOne.name} field
+    * @return the value of the ${oneToOne.name} field. 
+    */
+    @MapsId
+    @OneToOne(targetEntity = ${javaHelper.getRelatedEntityType($oneToOne)}.class, fetch = FetchType.LAZY, #if($oneToOne.notNull) optional = false#else optional = true#end)
+    @JoinColumns( {
+#foreach($col in $oneToOne.relation.foreignKey.columnConstraints)
+        @JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", #if($col.referencingColumn.notNull) nullable = false#else nullable = true#end)#if($velocityHasNext), 
+#end
+#end
+    
+    } )
+    public ${javaHelper.getRelatedEntityType($oneToOne).className} get${javaHelper.firstToUpperCase($oneToOne.name)}() {
+        return this.${oneToOne.name};
+    }
+      
+    /**
+    * Mutator for ${oneToOne.name} field
+    * @param ${oneToOne.name} the new value for the ${oneToOne.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($oneToOne.name)}(${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name}) {
+        this.${oneToOne.name} = ${oneToOne.name};
+    }
+
+#end
+## One-to-one inverse accessors and mutators
+#foreach($oneToOne in $entity.oneToOneChilds)        
+    /**
+    * Accessor for ${oneToOne.name} field
+    * @return the value of the ${oneToOne.name} field. 
+    */
+#if ($entity.primaryKeyColumnNames.containsAll($oneToOne.columnNames))
+    @MapsId#if($entity.complexIdentity)("${entity.identity.getFieldBackedByColumns($oneToOne.columns).name}")
+#end
+#end
+    @OneToOne(targetEntity = ${javaHelper.getRelatedEntityType($oneToOne)}.class, fetch = FetchType.LAZY,#if($oneToOne.notNull) optional = false#else optional = true#end)
+    @JoinColumns( {
+#foreach($col in $oneToOne.relation.foreignKey.columnConstraints)
+        @JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", #if($col.referencingColumn.notNull) nullable = false#else nullable = true#end#if ($entity.primaryKeyColumnNames.contains($col.referencingColumn.name)), insertable = false, updatable = false#end)#if($velocityHasNext), 
+#end
+#end
+    } )
+    public ${javaHelper.getRelatedEntityType($oneToOne).className} get${javaHelper.firstToUpperCase($oneToOne.name)}() {
+        return this.${oneToOne.name};
+    }
+      
+    /**
+    * Mutator for ${oneToOne.name} field
+    * @param ${oneToOne.name} the new value for the ${oneToOne.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($oneToOne.name)}(${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name}) {
+        this.${oneToOne.name} = ${oneToOne.name};
+    }
+          
+#end
+## One-to-one owner accessors and mutators
+#foreach($oneToOne in $entity.oneToOneParents)        
+    /**
+    * Accessor for ${oneToOne.name} field
+    * @return the value of the ${oneToOne.name} field. 
+    */
+    @OneToOne(targetEntity = ${javaHelper.getRelatedEntityType($oneToOne)}.class, fetch = FetchType.LAZY, optional = true, cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "${javaHelper.getRelatedField($oneToOne).name}")
+    public ${javaHelper.getRelatedEntityType($oneToOne).className} get${javaHelper.firstToUpperCase($oneToOne.name)}() {
+        return this.${oneToOne.name};
+    }
+      
+    /**
+    * Mutator for ${oneToOne.name} field
+    * @param ${oneToOne.name} the new value for the ${oneToOne.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($oneToOne.name)}(${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name}) {
+        this.${oneToOne.name} = ${oneToOne.name};
+    }
+          
+#end
+## Many-to-one accessors and mutators
+#foreach($manyToOne in $entity.manyToOnes)    
+    /**
+    * Accessor for ${manyToOne.name} field
+    * @return the value of the ${manyToOne.name} field. 
+    */
+#if ($entity.primaryKeyColumnNames.containsAll($manyToOne.columnNames))
+    @MapsId#if($entity.componentIdentity)("${entity.identity.getFieldBackedByColumns($manyToOne.columns).name}")
+#end
+#end
+    @ManyToOne(targetEntity = ${javaHelper.getRelatedEntityType($manyToOne)}.class, fetch = FetchType.LAZY, #if($manyToOne.notNull) optional = false#else optional = true#end)
+    @JoinColumns( {
+#foreach($col in $manyToOne.relation.foreignKey.columnConstraints)
+        @JoinColumn(name = "$col.referencingColumn.name", referencedColumnName = "$col.referencedColumn.name", #if($manyToOne.notNull) nullable = false#else nullable = true#end#if($entity.primaryKeyColumnNames.contains($col.referencingColumn.name)), insertable = false, updatable = false#end)#if($velocityHasNext), 
+#end
+#end
+
+    } )
+    public ${javaHelper.getRelatedEntityType($manyToOne).className} get${javaHelper.firstToUpperCase($manyToOne.name)}() {
+        return this.${manyToOne.name};
+    }
+      
+    /**
+    * Mutator for ${manyToOne.name} field
+    * @param ${manyToOne.name} the new value for the ${manyToOne.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($manyToOne.name)}(${javaHelper.getRelatedEntityType($manyToOne).className} ${manyToOne.name}) {
+        this.${manyToOne.name} = ${manyToOne.name};
+    }
+          
+#end
+## One-to-many fields
+#foreach($oneToMany in $entity.oneToManies)    
+    /**
+    * Accessor for ${oneToMany.name} field
+    * @return the value of the ${oneToMany.name} field. 
+    */
+    @OneToMany(targetEntity = ${javaHelper.getRelatedEntityType($oneToMany)}.class, mappedBy = "#foreach($name in $javaHelper.getRelatedFieldPathNames($oneToMany))${name}#if($velocityHasNext).#end#end", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    public Collection<${javaHelper.getRelatedEntityType($oneToMany).className}> get${javaHelper.firstToUpperCase($oneToMany.name)}() {
+        return this.${oneToMany.name};
+    }
+      
+    /**
+    * Mutator for ${oneToMany.name} field
+    * @param ${oneToMany.name} the new value for the ${oneToMany.name} field
+    */        
+    public void set${javaHelper.firstToUpperCase($oneToMany.name)}(Collection<${javaHelper.getRelatedEntityType($oneToMany).className}> ${oneToMany.name}) {
+        this.${oneToMany.name} = ${oneToMany.name};
+    }
+          
+#end
+## Many-to-many mutators and accessors
+#foreach($manyToMany in $entity.manyToManies)    
+
+    /**
+    * Accessor for ${manyToMany.name} field
+    * @return the value of the ${manyToMany.name} field. 
+    */
+#if($manyToMany.owner)
+    @ManyToMany(targetEntity = ${javaHelper.getRelatedEntityType($manyToMany)}.class, mappedBy = "${javaHelper.getRelatedField($manyToMany).name}", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+#else
+    @ManyToMany(targetEntity = ${javaHelper.getRelatedEntityType($manyToMany)}.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinTable(
+        name = "${manyToMany.foreignKey.referencingTable.name}",
+##      schema = "DBO",
+        joinColumns = { #foreach($col in $manyToMany.foreignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end },
+        inverseJoinColumns = { #foreach($col in $manyToMany.relatedForeignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end }
+    )
+#end
+    public Collection<${javaHelper.getRelatedEntityType($manyToMany).className}> get${javaHelper.firstToUpperCase($manyToMany.name)}() {
+        return this.${manyToMany.name};
+    }
+      
+      /**
+      * Mutator for ${manyToMany.name} field
+      * @param ${manyToMany.name} the new value for the ${manyToMany.name} field
+      */        
+      public void set${javaHelper.firstToUpperCase($manyToMany.name)}(Collection<${javaHelper.getRelatedEntityType($manyToMany).className}> ${manyToMany.name}) {
+        this.${manyToMany.name} = ${manyToMany.name};
+      }
+          
+#end
+## One-to-one association mutators and accessors
+#foreach($oneToOne in $entity.oneToOneAssociations)    
+
+    /**
+    * Accessor for ${oneToOne.name} field
+    * @return the value of the ${oneToOne.name} field. 
+    */
+#if($oneToOne.owner)
+    @OneToOne(targetEntity = ${javaHelper.getRelatedEntityType($oneToOne)}.class, mappedBy = "${javaHelper.getRelatedField($oneToOne).name}", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+#else
+    @OneToOne(targetEntity = ${javaHelper.getRelatedEntityType($oneToOne)}.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinTable(
+        name = "${oneToOne.relation.ownerForeignKey.referencingTable.name}",
+##      schema = "DBO",
+        joinColumns = { #foreach($col in $oneToOne.foreignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end },
+        inverseJoinColumns = { #foreach($col in $oneToOne.relatedForeignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end }, 
+        uniqueConstraints = { @UniqueConstraint(columnNames = { #foreach($col in $oneToOne.foreignKey.columnConstraints)"${col.referencingColumn.name}"#if($velocityHasNext), #end#end }), @UniqueConstraint(columnNames = { #foreach($col in $oneToOne.relatedForeignKey.columnConstraints)"${col.referencingColumn.name}"#if($velocityHasNext), #end#end }) }
+    )
+#end
+    public ${javaHelper.getRelatedEntityType($oneToOne).className} get${javaHelper.firstToUpperCase($oneToOne.name)}() {
+        return this.${oneToOne.name};
+    }
+      
+      /**
+      * Mutator for ${oneToOne.name} field
+      * @param ${oneToOne.name} the new value for the ${oneToOne.name} field
+      */        
+      public void set${javaHelper.firstToUpperCase($oneToOne.name)}(${javaHelper.getRelatedEntityType($oneToOne).className} ${oneToOne.name}) {
+        this.${oneToOne.name} = ${oneToOne.name};
+      }
+          
+#end
+## Many-to-ones via association
+#foreach($manyToOne in $entity.manyToOneAssociations)    
+    /**
+    * Accessor for ${manyToOne.name} field
+    * @return the value of the ${manyToOne.name} field. 
+    */
+#if($manyToOne.owner)
+    @ManyToOne(targetEntity = ${javaHelper.getRelatedEntityType($manyToOne)}.class, mappedBy = "${javaHelper.getRelatedField($manyToOne).name}", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+#else
+    @ManyToOne(targetEntity = ${javaHelper.getRelatedEntityType($manyToOne)}.class, fetch = FetchType.LAZY, #if($manyToOne.notNull) optional = false#else optional = true#end)
+    @JoinTable(
+        name = "${manyToOne.foreignKey.referencingTable.name}",
+##      schema = "DBO",
+        joinColumns = { #foreach($col in $manyToOne.foreignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end },
+        inverseJoinColumns = { #foreach($col in $manyToOne.relatedForeignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end },
+        uniqueConstraints = {@UniqueConstraint(columnNames = { #foreach($col in $manyToOne.foreignKey.columnConstraints)"${col.referencingColumn.name}"#if($velocityHasNext), #end#end })}
+    )
+#end
+    public ${javaHelper.getRelatedEntityType($manyToOne).className} get${javaHelper.firstToUpperCase($manyToOne.name)}() {
+        return this.${manyToOne.name};
+    }
+      
+    /**
+    * Mutator for ${manyToOne.name} field
+    * @param ${manyToOne.name} the new value for the ${manyToOne.name} field
+    */    
+    public void set${javaHelper.firstToUpperCase($manyToOne.name)}(${javaHelper.getRelatedEntityType($manyToOne).className} ${manyToOne.name}) {
+        this.${manyToOne.name} = ${manyToOne.name};
+    }
+          
+#end
+## One-to-many association fields
+#foreach($oneToMany in $entity.oneToManyAssociations)    
+    /**
+    * Accessor for ${oneToMany.name} field
+    * @return the value of the ${oneToMany.name} field. 
+    */
+#if($oneToMany.owner)
+    @OneToMany(targetEntity = ${javaHelper.getRelatedEntityType($oneToMany)}.class, mappedBy = "${javaHelper.getRelatedField($oneToMany).name}", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+#else
+    @OneToMany(targetEntity = ${javaHelper.getRelatedEntityType($oneToMany)}.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinTable(
+        name = "${oneToMany.foreignKey.referencingTable.name}",
+##      schema = "DBO",
+        joinColumns = { #foreach($col in $oneToMany.foreignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end },
+        inverseJoinColumns = { #foreach($col in $oneToMany.relatedForeignKey.columnConstraints)@JoinColumn(name = "${col.referencingColumn.name}", referencedColumnName = "${col.referencedColumn.name}", nullable = false)#if($velocityHasNext), #end#end },
+        uniqueConstraints = {@UniqueConstraint(columnNames = { #foreach($col in $oneToMany.relatedForeignKey.columnConstraints)"${col.referencingColumn.name}"#if($velocityHasNext), #end#end })}
+    )
+#end
+    public Collection<${javaHelper.getRelatedEntityType($oneToMany).className}> get${javaHelper.firstToUpperCase($oneToMany.name)}() {
+        return this.${oneToMany.name};
+    }
+      
+    /**
+    * Mutator for ${oneToMany.name} field
+    * @param ${oneToMany.name} the new value for the ${oneToMany.name} field
+    */        
+    public void set${javaHelper.firstToUpperCase($oneToMany.name)}(Collection<${javaHelper.getRelatedEntityType($oneToMany).className}> ${oneToMany.name}) {
+        this.${oneToMany.name} = ${oneToMany.name};
+    }
+          
+#end
+##equals() method
+    @Override
+    public boolean equals(Object that) {
+        
+        // Check references for equality
+        if ( this == that ) return true;
+        
+        // Check for null
+        if (that == null) return false;
+
+        // Check candidate is an instance of ${javaHelper.firstToUpperCase($entity.name)}
+        if ( !(that instanceof ${entityType.className}) ) return false;
+
+        // Safely cast to ${javaHelper.firstToUpperCase($entity.name)}
+        ${entityType.className} thatObj = (${entityType.className})that;
+
+#if($entity.naturalIdentity)
+        // Equality is based on natural id
+        return
+            this.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}() == null ? thatObj.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}() == null : this.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}().equals(thatObj.get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}()) && 
+            true;
+#else
+        // Equality is based on all field values
+        return
+#foreach($property in $entity.simpleProperties)
+#if($property.notNull)
+#set($propertyType = $javaHelper.getQualifiedJavaType($property))  
+#if(not $propertyType.facetNames.contains("Binary"))
+            this.get${javaHelper.firstToUpperCase($property.name)}() == null ? thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null : this.get${javaHelper.firstToUpperCase($property.name)}().equals(thatObj.get${javaHelper.firstToUpperCase($property.name)}())&&
+#end
+#end
+#end
+#if ($entity.constrainedIdentity)
+#set ($property = $entity.constrainedIdentity)
+            this.get${javaHelper.firstToUpperCase($property.name)}() == null ? thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null : this.get${javaHelper.firstToUpperCase($property.name)}().equals(thatObj.get${javaHelper.firstToUpperCase($property.name)}())&&
+#end
+#foreach($property in $entity.oneToOneChilds)
+#if($property.notNull)
+            this.get${javaHelper.firstToUpperCase($property.name)}() == null ? thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null : this.get${javaHelper.firstToUpperCase($property.name)}().equals(thatObj.get${javaHelper.firstToUpperCase($property.name)}())&&
+#end
+#end
+#foreach($property in $entity.manyToOnes)
+#if($property.notNull)
+            this.get${javaHelper.firstToUpperCase($property.name)}() == null ? thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null : this.get${javaHelper.firstToUpperCase($property.name)}().equals(thatObj.get${javaHelper.firstToUpperCase($property.name)}())&&        
+#end
+#end
+            true;
+#end
+    }
+
+##hashCode() method
+    @Override
+    public int hashCode() {
+        
+        int hash = 7;
+        
+#if($entity.naturalIdentity)
+        // Hash is based on natural id
+        hash = 31 * hash + (null == get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}() ? 0 : get${javaHelper.firstToUpperCase($entity.naturalIdentity.name)}().hashCode());
+#else
+        // Hash is based on all fields
+#foreach($property in $entity.simpleProperties)
+#if($property.notNull)
+#set($propertyType = $javaHelper.getQualifiedJavaType($property))  
+#if(not $propertyType.facetNames.contains("Binary"))
+        hash = 31 * hash + (null == get${javaHelper.firstToUpperCase($property.name)}() ? 0 : get${javaHelper.firstToUpperCase($property.name)}().hashCode());
+#end
+#end
+#end
+#if ($entity.constrainedIdentity)
+#set ($property = $entity.constrainedIdentity)
+        hash = 31 * hash + (null == get${javaHelper.firstToUpperCase($property.name)}() ? 0 : get${javaHelper.firstToUpperCase($property.name)}().hashCode());
+#end
+#foreach($property in $entity.oneToOneChilds)
+#if($property.notNull)
+        hash = 31 * hash + (null == get${javaHelper.firstToUpperCase($property.name)}() ? 0 : get${javaHelper.firstToUpperCase($property.name)}().hashCode());
+#end
+#end
+#foreach($property in $entity.manyToOnes)
+#if($property.notNull)
+        hash = 31 * hash + (null == get${javaHelper.firstToUpperCase($property.name)}() ? 0 : get${javaHelper.firstToUpperCase($property.name)}().hashCode());
+#end
+#end
+#end
+
+        return hash;
+    }
+        
+##toString() method
+    @Override        
+    public String toString() {
+        String str = "${javaHelper.firstToUpperCase($entity.name)}:";
+        str +=  ("Identity = " + (null == ${identityName} ? "null" : ${identityName}.toString())) + ", ";
+#foreach($property in $entity.simpleProperties)
+#set($propertyType = $javaHelper.getQualifiedJavaType($property))  
+#if(not $propertyType.facetNames.contains("Binary"))
+        str +=  ("${property.name} = " + (null == get${javaHelper.firstToUpperCase($property.name)}() ? "null" : get${javaHelper.firstToUpperCase($property.name)}().toString())) + ", ";
+#end
+#end
+#if ($entity.naturalIdentity)
+#set ($property = $entity.naturalIdentity)
+        str +=  ("${property.name} = " + (null == get${javaHelper.firstToUpperCase($property.name)}() ? "null" : get${javaHelper.firstToUpperCase($property.name)}().toString())) + ", ";
+#end
+#if ($entity.constrainedIdentity)
+#set ($property = $entity.constrainedIdentity)
+        str +=  ("${property.name} = " + (null == get${javaHelper.firstToUpperCase($property.name)}() ? "null" : get${javaHelper.firstToUpperCase($property.name)}().toString())) + ", ";
+#end
+#foreach($property in $entity.oneToOneChilds)
+        str +=  ("${property.name} = " + (null == get${javaHelper.firstToUpperCase($property.name)}() ? "null" : get${javaHelper.firstToUpperCase($property.name)}().toString())) + ", ";
+#end
+#foreach($property in $entity.manyToOnes)
+        str +=  ("${property.name} = " + (null == get${javaHelper.firstToUpperCase($property.name)}() ? "null" : get${javaHelper.firstToUpperCase($property.name)}().toString())) + ", ";
+#end
+        return str.substring(0, str.lastIndexOf(", "));
+    }
+    
+##compareTo() method    
+    @Override
+    public int compareTo(${entityType.className} thatObj) {
+    
+        int cmp;
+
+#if($entity.naturalIdentity)
+#set ($property = $entity.naturalIdentity)
+        cmp = this.get${javaHelper.firstToUpperCase($property.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($property.name)}());
+        if (cmp !=  0)
+            return cmp;
+#else
+#foreach($property in $entity.simpleProperties)
+#if($property.notNull)
+#set($propertyType = $javaHelper.getQualifiedJavaType($property))  
+#if(not $propertyType.facetNames.contains("Binary"))
+        cmp = this.get${javaHelper.firstToUpperCase($property.name)}() == null ?
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 0 : -1) :
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 1 : this.get${javaHelper.firstToUpperCase($property.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($property.name)}())
+                );
+        if (cmp !=  0)
+            return cmp;
+#end
+#end
+#end
+#if ($entity.constrainedIdentity)
+#set ($property = $entity.constrainedIdentity)
+        cmp = this.get${javaHelper.firstToUpperCase($property.name)}() == null ?
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 0 : -1) :
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 1 : this.get${javaHelper.firstToUpperCase($property.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($property.name)}())
+                );
+        if (cmp !=  0)
+            return cmp;
+#end
+#foreach($property in $entity.oneToOneChilds)
+#if($property.notNull)
+        cmp = this.get${javaHelper.firstToUpperCase($property.name)}() == null ?
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 0 : -1) :
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 1 : this.get${javaHelper.firstToUpperCase($property.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($property.name)}())
+                );
+        if (cmp !=  0)
+            return cmp;
+#end
+#end
+#foreach($property in $entity.manyToOnes)
+#if($property.notNull)
+        cmp = this.get${javaHelper.firstToUpperCase($property.name)}() == null ?
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 0 : -1) :
+                (thatObj.get${javaHelper.firstToUpperCase($property.name)}() == null ? 1 : this.get${javaHelper.firstToUpperCase($property.name)}().compareTo(thatObj.get${javaHelper.firstToUpperCase($property.name)}())
+                );
+        if (cmp !=  0)
+            return cmp;
+#end
+#end
+#end
+
+        return cmp;    
+    }
+        
+}

@@ -1,0 +1,94 @@
+package ${daoImplType.packageName};
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+
+import junit.framework.Assert;
+import ${entityType};
+import ${entityType}TestUtils;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.unitils.UnitilsJUnit4TestClassRunner;
+import org.unitils.inject.annotation.InjectInto;
+import org.unitils.inject.annotation.TestedObject;
+import org.unitils.mock.Mock;
+
+@RunWith(UnitilsJUnit4TestClassRunner.class)
+public class ${daoImplType.className}UnitTest {
+
+    @InjectInto(property="entityManager")
+    private Mock<EntityManager> entityManager;
+    
+    @TestedObject
+    private ${daoImplType.className} ${entity.name.objectName}Dao;
+    
+    @Test
+    public void testLoadExisting() {
+    
+        ${entityType.className} expected = ${entityType.className}TestUtils.createDefaultInstance();
+        entityManager.returns(expected).getReference(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        ${entityType.className} actual = ${entity.name.objectName}Dao.load${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+        entityManager.assertInvoked().getReference(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        Assert.assertEquals(expected, actual);
+    
+    }
+    
+    
+    @Test (expected=RuntimeException.class)
+    public void testLoadNonExisting() {
+
+        entityManager.raises(EntityNotFoundException.class).getReference(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        ${entity.name.objectName}Dao.load${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+    
+    }
+    
+    @Test
+    public void testFindExisting() {
+    
+        ${entityType.className} expected = ${entityType.className}TestUtils.createDefaultInstance();
+        entityManager.returns(expected).find(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        ${entityType.className} actual = ${entity.name.objectName}Dao.find${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+        entityManager.assertInvoked().find(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        Assert.assertEquals(expected, actual);
+    
+    }
+    
+    @Test
+    public void testFindNonExisting() {
+
+        entityManager.returns(null).find(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        ${entityType.className} actual = ${entity.name.objectName}Dao.find${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+        Assert.assertNull(actual);
+    
+    }
+    
+    @Test
+    public void testCreate() {
+        
+        ${entityType.className} expected = ${entityType.className}TestUtils.createDefaultInstance();
+        ${entity.name.objectName}Dao.create${entityType.className}(expected);
+        entityManager.assertInvoked().persist(expected);
+        
+    }
+    
+    @Test
+    public void testUpdate() {
+        
+        ${entityType.className} expected = ${entityType.className}TestUtils.createDefaultInstance();
+        ${entity.name.objectName}Dao.update${entityType.className}(expected);
+        entityManager.assertInvoked().merge(expected);
+                
+    }
+    
+    @Test
+    public void testDelete() {
+        
+        ${entityType.className} expected = ${entityType.className}TestUtils.createDefaultInstance();
+        entityManager.returns(expected).getReference(${entityType.className}.class, ${entityType.className}TestUtils.getDefaultIdentity());
+        ${entity.name.objectName}Dao.remove${entityType.className}(${entityType.className}TestUtils.getDefaultIdentity());
+        entityManager.assertInvoked().remove(expected);
+                
+    }
+   
+}

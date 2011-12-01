@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="target/xsd/dataset.xsd" 
+#foreach($schema in $database.schemaNames)
+    xmlns:$schema="$schema"#if($velocityHasNext)
+    
+#else>
+#end
+#end
+#foreach($table in $dataSet.tables)
+#foreach($row in $table.rows)
+    <#if($table.name.schemaName)${table.name.schemaName}:#end${table.name.objectName} #foreach($col in $table.columns)#if($col.notNull)${col.name}="${row.getValue($col.name)}" #end#end/>
+#end
+#end
+</dataset>
+
+ 
+
+ 
+ 

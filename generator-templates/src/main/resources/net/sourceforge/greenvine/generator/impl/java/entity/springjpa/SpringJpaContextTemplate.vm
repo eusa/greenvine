@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+    default-autowire="byName">
+
+#foreach ($catalog in $model.catalogs)    
+    <!-- ${catalog.name} JPA TransactionManager -->
+    <bean id="${catalog.name}JpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="${catalog.name}EntityManagerFactory" />
+		<property name="dataSource" ref="${catalog.name}DataSource" />
+	</bean> 
+                                                
+    <!-- ${catalog.name} JPA EntityManagerFactory -->
+    <bean id="${catalog.name}EntityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+  
+        <property name="dataSource" ref="${catalog.name}DataSource" />
+  		
+  		<property name="jpaDialect">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+		</property>
+  		
+        <property name="jpaVendorAdapter">
+            <bean
+                class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true" />
+                <property name="generateDdl" value="false" />
+                <property name="databasePlatform" value="org.hibernate.dialect.H2Dialect" />
+            </bean>
+        </property>
+    </bean>
+    
+#end    
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+    default-autowire="byName">
+ 
+#foreach ($catalog in $model.catalogs)    
+#foreach ($entity in $catalog.entities)
+#set($daoImplType = $javaHelper.getDaoImplType($entity, "springhibernate"))
+#set($entityType = $javaHelper.getEntityType($entity))
+	<bean id="${entity.name.objectName}${sourceConfig.daoSuffix}"
+		class="${daoImplType}">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.${entityType}" />
+	                </bean>
+		</property>
+	</bean>
+#end
+#end
+	
+</beans>

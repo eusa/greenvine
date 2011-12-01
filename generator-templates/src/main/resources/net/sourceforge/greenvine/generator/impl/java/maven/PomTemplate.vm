@@ -1,0 +1,291 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>${sourceConfig.basePackage}</groupId>
+    <artifactId>${model.name}</artifactId>
+    <packaging>war</packaging>
+    <version>1.0</version>
+    <name>${model.name}</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>
+		<org.hibernate.version>3.6.7.Final</org.hibernate.version>
+	</properties>
+    <dependencies>
+## Escape invalid characters in VTL
+#set( $q = '${org.hibernate.version}' )
+        
+        <!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${q}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+			<version>${q}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager
+            </artifactId>
+			<version>${q}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.1.0.Final</version>
+		</dependency>
+		
+		<!-- Javassist (needed by Hibernate) -->
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.8.0.GA</version>
+		</dependency>
+
+## Escape invalid characters in VTL
+#set( $g = '${org.springframework.version}' )
+        <!-- Spring Core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>$g</version>
+        </dependency>
+
+        <!-- Spring Context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>$g</version>
+        </dependency>
+
+        <!-- Spring AOP -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>$g</version>
+        </dependency>
+
+        <!-- Spring TX -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>$g</version>
+        </dependency>
+
+        <!-- Spring Hibernate -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>$g</version>
+        </dependency>
+
+        <!-- Spring JDBC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>$g</version>
+        </dependency>
+        
+       <!-- JUnit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8</version>
+			<scope>test</scope>
+		</dependency>
+		
+        <!-- EasyMock -->
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.0</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- Unitils - DBUnit -->
+		<dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-dbunit</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+            <exclusions>
+			    <exclusion> 
+			      <groupId>org.hibernate</groupId>
+			      <artifactId>hibernate</artifactId>
+			    </exclusion>
+		    </exclusions> 
+        </dependency>
+        
+        <!-- Unitils - ORM -->
+        <dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-orm</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+            <exclusions>
+			    <exclusion> 
+			      <groupId>javax.persistence</groupId>
+			      <artifactId>persistence-api</artifactId>
+			    </exclusion>
+		    </exclusions> 
+        </dependency>
+        
+        <!-- Unitils - Inject -->
+        <dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-inject</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
+		
+		<!-- Unitils - Mock -->
+        <dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-mock</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
+		
+		<!-- DBCP -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		
+		<!-- Commons Lang -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.4</version>
+		</dependency>
+		
+		<!--  SLF4J API -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.8</version>
+		</dependency>
+		
+		<!--  SLF4J over Log4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.8</version>
+		</dependency>
+		
+		<!-- Log4J -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.12</version>
+		</dependency>
+		
+		<!-- DBUnit -->
+		<dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.4.8</version>
+            <scope>test</scope>
+        </dependency>
+		
+		<!-- JDBC Driver-->
+		<dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+		    <version>1.2.136</version>
+		</dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <forkMode>always</forkMode>
+                    <argLine>-Xmx1050m -XX:MaxPermSize=512M</argLine>
+                </configuration>
+            </plugin>
+
+#*
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <!--
+                    Necessary as default source folder is src/main/java and 
+                    flex mojo looks for files relative to source folder 
+                    -->
+                    <sourceFile>../flex/Main.mxml</sourceFile>
+                    <!-- Need both flex and as3 folders -->
+                    <sourcePaths>
+                        <path>${basedir}/src/main/flex</path>
+                        <path>${basedir}/src/main/as3</path>
+                    </sourcePaths>
+                    <services>${basedir}/src/main/webapp/WEB-INF/flex/services-config.xml</services>
+                    <locales>
+                        <param>en_GB</param>
+                    </locales>
+                    <!-- this must match the web application project -->
+                    <contextRoot>cookietime</contextRoot>
+                    <output>${basedir}/src/main/webapp/Main.swf</output>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>compile-swf</id>
+                        <goals>
+                            <goal>compile-swf</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+*#
+                
+        </plugins>
+        
+    </build>
+#*    
+    <repositories>
+        <repository>
+            <id>java-net-repository</id>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>flexmojos-repository</id>
+            <url>http://repository.sonatype.org/content/groups/public/</url>
+       </repository>
+    </repositories>
+*#
+#*
+    <pluginRepositories>
+        <pluginRepository>
+            <id>flexmojos-repository</id>
+            <url>http://repository.sonatype.org/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+*#
+
+</project>

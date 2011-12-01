@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="${entityType}"
+        entity-name="${entityType}" 
+#if ($entity.readOnly) 
+        mutable="false">
+#else
+        table="${entity.table.name}"
+        mutable="true">
+#end
+#if ($entity.readOnly)
+        <!--
+        Can use <subselect> as an alternative to defining a view in the database
+        -->
+        <subselect>
+        	SELECT * from ${entity.tableName}
+        </subselect>
+        
+        <!--
+        Specify join tables to ensure updates are seen
+        <synchronize table="Xxxx" />
+        -->
+        
+#end
+#if ($entity.simpleIdentity)
+	    <id name="${entity.identity.name}" type="${entity.simpleIdentity.propertyType.name().toLowerCase()}">
+	        <column name="${entity.simpleIdentity.column.name}" />
+	        <generator class="${entity.simpleIdentity.keyGenerationStrategy.name().toLowerCase()}" />
+	    </id>
+#elseif ($entity.componentIdentity) 
+        <composite-id name="${entity.componentIdentity.name}" class="${identityType}">
+#foreach($property in $entity.componentIdentity.simpleProperties)
+            <key-property name="${property.name}" column="${property.column.name}" type="${property.propertyType.name().toLowerCase()}"/>
+#end
+#foreach($property in $entity.componentIdentity.manyToOnes)
+            <key-many-to-one name="${property.name}" class="${javaHelper.getRelatedEntityType($property)}" lazy="proxy"#if(not $property.referencesIdentity()) property-ref="${property.referencedField.name}"#end>
+#foreach($col in $property.columns)
+         	    <column name="${col.name}" not-null="${col.notNull}" />
+#end
+            </key-many-to-one>
+#end
+        </composite-id>
+#else
+## Constrained identity is either ultimately a simple or complex identity
+#if ($identity.class.simpleName == "SimpleIdentityImpl")
+	    <id name="${identityName}" type="${identity.propertyType.name().toLowerCase()}">
+	        <column name="${entity.identity.findColumnMappedToField($identity).name}" />
+		    <generator class="foreign">
+		        <param name="property">${entity.identity.name}</param>
+		    </generator>
+	    </id>
+#else
+	    <composite-id name="${identityName}" class="${identityType}">
+#foreach($property in $identity.simpleProperties)
+            <key-property name="${property.name}" column="${entity.identity.findColumnMappedToField($property).name}" type="${property.propertyType.name().toLowerCase()}"/>
+#end
+#foreach($property in $identity.manyToOnes)
+            <key-many-to-one name="${property.name}" class="${javaHelper.getRelatedEntityType($property)}" lazy="proxy"#if(not $property.referencesIdentity()) property-ref="${property.referencedField.name}"#end>
+#foreach($col in $property.columns)
+         	    <column name="${col.name}" not-null="${property.notNull}" />
+#end
+            </key-many-to-one>
+#end
+            <generator class="foreign">
+                 <param name="property">${entity.identity.name}</param>
+            </generator>
+        </composite-id>
+#end
+#end
+## Natural Id fields
+#if($naturalId)
+        <natural-id mutable="false">
+## Simple property natural-id
+#if ($entity.simpleNaturalIdentity)	 
+#set ($property = $entity.simpleNaturalIdentity)
+            <property name="${property.name}" type="${property.propertyType.name().toLowerCase()}">
+#if ($property.column.name)
+                <column name="${property.column.name}" not-null="${property.column.notNull}" sql-type="${property.column.columnType}${property.column.specification}" />
+#end
+            </property>
+#end
+#if ($entity.componentNaturalIdentity)
+            <component name="${entity.naturalIdentity.name}" class="${naturalIdentityType}" unique="true">
+                <!-- TODO <parent name="blah" /> -->
+#foreach($property in $entity.componentNaturalIdentity.simpleProperties)
+                <property name="${property.name}" column="${property.column.name}" type="${property.propertyType.name().toLowerCase()}"/>
+#end
+#foreach($property in $entity.componentNaturalIdentity.manyToOnes)
+                <many-to-one name="${property.name}" class="${javaHelper.getRelatedEntityType($property)}" fetch="select" lazy="proxy"#if(not $property.referencesIdentity()) property-ref="${property.referencedField.name}"#end>
+#foreach($col in $property.columns)
+         	        <column name="${col.name}" not-null="${col.notNull}" />
+#end
+                </many-to-one>
+#end     
+            </component>
+#end
+## One-to-one field natural-id
+#if ($entity.oneToOneNaturalIdentity)	
+#set ($oneToOne = $entity.oneToOneNaturalIdentity)
+		    <many-to-one name="${oneToOne.name}" class="${javaHelper.getRelatedEntityType($oneToOne)}" fetch="select" lazy="proxy" cascade="none" outer-join="auto"#if(not $oneToOne.referencesIdentity()) property-ref="${oneToOne.referencedField.name}"#end>
+#foreach($col in $oneToOne.columns)
+         	    <column name="${col.name}" not-null="${oneToOne.notNull}" />
+#end
+		    </many-to-one>
+#end
+        </natural-id>
+#end    
+## Simple properties
+#foreach($property in $entity.simpleProperties)
+##if (not $naturalIdFields.contains($property.name))
+#if ($property.propertyType.name() == "BLOB")
+        <property name="${property.name}" type="binary">
+#else
+        <property name="${property.name}" type="${property.propertyType.name().toLowerCase()}">
+#end
+            <column name="${property.column.name}" not-null="${property.column.notNull}" sql-type="${property.column.columnType}${property.column.specification}" />
+        </property>
+##end
+#end
+## Many-to-one fields
+#foreach($manyToOne in $entity.manyToOnes)
+##if (not $naturalIdFields.contains($manyToOne.name))
+		<many-to-one name="${manyToOne.name}" class="${javaHelper.getRelatedEntityType($manyToOne)}" fetch="select" lazy="proxy" cascade="none" outer-join="auto"#if(${entity.primaryKeyColumnNames.containsAll($manyToOne.getColumnNames())}) insert="false" update="false"#end#if(not $manyToOne.referencesIdentity()) property-ref="${javaHelper.getRelatedField($manyToOne).name}"#end>  
+#foreach($col in $manyToOne.columns)
+         	<column name="${col.name}" not-null="${col.notNull}" />
+#end
+        </many-to-one>
+#end
+##end
+## One-to-one fields
+#foreach($oneToOne in $entity.oneToOneChilds)	
+##if (not $naturalIdFields.contains($oneToOne.name))
+		<many-to-one name="${oneToOne.name}" class="${javaHelper.getRelatedEntityType($oneToOne)}" fetch="select" lazy="proxy" cascade="none" outer-join="auto"#if(${entity.primaryKeyColumnNames.containsAll($oneToOne.getColumnNames())}) insert="false" update="false"#end#if(not $oneToOne.referencesIdentity()) property-ref="${oneToOne.referencedField.name}"#end>
+#foreach($col in $oneToOne.columns)
+         	<column name="${col.name}" not-null="${col.notNull}" />
+#end
+		</many-to-one>
+#end
+##end
+#foreach($oneToOne in $entity.oneToOneParents)	
+		<one-to-one name="${oneToOne.name}" class="${javaHelper.getRelatedEntityType($oneToOne)}" fetch="select" lazy="proxy" cascade="all" outer-join="auto" constrained="false"#if(not $javaHelper.getRelatedEntity($oneToOne).constrainedIdentity) property-ref="${javaHelper.getRelatedField($oneToOne).name}"#end/>
+#end
+#if($entity.constrainedIdentity)	
+		<one-to-one name="${entity.identity.name}" class="${javaHelper.getRelatedEntityType($entity.identity)}" fetch="select" lazy="proxy" cascade="none" outer-join="auto" constrained="true" />
+#end         
+## One-to-many fields
+#foreach($oneToMany in $entity.oneToManies)
+        <set name="${oneToMany.name}" inverse="true" lazy="true" cascade="all" sort="natural" table="$oneToMany.relation.foreignKey.referencingTable.name">
+            <key>
+#foreach($col in $oneToMany.relation.foreignKey.columnConstraints)
+                <column name="${col.referencingColumn.name}" not-null="${col.referencingColumn.notNull}" />
+#end
+            </key>
+            <one-to-many class="${javaHelper.getRelatedEntityType($oneToMany)}" />
+        </set>
+#end
+## Many-to-many fields
+#foreach($manyToMany in $entity.manyToManies)
+		<set name="${manyToMany.name}" inverse="false" lazy="true" cascade="none" sort="natural" table="${manyToMany.foreignKey.referencingTable.name}">
+            <key>
+#foreach($col in $manyToMany.foreignKey.columnConstraints)
+                <column name="${col.referencingColumn.name}" not-null="${col.referencingColumn.notNull}" />
+#end
+            </key>
+            <many-to-many class="${javaHelper.getRelatedEntityType($manyToMany)}"#if(not $manyToMany.referencesIdentity()) property-ref="${manyToMany.referencedField.name}"#end>
+#foreach($col in $manyToMany.relatedForeignKey.columnConstraints)            
+				<column name="${col.referencingColumn.name}" />
+#end
+            </many-to-many>    
+        </set>
+#end
+## One-to-many fields (via association)
+#foreach($oneToMany in $entity.oneToManyAssociations)
+		<set name="${oneToMany.name}" inverse="false" lazy="true" cascade="none" sort="natural" table="${oneToMany.foreignKey.referencingTable.name}">
+            <key>
+#foreach($col in $oneToMany.foreignKey.columnConstraints)
+                <column name="${col.referencingColumn.name}" />
+#end
+            </key>
+            <many-to-many class="${javaHelper.getRelatedEntityType($oneToMany)}"#if (not $oneToMany.referencesIdentity()) property-ref="${oneToMany.referencedIdentity.name}"#end>
+#foreach($col in $oneToMany.relatedForeignKey.columnConstraints)            
+				<column name="${col.referencingColumn.name}" />
+#end
+            </many-to-many>    
+        </set>
+#end
+#foreach($oneToOne in $entity.oneToOneAssociations)	
+        <join table="${oneToOne.foreignKey.referencingTable.name}" 
+	        optional="true">
+	        <key unique="true">
+#foreach($col in $oneToOne.foreignKey.columnConstraints)
+                <column name="${col.referencingColumn.name}" />
+#end
+	        </key>   
+	        <many-to-one name="${oneToOne.name}"
+	            class="${javaHelper.getRelatedEntityType($oneToOne)}" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+#if(not $oneToOne.referencesIdentity()) 
+                property-ref="${oneToOne.referencedField.name}"
+#end 
+	            outer-join="auto">
+#foreach($col in $oneToOne.relatedForeignKey.columnConstraints)            
+				<column name="${col.referencingColumn.name}" />
+#end
+	        </many-to-one>
+	    </join>
+#end
+#foreach($manyToOne in $entity.manyToOneAssociations)	
+        <join table="${manyToOne.foreignKey.referencingTable.name}" 
+	        optional="true">
+	        <key unique="true">
+#foreach($col in $manyToOne.foreignKey.columnConstraints)
+                <column name="${col.referencingColumn.name}" />
+#end
+	        </key>   
+	        <many-to-one name="${manyToOne.name}"
+	            class="${javaHelper.getRelatedEntityType($manyToOne)}" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+#if(not $manyToOne.referencesIdentity()) 
+                property-ref="${manyToOne.referencedField.name}"
+#end	            
+	            outer-join="auto">
+#foreach($col in $manyToOne.relatedForeignKey.columnConstraints)            
+				<column name="${col.referencingColumn.name}" />
+#end
+	        </many-to-one>
+	    </join>
+#end
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from ${entityType} as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from ${entityType} as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

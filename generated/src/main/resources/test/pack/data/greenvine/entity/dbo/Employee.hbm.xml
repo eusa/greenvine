@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.dbo.Employee"
+        entity-name="test.pack.data.greenvine.entity.dbo.Employee" 
+        table="DBO.TBL_EMPLOYEE"
+        mutable="true">
+	    <id name="employeeId" type="integer">
+	        <column name="EMPLOYEE_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <natural-id mutable="false">
+            <property name="email" type="string">
+                <column name="EMAIL" not-null="true" sql-type="VARCHAR(255)" />
+            </property>
+        </natural-id>
+        <property name="dailyWorkingHours" type="big_decimal">
+            <column name="DAILY_WORKING_HOURS" not-null="true" sql-type="DECIMAL(4, 1)" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" not-null="true" sql-type="VARCHAR(255)" />
+        </property>
+        <property name="hourlyCost" type="big_decimal">
+            <column name="HOURLY_COST" not-null="true" sql-type="DECIMAL(19, 4)" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" not-null="true" sql-type="VARCHAR(255)" />
+        </property>
+		<many-to-one name="manager" class="test.pack.data.greenvine.entity.dbo.Employee" fetch="select" lazy="proxy" cascade="none" outer-join="auto">  
+         	<column name="FK_MANAGER_ID" not-null="false" />
+        </many-to-one>
+		<many-to-one name="user" class="test.pack.data.greenvine.entity.dbo.User" fetch="select" lazy="proxy" cascade="none" outer-join="auto">
+         	<column name="FK_USER_ID" not-null="true" />
+		</many-to-one>
+		<one-to-one name="contract" class="test.pack.data.greenvine.entity.dbo.Contract" fetch="select" lazy="proxy" cascade="all" outer-join="auto" constrained="false"/>
+        <set name="employees" inverse="true" lazy="true" cascade="all" sort="natural" table="DBO.TBL_EMPLOYEE">
+            <key>
+                <column name="FK_MANAGER_ID" not-null="false" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.dbo.Employee" />
+        </set>
+        <set name="timesheets" inverse="true" lazy="true" cascade="all" sort="natural" table="TEST.TBL_TIMESHEET">
+            <key>
+                <column name="FK_EMPLOYEE_ID" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.test.Timesheet" />
+        </set>
+        <set name="umbrellas" inverse="true" lazy="true" cascade="all" sort="natural" table="DBO.TBL_UMBRELLA">
+            <key>
+                <column name="FK_EMPLOYEE_ID" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.dbo.Umbrella" />
+        </set>
+		<set name="employeeMentorees" inverse="false" lazy="true" cascade="none" sort="natural" table="DBO.TBL_EMPLOYEE_MENTOR">
+            <key>
+                <column name="MENTOR_ID" />
+            </key>
+            <many-to-many class="test.pack.data.greenvine.entity.dbo.Employee">
+				<column name="MENTOREE_ID" />
+            </many-to-many>    
+        </set>
+        <join table="DBO.TBL_DESK_EMPLOYEE" 
+	        optional="true">
+	        <key unique="true">
+                <column name="FK_EMPLOYEE_ID" />
+	        </key>   
+	        <many-to-one name="desk"
+	            class="test.pack.data.greenvine.entity.dbo.Desk" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+	            outer-join="auto">
+				<column name="FK_DESK_ID" />
+	        </many-to-one>
+	    </join>
+        <join table="DBO.TBL_EMPLOYEE_MENTOR" 
+	        optional="true">
+	        <key unique="true">
+                <column name="MENTOREE_ID" />
+	        </key>   
+	        <many-to-one name="employeeMentor"
+	            class="test.pack.data.greenvine.entity.dbo.Employee" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+	            outer-join="auto">
+				<column name="MENTOR_ID" />
+	        </many-to-one>
+	    </join>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Employee as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Employee as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

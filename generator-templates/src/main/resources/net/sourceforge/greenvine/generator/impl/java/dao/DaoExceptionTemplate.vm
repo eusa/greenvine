@@ -1,0 +1,23 @@
+package ${exceptionPackageName};
+
+public class ${exceptionClassName} extends RuntimeException {
+
+    private static final long serialVersionUID = ${javaHelper.generateSerialVersionUID()}L;
+
+    public ${exceptionClassName}() {
+        super();
+    }
+
+    public ${exceptionClassName}(String message) {
+        super(message);
+    }
+
+    public ${exceptionClassName}(Throwable cause) {
+        super(cause);
+    }
+
+    public ${exceptionClassName}(String message, Throwable cause) {
+        super(message, cause);
+    }
+    
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Bug"
+        entity-name="test.pack.data.greenvine.entity.test.Bug" 
+        table="TEST.TBL_BUGS"
+        mutable="true">
+	    <id name="bugId" type="integer">
+	        <column name="BUG_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" not-null="true" sql-type="VARCHAR(4000)" />
+        </property>
+        <property name="open" type="boolean">
+            <column name="OPEN" not-null="true" sql-type="BOOLEAN" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" not-null="true" sql-type="VARCHAR(255)" />
+        </property>
+		<many-to-one name="owner" class="test.pack.data.greenvine.entity.test.User" fetch="select" lazy="proxy" cascade="none" outer-join="auto">  
+         	<column name="OWNER" not-null="true" />
+        </many-to-one>
+		<many-to-one name="reporter" class="test.pack.data.greenvine.entity.test.User" fetch="select" lazy="proxy" cascade="none" outer-join="auto">  
+         	<column name="REPORTER" not-null="true" />
+        </many-to-one>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Bug as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Bug as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

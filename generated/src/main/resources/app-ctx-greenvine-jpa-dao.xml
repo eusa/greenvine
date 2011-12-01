@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+    default-autowire="byName">
+    
+	
+	<bean id="contractDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springjpa.ContractDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="deskDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springjpa.DeskDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="employeeDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springjpa.EmployeeDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="groupDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springjpa.GroupDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="standDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springjpa.StandDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="umbrellaDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springjpa.UmbrellaDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="userDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springjpa.UserDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="activityDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.ActivityDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="addressDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.AddressDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="bugDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.BugDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="consignmentDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.ConsignmentDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="customerDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.CustomerDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="parkingPermitDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.ParkingPermitDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="parkingPermitPaymentDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.ParkingPermitPaymentDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="passportDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.PassportDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="personDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.PersonDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="profileDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.ProfileDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="timesheetDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.TimesheetDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="typeDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.TypeDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="userDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.UserDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean id="vehicleDao"
+		class="test.pack.data.greenvine.dao.test.impl.springjpa.VehicleDaoImpl">
+		<property name="jpaTemplate">
+			<bean class="org.springframework.orm.jpa.JpaTemplate">
+		        <property name="entityManagerFactory">
+			        <ref bean="entityManagerFactory" />
+		        </property>
+		    </bean>
+		</property>
+	</bean>
+	
+</beans>

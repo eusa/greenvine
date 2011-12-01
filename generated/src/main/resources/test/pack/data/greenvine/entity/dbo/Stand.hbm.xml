@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.dbo.Stand"
+        entity-name="test.pack.data.greenvine.entity.dbo.Stand" 
+        table="DBO.TBL_STAND"
+        mutable="true">
+	    <id name="standId" type="integer">
+	        <column name="STAND_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" not-null="true" sql-type="VARCHAR(4000)" />
+        </property>
+		<set name="umbrellas" inverse="false" lazy="true" cascade="none" sort="natural" table="DBO.TBL_STAND_UMBRELLA">
+            <key>
+                <column name="FK_STAND_ID" />
+            </key>
+            <many-to-many class="test.pack.data.greenvine.entity.dbo.Umbrella">
+				<column name="FK_UMBRELLA_ID" />
+            </many-to-many>    
+        </set>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Stand as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Stand as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

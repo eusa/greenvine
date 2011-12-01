@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+  
+    <!-- JDBCDatabaseExtractor -->
+    <bean id="databaseExtractor" class="net.sourceforge.greenvine.dbextractor.impl.JdbcDatabaseExtractorImpl">
+        <constructor-arg><ref bean="extractorConfig" /></constructor-arg>
+        <constructor-arg><ref bean="namingConventions" /></constructor-arg>
+    </bean>
+    
+    <!-- JDBCDatabaseExtractorConfig -->
+    <bean id="extractorConfig" class="net.sourceforge.greenvine.dbextractor.impl.JdbcDatabaseExtractorConfig">
+        <property name="catalog">
+        	<bean class="net.sourceforge.greenvine.dbextractor.impl.Catalog">
+        		<property name="connection">
+        		    <bean class="net.sourceforge.greenvine.dbextractor.impl.Connection">
+        		    	<property name="jdbcDriver" value="org.h2.Driver" />
+        		    	<property name="jdbcUrl" value="jdbc:h2:mem:~/GREENVINE_DB" />
+        		    	<property name="username" value="" />
+        		    	<property name="password" value="" />
+        		    </bean>
+        		</property>
+        		<property name="inclusions">
+        		    <bean class="net.sourceforge.greenvine.dbextractor.impl.IncludeAllStrategy" />
+        		</property>
+        	</bean>
+        </property>
+    </bean>
+    
+    <!-- Naming conventions -->
+    <bean id="namingConventions" class="net.sourceforge.greenvine.model.naming.RdbmsNamingConventions">
+        <property name="database">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="caseStrategy" value="UPPERCASE" />
+            	<property name="separator" value="_" />
+            	<property name="suffix" value="DB" />
+            	<property name="prefix" value="" />
+            	<property name="validatorRegex" value="^([A-Za-z_0-9\\.]+)*$" />
+            </bean>
+        </property>
+        <property name="dataColumn">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            </bean>
+        </property>
+        <property name="foreignColumn">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            	<property name="prefix" value="FK" />
+            	<property name="suffix" value="ID" />
+            </bean>
+        </property>
+        <property name="foreignKey">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            	<property name="prefix" value="FK" />
+            </bean>
+        </property>
+        <property name="primaryColumn">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            	<property name="prefix" value="PK" />
+            	<property name="suffix" value="ID" />
+            </bean>
+        </property>
+        <property name="primaryKey">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            	<property name="prefix" value="PK" />
+            </bean>
+        </property>
+        <property name="table">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            	<property name="prefix" value="TBL" />
+            </bean>
+        </property>
+        <property name="uniqueKey">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            	<property name="prefix" value="UK" />
+            </bean>
+        </property>
+        <property name="view">
+            <bean class="net.sourceforge.greenvine.model.naming.RdbmsNamingConvention">
+            	<property name="separator" value="_" />
+            	<property name="prefix" value="VW" />
+            </bean>
+        </property>
+    </bean> 
+     
+</beans>

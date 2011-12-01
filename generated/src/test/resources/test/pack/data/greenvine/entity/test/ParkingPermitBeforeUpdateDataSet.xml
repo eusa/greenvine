@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="target/xsd/dataset.xsd" 
+    xmlns:DBO="DBO"    
+    xmlns:TEST="TEST">
+    <TEST:TBL_VEHICLE MODEL="s" REG_NUMBER="s" />
+    <TEST:TBL_PARKING_PERMIT DATE="2009-01-01" FK_REG_NUMBER="s" VALUE="100.1" />
+</dataset>
+
+ 
+
+ 
+ 

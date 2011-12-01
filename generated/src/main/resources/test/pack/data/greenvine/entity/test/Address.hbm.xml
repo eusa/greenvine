@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Address"
+        entity-name="test.pack.data.greenvine.entity.test.Address" 
+        table="TEST.TBL_ADDRESS"
+        mutable="true">
+	    <id name="addressId" type="integer">
+	        <column name="ADDRESS_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <natural-id mutable="false">
+            <component name="addressNaturalIdentity" class="test.pack.data.greenvine.entity.test.AddressNaturalIdentity" unique="true">
+                <!-- TODO <parent name="blah" /> -->
+                <property name="houseNumber" column="HOUSE_NUMBER" type="string"/>
+                <property name="streetName" column="STREET_NAME" type="string"/>
+            </component>
+        </natural-id>
+        <property name="postCode" type="string">
+            <column name="POST_CODE" not-null="true" sql-type="CHARACTER(10)" />
+        </property>
+        <set name="consignments" inverse="true" lazy="true" cascade="all" sort="natural" table="TEST.TBL_CONSIGNMENT">
+            <key>
+                <column name="FK_ADDRESS_ID" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.test.Consignment" />
+        </set>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Address as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Address as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

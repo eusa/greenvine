@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.dbo.Umbrella"
+        entity-name="test.pack.data.greenvine.entity.dbo.Umbrella" 
+        table="DBO.TBL_UMBRELLA"
+        mutable="true">
+	    <id name="umbrellaId" type="integer">
+	        <column name="UMBRELLA_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="colour" type="string">
+            <column name="COLOUR" not-null="true" sql-type="VARCHAR(4000)" />
+        </property>
+		<many-to-one name="employee" class="test.pack.data.greenvine.entity.dbo.Employee" fetch="select" lazy="proxy" cascade="none" outer-join="auto">  
+         	<column name="FK_EMPLOYEE_ID" not-null="true" />
+        </many-to-one>
+        <join table="DBO.TBL_STAND_UMBRELLA" 
+	        optional="true">
+	        <key unique="true">
+                <column name="FK_UMBRELLA_ID" />
+	        </key>   
+	        <many-to-one name="stand"
+	            class="test.pack.data.greenvine.entity.dbo.Stand" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+	            outer-join="auto">
+				<column name="FK_STAND_ID" />
+	        </many-to-one>
+	    </join>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Umbrella as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.dbo.Umbrella as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<db-vendor-type-mapping database-vendor="mysql"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<!--  SQL92 types to db types -->
+	<sql92-mapping sql92-type="BIGINT" vendor-specific-type="bigint" />
+	<sql92-mapping sql92-type="BINARY" vendor-specific-type="binary" />
+	<sql92-mapping sql92-type="BIT" vendor-specific-type="bit" />
+	<sql92-mapping sql92-type="BLOB" vendor-specific-type="blob" />
+	<sql92-mapping sql92-type="BOOLEAN" vendor-specific-type="boolean" />
+	<sql92-mapping sql92-type="CHARACTER" vendor-specific-type="char" />
+	<sql92-mapping sql92-type="CLOB" vendor-specific-type="clob" />
+	<sql92-mapping sql92-type="DATE" vendor-specific-type="date" />
+	<sql92-mapping sql92-type="DECIMAL" vendor-specific-type="decimal" />
+	<sql92-mapping sql92-type="DOUBLE" vendor-specific-type="double precision" />
+	<sql92-mapping sql92-type="FLOAT" vendor-specific-type="float" />
+	<sql92-mapping sql92-type="INTEGER" vendor-specific-type="int" />
+	<sql92-mapping sql92-type="LONGVARBINARY" vendor-specific-type="longvarbinary" />
+	<sql92-mapping sql92-type="LONGVARCHAR" vendor-specific-type="mediumtext" />
+	<sql92-mapping sql92-type="NUMERIC" vendor-specific-type="numeric" />
+	<sql92-mapping sql92-type="REAL" vendor-specific-type="real" />
+	<sql92-mapping sql92-type="SMALLINT" vendor-specific-type="smallint" />
+	<sql92-mapping sql92-type="TIME" vendor-specific-type="time" />
+	<sql92-mapping sql92-type="TIMESTAMP" vendor-specific-type="timestamp" />
+	<sql92-mapping sql92-type="TINYINT" vendor-specific-type="tinyint" />
+	<sql92-mapping sql92-type="VARBINARY" vendor-specific-type="varbinary" />
+	<sql92-mapping sql92-type="VARCHAR" vendor-specific-type="varchar" />
+	
+	<!--  Property types to db types -->
+	<property-mapping property-type="big_decimal" vendor-specific-type="numeric" />
+	<property-mapping property-type="binary" vendor-specific-type="binary" />
+	<property-mapping property-type="blob" vendor-specific-type="binary" />
+	<property-mapping property-type="boolean" vendor-specific-type="bit" />
+	<property-mapping property-type="byte" vendor-specific-type="binary" />
+	<property-mapping property-type="calendar_date" vendor-specific-type="datetime" />
+	<property-mapping property-type="calendar" vendor-specific-type="datetime" />
+	<property-mapping property-type="character" vendor-specific-type="char" />
+	<property-mapping property-type="class" vendor-specific-type="text" />
+	<property-mapping property-type="clob" vendor-specific-type="text" />
+	<property-mapping property-type="currency" vendor-specific-type="decimal" />
+	<property-mapping property-type="date" vendor-specific-type="date" />
+	<property-mapping property-type="double" vendor-specific-type="double precision" />
+	<property-mapping property-type="float" vendor-specific-type="real" />
+	<property-mapping property-type="integer" vendor-specific-type="int" />
+	<property-mapping property-type="locale" vendor-specific-type="java.util.Locale" />	
+	<property-mapping property-type="long" vendor-specific-type="bigint" />
+	<property-mapping property-type="serializable" vendor-specific-type="binary" />
+	<property-mapping property-type="short" vendor-specific-type="smallint" />
+	<property-mapping property-type="string" vendor-specific-type="varchar" />
+	<property-mapping property-type="text" vendor-specific-type="text" />
+	
+</db-vendor-type-mapping>

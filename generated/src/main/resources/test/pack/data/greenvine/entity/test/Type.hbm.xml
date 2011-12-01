@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Type"
+        entity-name="test.pack.data.greenvine.entity.test.Type" 
+        table="TEST.TBL_TYPES"
+        mutable="true">
+	    <id name="type6" type="long">
+	        <column name="TYPE_6" />
+	        <generator class="assigned" />
+	    </id>
+        <property name="type1" type="integer">
+            <column name="TYPE_1" not-null="true" sql-type="INTEGER" />
+        </property>
+        <property name="type10" type="time">
+            <column name="TYPE_10" not-null="true" sql-type="TIME" />
+        </property>
+        <property name="type12" type="date">
+            <column name="TYPE_12" not-null="true" sql-type="DATE" />
+        </property>
+        <property name="type13" type="timestamp">
+            <column name="TYPE_13" not-null="true" sql-type="TIMESTAMP" />
+        </property>
+        <property name="type14" type="binary">
+            <column name="TYPE_14" not-null="true" sql-type="VARBINARY" />
+        </property>
+        <property name="type16" type="string">
+            <column name="TYPE_16" not-null="true" sql-type="VARCHAR(20)" />
+        </property>
+        <property name="type17" type="string">
+            <column name="TYPE_17" not-null="true" sql-type="CHARACTER(20)" />
+        </property>
+        <property name="type18" type="binary">
+            <column name="TYPE_18" not-null="true" sql-type="BLOB" />
+        </property>
+        <property name="type19" type="text">
+            <column name="TYPE_19" not-null="true" sql-type="CLOB" />
+        </property>
+        <property name="type2" type="boolean">
+            <column name="TYPE_2" not-null="true" sql-type="BOOLEAN" />
+        </property>
+        <property name="type20" type="string">
+            <column name="TYPE_20" not-null="true" sql-type="CHARACTER(20)" />
+        </property>
+        <property name="type3" type="byte">
+            <column name="TYPE_3" not-null="true" sql-type="TINYINT" />
+        </property>
+        <property name="type4" type="short">
+            <column name="TYPE_4" not-null="true" sql-type="SMALLINT" />
+        </property>
+        <property name="type5" type="long">
+            <column name="TYPE_5" not-null="true" sql-type="BIGINT" />
+        </property>
+        <property name="type7" type="big_decimal">
+            <column name="TYPE_7" not-null="true" sql-type="DECIMAL(10, 2)" />
+        </property>
+        <property name="type8" type="double">
+            <column name="TYPE_8" not-null="true" sql-type="DOUBLE(17)" />
+        </property>
+        <property name="type9" type="float">
+            <column name="TYPE_9" not-null="true" sql-type="REAL(7)" />
+        </property>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Type as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Type as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

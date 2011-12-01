@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+    default-autowire="byName">
+ 
+	<bean id="contractDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springhibernate.ContractDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.dbo.Contract" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="deskDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springhibernate.DeskDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.dbo.Desk" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="employeeDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springhibernate.EmployeeDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.dbo.Employee" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="groupDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springhibernate.GroupDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.dbo.Group" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="standDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springhibernate.StandDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.dbo.Stand" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="umbrellaDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springhibernate.UmbrellaDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.dbo.Umbrella" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="userDao"
+		class="test.pack.data.greenvine.dao.dbo.impl.springhibernate.UserDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.dbo.User" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="activityDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.ActivityDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Activity" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="addressDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.AddressDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Address" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="bugDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.BugDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Bug" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="consignmentDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.ConsignmentDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Consignment" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="customerDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.CustomerDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Customer" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="parkingPermitDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.ParkingPermitDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.ParkingPermit" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="parkingPermitPaymentDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.ParkingPermitPaymentDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.ParkingPermitPayment" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="passportDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.PassportDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Passport" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="personDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.PersonDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Person" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="profileDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.ProfileDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Profile" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="timesheetDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.TimesheetDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Timesheet" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="typeDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.TypeDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Type" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="userDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.UserDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.User" />
+	                </bean>
+		</property>
+	</bean>
+	<bean id="vehicleDao"
+		class="test.pack.data.greenvine.dao.test.impl.springhibernate.VehicleDaoImpl">
+		<property name="hibernateTemplate">
+			<bean class="org.springframework.orm.hibernate3.HibernateTemplate">
+		                <property name="sessionFactory">
+			                <ref bean="sessionFactory" />
+		                </property>
+		                <property name="cacheQueries" value="true" />
+		                <property name="queryCacheRegion" value="query.test.pack.data.greenvine.entity.test.Vehicle" />
+	                </bean>
+		</property>
+	</bean>
+	
+</beans>

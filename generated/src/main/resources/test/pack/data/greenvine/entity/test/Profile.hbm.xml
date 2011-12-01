@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Profile"
+        entity-name="test.pack.data.greenvine.entity.test.Profile" 
+        table="TEST.TBL_PROFILE"
+        mutable="true">
+	    <id name="profileId" type="integer">
+	        <column name="PROFILE_ID" />
+	        <generator class="assigned" />
+	    </id>
+        <natural-id mutable="false">
+		    <many-to-one name="user" class="test.pack.data.greenvine.entity.test.User" fetch="select" lazy="proxy" cascade="none" outer-join="auto">
+         	    <column name="FK_USERNAME" not-null="true" />
+		    </many-to-one>
+        </natural-id>
+        <property name="screenName" type="string">
+            <column name="SCREEN_NAME" not-null="true" sql-type="VARCHAR(100)" />
+        </property>
+		<set name="friendRequestees" inverse="false" lazy="true" cascade="none" sort="natural" table="TEST.TBL_FRIEND">
+            <key>
+                <column name="REQUESTER_ID" not-null="true" />
+            </key>
+            <many-to-many class="test.pack.data.greenvine.entity.test.Profile">
+				<column name="REQUESTEE_ID" />
+            </many-to-many>    
+        </set>
+		<set name="friendRequesters" inverse="false" lazy="true" cascade="none" sort="natural" table="TEST.TBL_FRIEND">
+            <key>
+                <column name="REQUESTEE_ID" not-null="true" />
+            </key>
+            <many-to-many class="test.pack.data.greenvine.entity.test.Profile">
+				<column name="REQUESTER_ID" />
+            </many-to-many>    
+        </set>
+        <join table="TEST.TBL_SPOUSE" 
+	        optional="true">
+	        <key unique="true">
+                <column name="SPOUSE_TO_ID" />
+	        </key>   
+	        <many-to-one name="spouseFrom"
+	            class="test.pack.data.greenvine.entity.test.Profile" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+	            outer-join="auto">
+				<column name="SPOUSE_FROM_ID" />
+	        </many-to-one>
+	    </join>
+        <join table="TEST.TBL_SPOUSE" 
+	        optional="true">
+	        <key unique="true">
+                <column name="SPOUSE_FROM_ID" />
+	        </key>   
+	        <many-to-one name="spouseTo"
+	            class="test.pack.data.greenvine.entity.test.Profile" 
+	            fetch="select" 
+	            lazy="proxy" 
+	            cascade="none" 
+	            outer-join="auto">
+				<column name="SPOUSE_TO_ID" />
+	        </many-to-one>
+	    </join>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Profile as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Profile as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="false">
+    <class 
+        name="test.pack.data.greenvine.entity.test.Timesheet"
+        entity-name="test.pack.data.greenvine.entity.test.Timesheet" 
+        table="TEST.TBL_TIMESHEET"
+        mutable="true">
+        <composite-id name="timesheetIdentity" class="test.pack.data.greenvine.entity.test.TimesheetIdentity">
+            <key-property name="date" column="DATE" type="date"/>
+            <key-property name="employeeId" column="FK_EMPLOYEE_ID" type="integer"/>
+        </composite-id>
+        <property name="expectedHours" type="big_decimal">
+            <column name="EXPECTED_HOURS" not-null="true" sql-type="DECIMAL(4, 1)" />
+        </property>
+		<many-to-one name="employee" class="test.pack.data.greenvine.entity.dbo.Employee" fetch="select" lazy="proxy" cascade="none" outer-join="auto" insert="false" update="false">  
+         	<column name="FK_EMPLOYEE_ID" not-null="true" />
+        </many-to-one>
+        <set name="activities" inverse="true" lazy="true" cascade="all" sort="natural" table="TEST.TBL_ACTIVITY">
+            <key>
+                <column name="FK_DATE" not-null="true" />
+                <column name="FK_EMPLOYEE_ID" not-null="true" />
+            </key>
+            <one-to-many class="test.pack.data.greenvine.entity.test.Activity" />
+        </set>
+     
+		<query name="FindAll">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Timesheet as a order by a.id
+			]]>
+		</query>
+		
+		<!-- 
+		Example query with named parameter
+		<query name="FindByXxxx">
+			<![CDATA[
+    		from test.pack.data.greenvine.entity.test.Timesheet as a
+    		where a.xxx = :xxx 
+    		order by a.id
+			]]>
+		</query>
+		 -->
+       
+    </class>
+</hibernate-mapping>
