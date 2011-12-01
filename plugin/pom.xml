@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>project</artifactId>
 		<groupId>net.sourceforge.greenvine</groupId>
-		<version>0.5.0</version>
+		<version>0.5.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>greenvine-plugin</artifactId>
@@ -20,19 +20,19 @@
         <dependency>
 			<groupId>net.sourceforge.greenvine</groupId>
 			<artifactId>generator-impl</artifactId>
-			<version>0.5.0</version>
+			<version>0.5.1-SNAPSHOT</version>
 		</dependency>
  
         <dependency>
 			<groupId>net.sourceforge.greenvine</groupId>
 			<artifactId>reverseengineer</artifactId>
-			<version>0.5.0</version>
+			<version>0.5.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>net.sourceforge.greenvine</groupId>
 			<artifactId>generator-templates</artifactId>
-			<version>0.5.0</version>
+			<version>0.5.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
