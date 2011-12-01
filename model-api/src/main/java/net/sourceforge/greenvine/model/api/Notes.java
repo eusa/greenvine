@@ -14,4 +14,8 @@ public interface Notes {
     // TODO [minor] Use the Builder pattern approach taken for ComponentIdentity on ComponentNaturalIdentity etc 
     // TODO [minor] add table/column/foreign-key overrides to reveng.xml to control names and types of generated fields
 
+	// TODO Handle reserved java keywords in name extractors
+	// TODO if a field in an entity has the same name as the entity, this could cause issues in some generated classes
+	// TODO Make NaturalIdentities optional, defaulting to false
+	
 }

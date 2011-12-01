@@ -18,9 +18,6 @@ import net.sourceforge.greenvine.generator.template.Template;
 import net.sourceforge.greenvine.generator.template.TemplateFactory;
 import net.sourceforge.greenvine.model.api.Model;
 
-import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.ValidationException;
-
 public class GeneratorRunnerImpl implements GeneratorRunner {
     
     private final GeneratorRunnerConfig generatorRunnerConfig;
@@ -40,8 +37,7 @@ public class GeneratorRunnerImpl implements GeneratorRunner {
     public GeneratorRunnerResult generate(Model model, File outputDirectory) throws InterruptedException,
             ExecutionException, ClassNotFoundException, InstantiationException,
             IllegalAccessException, NoSuchMethodException,
-            InvocationTargetException, MarshalException, ValidationException,
-            FileNotFoundException {
+            InvocationTargetException, FileNotFoundException {
 
         // Create the GeneratorTaskExecutor
         GeneratorTaskExecutor executor = new GeneratorTaskExecutor(generatorRunnerConfig
