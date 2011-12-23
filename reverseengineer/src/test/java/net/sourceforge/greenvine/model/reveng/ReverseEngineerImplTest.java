@@ -58,6 +58,7 @@ public class ReverseEngineerImplTest {
         // Set up RevengConfig
         RevengConfig revengConfig = new RevengConfig();
         revengConfig.setModelName("model");
+        revengConfig.setCreateNaturalIdentities(true);
         
         // Create ReverseEngineer
         reveng = new ReverseEngineerImpl(revengConfig);

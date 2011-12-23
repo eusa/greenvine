@@ -9,6 +9,7 @@ import net.sourceforge.greenvine.model.api.Entity;
 import net.sourceforge.greenvine.model.api.ForeignKey;
 import net.sourceforge.greenvine.model.api.Identity;
 import net.sourceforge.greenvine.model.api.ModelException;
+import net.sourceforge.greenvine.model.api.NaturalIdentity;
 import net.sourceforge.greenvine.model.api.PrimaryKey;
 import net.sourceforge.greenvine.model.api.PropertyValueGenerationStrategy;
 import net.sourceforge.greenvine.model.api.Table;
@@ -93,11 +94,10 @@ public class ReverseEngineerImpl implements ReverseEngineer {
             }
         }
         
-        // Create identities
-        //createIdentities(model, db);
-        
         // Create a natural identity
-        createNaturalIds(catalog, database);
+        if (revengConfig.isCreateNaturalIdentities()) {
+            createNaturalIds(catalog, database);
+        }
         
         // Create relationships
         createRelationships(catalog, database);
@@ -105,8 +105,6 @@ public class ReverseEngineerImpl implements ReverseEngineer {
         // Create simple properties
         createSimpleProperties(catalog, database);
         
-
-                
     }
     
     private void createSimpleProperties(CatalogImpl catalog, Database db) throws ModelException {
@@ -206,7 +204,7 @@ public class ReverseEngineerImpl implements ReverseEngineer {
         // where the component identity consists of a many-to-one
         // and a simple property - hence, only support if 
         // if specified in configuration
-        if (revengConfig.getCreateManyToOneInComponentIdentities()) {
+        if (revengConfig.isCreateManyToOneInComponentIdentities()) {
             for (ForeignKey foreignKey : pk.getForeignKeys()) {
                 logger.log(Level.FINE, "ComponentIdentity: Many-to-one component field");
                 Table relatedTable = foreignKey.getReferencedTable();
@@ -215,7 +213,6 @@ public class ReverseEngineerImpl implements ReverseEngineer {
                 OneToManyNameExtractor parentExtractor = new OneToManyNameExtractor(namingConventions);
                 FieldNameImpl childName = childExtractor.extractName(entity, foreignKey);
                 FieldNameImpl parentName = parentExtractor.extractName(relatedEntity, foreignKey);
-                //identity.createManyToOneRelationship(parentName, childName, foreignKey.getName());
                 builder.addManyToOne(parentName, childName, foreignKey.getName());
             }
         } else {
@@ -223,7 +220,6 @@ public class ReverseEngineerImpl implements ReverseEngineer {
             for (ForeignKey foreignKey : pk.getForeignKeys()) {
                 logger.log(Level.FINE, "ComponentIdentity: Many-to-one component field [as simple property]");
                 for (Column column : foreignKey.getReferencingColumns()) {
-                    //identity.createSimpleProperty(fieldExtractor.extractName(identity, column), column.getColumnType().getPropertyType(), PropertyValueGenerationStrategy.ASSIGNED, column.getName());
                     builder.addSimpleProperty(fieldExtractor.extractName(builder, column), column.getName(), column.getColumnType().getPropertyType(), PropertyValueGenerationStrategy.ASSIGNED);
                 }
             }
@@ -232,12 +228,7 @@ public class ReverseEngineerImpl implements ReverseEngineer {
         // Add simple property fields
         IdentityFieldNameExtractor fieldExtractor = new IdentityFieldNameExtractor(namingConventions);
         for (Column column : pk.getNonForeignColumns()) {
-        //for (Column column : pkCols) {
-          //  if (!identity.getColumns().contains(column)) {
-                //identity.createSimpleProperty(fieldExtractor.extractName(identity, column), column.getColumnType().getPropertyType(), PropertyValueGenerationStrategy.ASSIGNED, column.getName());
-                builder.addSimpleProperty(fieldExtractor.extractName(builder, column), column.getName(), column.getColumnType().getPropertyType(), PropertyValueGenerationStrategy.ASSIGNED);
-                
-            //}
+            builder.addSimpleProperty(fieldExtractor.extractName(builder, column), column.getName(), column.getColumnType().getPropertyType(), PropertyValueGenerationStrategy.ASSIGNED);
         }
         
         // Build the ComponentIdentity
@@ -385,23 +376,22 @@ public class ReverseEngineerImpl implements ReverseEngineer {
                         if (isForeignColumnPrimary) {
                             // It is a constrained one to one
                             // Therefore, already created during identity creation
-                        } else if (isForeignColumnUnique && childEntity.getNaturalIdentity() != null) {
+                        } else if (isForeignColumnUnique) {
+                        	UniqueKey uniqueKey = foreignKey.getReferencingUniqueKey();
+                        	NaturalIdentity naturalIdentity = childEntity.getNaturalIdentity();
                             // it is a one-to-one
-                            logger.log(Level.FINE, "One-to-one, parent: " + parentEntity.getName() + ", child: " + childEntity.getName());
-                            OneToOneChildNameExtractor childExtractor = new OneToOneChildNameExtractor(namingConventions);
-                            OneToOneParentNameExtractor parentExtractor = new OneToOneParentNameExtractor(namingConventions);
-                            FieldNameImpl childName = childExtractor.extractName(parentEntity, foreignKey);
-                            FieldNameImpl parentName = parentExtractor.extractName(childEntity, foreignKey);
-                            catalog.createBiDirectionalOneToOneRelationship(parentName, childName, foreignKey.getName());
-                        } else if (isForeignColumnUnique && childEntity.getNaturalIdentity() == null) {
-                            // it is a one-to-one
-                            logger.log(Level.FINE, "One-to-one natural identity, parent: " + parentEntity.getName() + ", child: " + childEntity.getName());
-                            OneToOneChildNameExtractor childExtractor = new OneToOneChildNameExtractor(namingConventions);
-                            OneToOneParentNameExtractor parentExtractor = new OneToOneParentNameExtractor(namingConventions);
-                            FieldNameImpl childName = childExtractor.extractName(parentEntity, foreignKey);
-                            FieldNameImpl parentName = parentExtractor.extractName(childEntity, foreignKey);
-                            catalog.createNaturalIdentityOneToOneRelation(parentName, childName, foreignKey.getName(), childEntity.getTable().getUniqueKey(0).getName());
-                        } else {
+                        	// Create relationship only if
+                        	// no natural identity exists or
+                        	// the natural identity uses a different unique key to this one
+                        	if (naturalIdentity == null || !naturalIdentity.getUniqueKey().equals(uniqueKey)) {
+	                        	logger.log(Level.FINE, "One-to-one, parent: " + parentEntity.getName() + ", child: " + childEntity.getName());
+	                            OneToOneChildNameExtractor childExtractor = new OneToOneChildNameExtractor(namingConventions);
+	                            OneToOneParentNameExtractor parentExtractor = new OneToOneParentNameExtractor(namingConventions);
+	                            FieldNameImpl childName = childExtractor.extractName(parentEntity, foreignKey);
+	                            FieldNameImpl parentName = parentExtractor.extractName(childEntity, foreignKey);
+	                            catalog.createBiDirectionalOneToOneRelationship(parentName, childName, foreignKey.getName());
+                        	}
+                        }  else {
                             // it is a one-to-many
                             logger.log(Level.FINE, "One-to-many, parent: " + parentEntity.getName() + ", child: " + childEntity.getName());
                             ManyToOneNameExtractor childExtractor = new ManyToOneNameExtractor(namingConventions);
@@ -426,12 +416,12 @@ public class ReverseEngineerImpl implements ReverseEngineer {
     private void createNaturalIds(CatalogImpl catalog, Database database) throws ModelException {
         for (EntityImpl entity : catalog.getEntities()) {
             Table table = entity.getTable();
-            if (table.getUniqueKeys() != null && table.getUniqueKeyCount() > 0) {
-                UniqueKey uniqueKey = table.getUniqueKey(0);
+            UniqueKey uniqueKey = table.getNaturalKey();
+            if (uniqueKey != null) {
                 
                 if (uniqueKey.isForeignKey()) {
                     // Create OneToOneNaturalIdentity
-                    // NOTE this is done in the relationships section
+                    createOneToOneNaturalIdentity(entity, uniqueKey);
                 } else {
                     if (uniqueKey.getColumnCount() == 1) {
                         // Create SimpleNaturalIdentity
@@ -445,7 +435,25 @@ public class ReverseEngineerImpl implements ReverseEngineer {
         }
     }
 
-    private void createSimpleNaturalIdentity(EntityImpl entity,
+    private void createOneToOneNaturalIdentity(EntityImpl entity,
+			UniqueKey uniqueKey) throws ModelException {
+    	CatalogImpl catalog = entity.getCatalog();
+    	ForeignKey foreignKey = uniqueKey.getForeignKey();
+        Table parentTable = foreignKey.getReferencedTable();
+        Table table = foreignKey.getReferencingTable();
+        Entity parentEntity = catalog.getEntityByTable(parentTable);
+        Entity childEntity = catalog.getEntityByTable(table);
+        
+    	 logger.log(Level.FINE, "One-to-one natural identity, parent: " + parentEntity.getName() + ", child: " + childEntity.getName());
+         OneToOneChildNameExtractor childExtractor = new OneToOneChildNameExtractor(namingConventions);
+         OneToOneParentNameExtractor parentExtractor = new OneToOneParentNameExtractor(namingConventions);
+         FieldNameImpl childName = childExtractor.extractName(parentEntity, foreignKey);
+         FieldNameImpl parentName = parentExtractor.extractName(childEntity, foreignKey);
+         catalog.createNaturalIdentityOneToOneRelation(parentName, childName, foreignKey.getName(), uniqueKey.getName());
+		
+	}
+
+	private void createSimpleNaturalIdentity(EntityImpl entity,
             UniqueKey uniqueKey) throws ModelException {
         SimplePropertyNameExtractor extractor = new SimplePropertyNameExtractor(namingConventions);
         Column column = uniqueKey.getColumn(0);
