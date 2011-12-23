@@ -387,6 +387,14 @@ public class EntityImpl implements Entity, MutableFieldCollection {
     }
     
     /* (non-Javadoc)
+     * @see net.sourceforge.greenvine.model.api.Entity#getNaturalKey()
+     */
+    public UniqueKey getNaturalKey() {
+        return table.getNaturalKey();
+    }
+    
+    
+    /* (non-Javadoc)
      * @see net.sourceforge.greenvine.model.api.impl.Entity#getPrimaryKeyColumnNames()
      */
     public SortedSet<ColumnName> getPrimaryKeyColumnNames() {

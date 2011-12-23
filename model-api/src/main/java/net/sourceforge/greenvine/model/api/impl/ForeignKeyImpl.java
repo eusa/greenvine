@@ -15,6 +15,7 @@ import net.sourceforge.greenvine.model.api.Database;
 import net.sourceforge.greenvine.model.api.ForeignKey;
 import net.sourceforge.greenvine.model.api.ModelException;
 import net.sourceforge.greenvine.model.api.Table;
+import net.sourceforge.greenvine.model.api.UniqueKey;
 import net.sourceforge.greenvine.model.naming.ColumnName;
 import net.sourceforge.greenvine.model.naming.RdbmsNamingConvention;
 import net.sourceforge.greenvine.model.naming.impl.ColumnNameImpl;
@@ -323,20 +324,6 @@ public class ForeignKeyImpl extends AbstractDatabaseObject implements ForeignKey
     }
     
     /* (non-Javadoc)
-     * @see net.sourceforge.greenvine.model.api.ForeignKey#areReferencingColumnsUniqueKey()
-     */
-    public boolean areReferencingColumnsUniqueKey() {
-        Set<ColumnName> referencingColumns = this.getReferencingColumnNames();
-        for (UniqueKeyImpl uniqueConstraint : referencingTable.getUniqueKeys()) {
-            Set<ColumnName> uniqueColumns = uniqueConstraint.getColumnNames();
-            if (uniqueColumns.containsAll(referencingColumns) && referencingColumns.containsAll(uniqueColumns)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /* (non-Javadoc)
      * @see net.sourceforge.greenvine.model.api.ForeignKey#areReferencingColumnsPrimaryKey()
      */
     public boolean areReferencingColumnsPrimaryKey() {
@@ -465,5 +452,25 @@ public class ForeignKeyImpl extends AbstractDatabaseObject implements ForeignKey
         colName.prependPrefix().toCase();
         return colName.toColumnName();
     }
+
+    /* (non-Javadoc)
+     * @see net.sourceforge.greenvine.model.api.ForeignKey#areReferencingColumnsUniqueKey()
+     */
+    public boolean areReferencingColumnsUniqueKey() {
+        UniqueKey key = getReferencingUniqueKey();
+        return key == null ? false : true;
+    }
+
+	public UniqueKeyImpl getReferencingUniqueKey() {
+		UniqueKeyImpl ukey = null;
+		Set<ColumnName> referencingColumns = this.getReferencingColumnNames();
+        for (UniqueKeyImpl uniqueConstraint : referencingTable.getUniqueKeys()) {
+            Set<ColumnName> uniqueColumns = uniqueConstraint.getColumnNames();
+            if (uniqueColumns.equals(referencingColumns)) {
+            	ukey = uniqueConstraint;
+            }
+        }
+        return ukey;
+	}
     
 }

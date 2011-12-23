@@ -7,6 +7,7 @@
     <!-- RevengConfig -->
     <bean id="revengConfig" class="net.sourceforge.greenvine.reveng.impl.RevengConfig">
         <property name="modelName" value="schedule" />
+        <property name="createNaturalIdentities" value="false" />
     </bean>
     
     <!-- ReverseEngineer -->

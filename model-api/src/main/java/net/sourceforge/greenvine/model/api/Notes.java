@@ -16,6 +16,6 @@ public interface Notes {
 
 	// TODO Handle reserved java keywords in name extractors
 	// TODO if a field in an entity has the same name as the entity, this could cause issues in some generated classes
-	// TODO Make NaturalIdentities optional, defaulting to false
+	// TODO Test with MySQL
 	
 }

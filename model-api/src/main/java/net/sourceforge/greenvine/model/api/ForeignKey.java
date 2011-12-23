@@ -9,40 +9,40 @@ import net.sourceforge.greenvine.model.naming.DatabaseObjectName;
 
 public interface ForeignKey extends DatabaseObject {
     
-    public abstract DatabaseObjectName getName();
+    public DatabaseObjectName getName();
 
-    public abstract boolean referencesUniqueKey();
+    public boolean referencesUniqueKey();
 
-    public abstract boolean referencesPrimaryKey();
+    public boolean referencesPrimaryKey();
 
-    public abstract SortedSet<ColumnName> getReferencingColumnNames();
+    public SortedSet<ColumnName> getReferencingColumnNames();
 
-    public abstract SortedSet<ColumnName> getReferencedColumnNames();
+    public SortedSet<ColumnName> getReferencedColumnNames();
 
-    public abstract Map<ColumnName, ColumnName> getColumnConstraintNames();
+    public Map<ColumnName, ColumnName> getColumnConstraintNames();
 
-    public abstract Table getReferencingTable();
+    public Table getReferencingTable();
 
-    public abstract Table getReferencedTable();
+    public Table getReferencedTable();
 
-    public abstract Set<? extends ColumnConstraint> getColumnConstraints();
+    public Set<? extends ColumnConstraint> getColumnConstraints();
 
-    public abstract int getColumnConstraintCount();
+    public int getColumnConstraintCount();
 
-    public abstract ColumnConstraint getColumnConstraint(int index);
+    public ColumnConstraint getColumnConstraint(int index);
 
-    public abstract ColumnConstraint getColumnConstraintByReferencingColumnName(
+    public ColumnConstraint getColumnConstraintByReferencingColumnName(
             ColumnName referencingColumnName) throws ModelException;
 
-    public abstract ColumnConstraint getColumnConstraintByReferencedColumnName(
+    public ColumnConstraint getColumnConstraintByReferencedColumnName(
             ColumnName referencedColumnName) throws ModelException;
 
-    public abstract boolean hasConstraint(CharSequence referencingColumn,
+    public boolean hasConstraint(CharSequence referencingColumn,
             CharSequence referencedColumn) throws ModelException;
 
-    public abstract boolean hasReferencingColumn(Column column);
+    public boolean hasReferencingColumn(Column column);
 
-    public abstract boolean hasReferencedColumn(Column column);
+    public boolean hasReferencedColumn(Column column);
 
     /**
      * Returns true if the referencing
@@ -56,7 +56,7 @@ public interface ForeignKey extends DatabaseObject {
      * @param foreignTable
      * @return
      */
-    public abstract boolean areReferencingColumnsUniqueKey();
+    public boolean areReferencingColumnsUniqueKey();
 
     /**
      * True if the {@link ForeignKey}
@@ -70,11 +70,11 @@ public interface ForeignKey extends DatabaseObject {
      * by the {@link PrimaryKey}
      * @return
      */
-    public abstract boolean areReferencingColumnsPrimaryKey();
+    public boolean areReferencingColumnsPrimaryKey();
 
-    public abstract SortedSet<? extends Column> getReferencingColumns();
+    public SortedSet<? extends Column> getReferencingColumns();
 
-    public abstract SortedSet<? extends Column> getReferencedColumns();
+    public SortedSet<? extends Column> getReferencedColumns();
 
     /**
      * Are all of the referencing
@@ -82,9 +82,9 @@ public interface ForeignKey extends DatabaseObject {
      * to be set to null
      * @return
      */
-    public abstract boolean areReferencingColumnsNullable();
+    public boolean areReferencingColumnsNullable();
 
-    public abstract boolean isSelfReferencing();
+    public boolean isSelfReferencing();
 
     /**
      * Return the cardinality of the relationship
@@ -94,7 +94,7 @@ public interface ForeignKey extends DatabaseObject {
      * it is one-to-many
      * @return
      */
-    public abstract Cardinality getCardinality();
+    public Cardinality getCardinality();
 
     /**
      * This method returns true if another
@@ -111,6 +111,8 @@ public interface ForeignKey extends DatabaseObject {
      * @return
      * @throws ModelException
      */
-    public abstract boolean otherSimilarRelationsExist() throws ModelException;
+    public boolean otherSimilarRelationsExist() throws ModelException;
+
+	public UniqueKey getReferencingUniqueKey();
 
 }

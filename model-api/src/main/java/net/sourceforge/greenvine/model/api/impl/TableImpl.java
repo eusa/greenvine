@@ -68,6 +68,17 @@ public class TableImpl extends AbstractDataContainer implements Table {
     }
     
     /* (non-Javadoc)
+     * @see net.sourceforge.greenvine.model.api.Table#getNaturalKey()
+     */
+    public UniqueKeyImpl getNaturalKey() {
+    	UniqueKeyImpl natural = null;
+    	if (this.getUniqueKeyCount() > 0) {
+    		natural = getUniqueKey(0);
+    	}
+        return natural;
+    }
+    
+    /* (non-Javadoc)
      * @see net.sourceforge.greenvine.model.api.Table#getUniqueKeys()
      */
     public Collection<UniqueKeyImpl> getUniqueKeys() {

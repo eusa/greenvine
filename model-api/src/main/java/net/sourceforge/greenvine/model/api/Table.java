@@ -8,13 +8,14 @@ public interface Table extends ColumnCollection, DatabaseObject {
     public abstract Database getDatabase();
 
     public abstract PrimaryKey getPrimaryKey();
+    
+    public abstract UniqueKey getNaturalKey();
 
     public abstract Collection<? extends UniqueKey> getUniqueKeys();
 
     public abstract Collection<? extends ForeignKey> getImportedForeignKeys();
 
     public abstract Collection<? extends ForeignKey> getExportedForeignKeys();
-
     
     public abstract int getImportedForeignKeyCount();
 

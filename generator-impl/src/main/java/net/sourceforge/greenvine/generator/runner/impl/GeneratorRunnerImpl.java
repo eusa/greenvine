@@ -1,8 +1,6 @@
 package net.sourceforge.greenvine.generator.runner.impl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
@@ -26,19 +24,7 @@ public class GeneratorRunnerImpl implements GeneratorRunner {
         this.generatorRunnerConfig = generatorRunnerConfig;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * net.sourceforge.greenvine.generator.runner.GeneratorRunner#generate(net
-     * .sourceforge.greenvine.generator.config.GeneratorConfig, java.io.File,
-     * java.io.File)
-     */
-    public GeneratorRunnerResult generate(Model model, File outputDirectory) throws InterruptedException,
-            ExecutionException, ClassNotFoundException, InstantiationException,
-            IllegalAccessException, NoSuchMethodException,
-            InvocationTargetException, FileNotFoundException {
-
+    public GeneratorRunnerResult generate(Model model, File outputDirectory) throws InterruptedException, ExecutionException {
         // Create the GeneratorTaskExecutor
         GeneratorTaskExecutor executor = new GeneratorTaskExecutor(generatorRunnerConfig
                 .getGeneratorThreads(), generatorRunnerConfig.getTemplateThreads());
@@ -58,10 +44,8 @@ public class GeneratorRunnerImpl implements GeneratorRunner {
     }
 
     private void submitGeneratorTask(Model model, File outputDirectory,
-            GeneratorTaskExecutor executor, GeneratorContext genImpl)
-            throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException, NoSuchMethodException,
-            InvocationTargetException, InterruptedException, ExecutionException {
+            GeneratorTaskExecutor executor, GeneratorContext genImpl) throws InterruptedException, ExecutionException
+           {
 
        // Load the Generator class
         Generator generator = genImpl.getGenerator();

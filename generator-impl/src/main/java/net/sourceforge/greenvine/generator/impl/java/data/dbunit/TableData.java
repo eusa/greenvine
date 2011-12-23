@@ -168,12 +168,10 @@ public class TableData {
     
 
     public SortedSet<Column> getNaturalKeyColumns() {
-        SortedSet<Column> columns;
-        if (metadata.getUniqueKeyCount() >= 1) {
-            columns = metadata.getUniqueKey(0).getColumns();
-        }
-        else {
-            columns = new TreeSet<Column>();
+        SortedSet<Column> columns = new TreeSet<Column>();
+        UniqueKey natural = metadata.getNaturalKey();
+        if (natural != null) {
+        	columns.addAll(natural.getColumns());
         }
         return columns; 
     }

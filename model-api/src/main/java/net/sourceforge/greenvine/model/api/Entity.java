@@ -87,6 +87,8 @@ public interface Entity extends SimpleComponent {
     public abstract Collection<? extends UniqueKey> getUniqueKeys();
 
     public abstract PrimaryKey getPrimaryKey();
+    
+    public abstract UniqueKey getNaturalKey();
 
     public abstract SortedSet<ColumnName> getPrimaryKeyColumnNames();
 
