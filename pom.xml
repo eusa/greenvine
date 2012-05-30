@@ -29,12 +29,13 @@
     <module>plugin</module>
     <module>generator-impl</module>
     <module>generator-templates</module>
-    <module>generated</module>
+<!--    <module>generated</module> -->
   </modules>
   <build>
      <plugins>
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.5</version>
             <configuration>
                 <source>1.6</source>
                 <target>1.6</target>
