@@ -1,5 +1,5 @@
-Greenvine [![Build Status](https://secure.travis-ci.org/eusa/greenvine.png)](http://travis-ci.org/eusa/greenvine)
-
+[Greenvine](http://eusa.github.com/greenvine/index.html) [![Build Status](https://secure.travis-ci.org/eusa/greenvine.png)](http://travis-ci.org/eusa/greenvine)
+==========
 A tool for reverse-engineering a JPA 2.0 and/or Hibernate project from a JDBC database. It's a Maven plugin.
 
  - Entity classes with JPA 2.0 annotations
