@@ -1,6 +1,5 @@
 package net.sourceforge.greenvine.generator.helper;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,6 +7,7 @@ import java.util.GregorianCalendar;
 
 import sun.misc.BASE64Encoder;
 
+@SuppressWarnings("restriction")
 public class DataHelper {
     
     private static final String CREATE_BYTES_STRING = "test1";
@@ -16,9 +16,6 @@ public class DataHelper {
     private static final String dateFormat ="yyyy-MM-dd";
     private static final String timeFormat = "hh:mm:ss";
     private static final String dateTimeFormat = "yyyy-MM-dd hh:mm:ss";
-    private final DateFormat date;
-    private final DateFormat time;
-    private final DateFormat dateTime;
     
     private final Date defaultDateTime;
     private final Date defaultDate;
@@ -82,15 +79,6 @@ public class DataHelper {
         cal.set(Calendar.MINUTE, 2);
         cal.set(Calendar.SECOND, 2);
         this.updateTime = cal.getTime();
-        
-        // Date time 
-        dateTime = new SimpleDateFormat(dateTimeFormat);
-        
-        // Just date
-        date = new SimpleDateFormat(dateFormat);
-        
-        // Just time
-        time = new SimpleDateFormat(timeFormat);
         
     }
     
@@ -160,8 +148,8 @@ public class DataHelper {
         return getBase64String(UPDATE_BYTES_STRING);
     }
     
-    private String getBase64String(String binary) {
-        BASE64Encoder encoder = new BASE64Encoder();
+	private String getBase64String(String binary) {
+		BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(binary.getBytes());
     }
     
@@ -278,39 +266,39 @@ public class DataHelper {
     }
 
     public String getCreateDateString() {
-        return date.format(defaultDate);
+        return new SimpleDateFormat(dateFormat).format(defaultDate);
     }
     
     public String getUpdateDateString() {
-        return date.format(updateDate);
+        return new SimpleDateFormat(dateFormat).format(updateDate);
     }
     
     public String getRandomDateString() {
-        return date.format(getRandomDate());
+        return new SimpleDateFormat(dateFormat).format(getRandomDate());
     }
     
     public String getCreateTimeString() {
-        return time.format(defaultTime);
+        return new SimpleDateFormat(timeFormat).format(defaultTime);
     }
     
     public String getUpdateTimeString() {
-        return time.format(updateTime);
+        return new SimpleDateFormat(timeFormat).format(updateTime);
     }
     
     public String getRandomTimeString() {
-        return time.format(getRandomDate());
+        return new SimpleDateFormat(timeFormat).format(getRandomDate());
     }
     
     public String getCreateTimestampString() {
-        return dateTime.format(defaultDateTime);
+        return new SimpleDateFormat(dateTimeFormat).format(defaultDateTime);
     }
     
     public String getUpdateTimestampString() {
-        return dateTime.format(updateDateTime);
+        return new SimpleDateFormat(dateTimeFormat).format(updateDateTime);
     }
     
     public String getRandomTimestampString() {
-        return dateTime.format(getRandomDate());
+        return new SimpleDateFormat(dateTimeFormat).format(getRandomDate());
     }
 
 }
