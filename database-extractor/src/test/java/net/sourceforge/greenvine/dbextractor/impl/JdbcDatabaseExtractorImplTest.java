@@ -166,96 +166,96 @@ public class JdbcDatabaseExtractorImplTest {
 		// Test TBL_MAILBOX
         // TODO [minor] reinstate when Hibernate JPA supports non-primary key based relations
         
-		// Test TEST.TBL_TIMESHEET
-        dbAssert.assertTableExists("TEST.TBL_TIMESHEET", createNameArray("FK_EMPLOYEE_ID", "DATE", "EXPECTED_HOURS"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_TIMESHEET", createNameArray("FK_EMPLOYEE_ID", "DATE"));
-        dbAssert.assertForeignKeyExists("TEST.FK_TIMESHEET_EMPLOYEE", "TEST.TBL_TIMESHEET", "DBO.TBL_EMPLOYEE");
+		// Test TEST_SCHEMA.TBL_TIMESHEET
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_TIMESHEET", createNameArray("FK_EMPLOYEE_ID", "DATE", "EXPECTED_HOURS"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_TIMESHEET", createNameArray("FK_EMPLOYEE_ID", "DATE"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_TIMESHEET_EMPLOYEE", "TEST_SCHEMA.TBL_TIMESHEET", "DBO.TBL_EMPLOYEE");
         
-        // Test TEST.TBL_ACTIVITY
-        dbAssert.assertTableExists("TEST.TBL_ACTIVITY", createNameArray("ACTIVITY_ID", "FK_EMPLOYEE_ID", "FK_DATE", "HOURS", "DESCRIPTION"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_ACTIVITY", createNameArray("ACTIVITY_ID"));
-        dbAssert.assertForeignKeyExists("TEST.FK_ACTIVITY_TIMESHEET", "TEST.TBL_ACTIVITY", "TEST.TBL_TIMESHEET");
+        // Test TEST_SCHEMA.TBL_ACTIVITY
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_ACTIVITY", createNameArray("ACTIVITY_ID", "FK_EMPLOYEE_ID", "FK_DATE", "HOURS", "DESCRIPTION"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_ACTIVITY", createNameArray("ACTIVITY_ID"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_ACTIVITY_TIMESHEET", "TEST_SCHEMA.TBL_ACTIVITY", "TEST_SCHEMA.TBL_TIMESHEET");
         
-        // Test TEST.TBL_VEHICLE
-        dbAssert.assertTableExists("TEST.TBL_VEHICLE", createNameArray("REG_NUMBER", "MODEL"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_VEHICLE", createNameArray("REG_NUMBER"));
+        // Test TEST_SCHEMA.TBL_VEHICLE
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_VEHICLE", createNameArray("REG_NUMBER", "MODEL"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_VEHICLE", createNameArray("REG_NUMBER"));
         
-        // Test TEST.TBL_PARKING_PERMIT
-        dbAssert.assertTableExists("TEST.TBL_PARKING_PERMIT", createNameArray("FK_REG_NUMBER", "DATE", "VALUE"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_PARKING_PERMIT", createNameArray("FK_REG_NUMBER", "DATE"));
-        dbAssert.assertForeignKeyExists("TEST.FK_PARKING_PERMIT_VEHICLE", "TEST.TBL_PARKING_PERMIT", "TEST.TBL_VEHICLE");
+        // Test TEST_SCHEMA.TBL_PARKING_PERMIT
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_PARKING_PERMIT", createNameArray("FK_REG_NUMBER", "DATE", "VALUE"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_PARKING_PERMIT", createNameArray("FK_REG_NUMBER", "DATE"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_PARKING_PERMIT_VEHICLE", "TEST_SCHEMA.TBL_PARKING_PERMIT", "TEST_SCHEMA.TBL_VEHICLE");
         
-        // Test TEST.TBL_PARKING_PERMIT_PAYMENT
-        dbAssert.assertTableExists("TEST.TBL_PARKING_PERMIT_PAYMENT", createNameArray("FK_REG_NUMBER", "FK_PARKING_PERMIT_DATE", "PAYMENT_DATE"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_PARKING_PERMIT_PAYMENT", createNameArray("FK_REG_NUMBER", "FK_PARKING_PERMIT_DATE"));
-        dbAssert.assertForeignKeyExists("TEST.FK_PARKING_PERMIT_PAYMENT_PARKING_PERMIT", "TEST.TBL_PARKING_PERMIT_PAYMENT", "TEST.TBL_PARKING_PERMIT");
+        // Test TEST_SCHEMA.TBL_PARKING_PERMIT_PAYMENT
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_PARKING_PERMIT_PAYMENT", createNameArray("FK_REG_NUMBER", "FK_PARKING_PERMIT_DATE", "PAYMENT_DATE"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_PARKING_PERMIT_PAYMENT", createNameArray("FK_REG_NUMBER", "FK_PARKING_PERMIT_DATE"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_PARKING_PERMIT_PAYMENT_PARKING_PERMIT", "TEST_SCHEMA.TBL_PARKING_PERMIT_PAYMENT", "TEST_SCHEMA.TBL_PARKING_PERMIT");
         
-        // Test TEST.TBL_USER
-        dbAssert.assertTableExists("TEST.TBL_USER", createNameArray("USERNAME", "PASSWORD"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_USER", createNameArray("USERNAME"));
+        // Test TEST_SCHEMA.TBL_USER
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_USER", createNameArray("USERNAME", "PASSWORD"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_USER", createNameArray("USERNAME"));
         
-        // Test TEST.TBL_PROFILE
-        dbAssert.assertTableExists("TEST.TBL_PROFILE", createNameArray("PROFILE_ID", "FK_USERNAME", "SCREEN_NAME"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_PROFILE", createNameArray("PROFILE_ID"));
-        dbAssert.assertUniqueKeyExists("TEST.UK_PROFILE1_UNIQUE", createNameArray("FK_USERNAME"));
-        dbAssert.assertForeignKeyExists("TEST.FK_PROFILE_USER", "TEST.TBL_PROFILE", "TEST.TBL_USER");
+        // Test TEST_SCHEMA.TBL_PROFILE
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_PROFILE", createNameArray("PROFILE_ID", "FK_USERNAME", "SCREEN_NAME"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_PROFILE", createNameArray("PROFILE_ID"));
+        dbAssert.assertUniqueKeyExists("TEST_SCHEMA.UK_PROFILE1_UNIQUE", createNameArray("FK_USERNAME"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_PROFILE_USER", "TEST_SCHEMA.TBL_PROFILE", "TEST_SCHEMA.TBL_USER");
         
-        // Test TEST.TBL_FRIEND
-        dbAssert.assertTableExists("TEST.TBL_FRIEND", createNameArray("REQUESTER_ID", "REQUESTEE_ID"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_FRIEND", createNameArray("REQUESTER_ID", "REQUESTEE_ID"));
-        dbAssert.assertForeignKeyExists("TEST.FK_FRIEND_REQUESTER", "TEST.TBL_FRIEND", "TEST.TBL_PROFILE");
-        dbAssert.assertForeignKeyExists("TEST.FK_FRIEND_REQUESTEE", "TEST.TBL_FRIEND", "TEST.TBL_PROFILE");
+        // Test TEST_SCHEMA.TBL_FRIEND
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_FRIEND", createNameArray("REQUESTER_ID", "REQUESTEE_ID"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_FRIEND", createNameArray("REQUESTER_ID", "REQUESTEE_ID"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_FRIEND_REQUESTER", "TEST_SCHEMA.TBL_FRIEND", "TEST_SCHEMA.TBL_PROFILE");
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_FRIEND_REQUESTEE", "TEST_SCHEMA.TBL_FRIEND", "TEST_SCHEMA.TBL_PROFILE");
         
-        // Test TEST.TBL_SPOUSE
-        dbAssert.assertTableExists("TEST.TBL_SPOUSE", createNameArray("SPOUSE_TO_ID", "SPOUSE_FROM_ID"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_SPOUSE", createNameArray("SPOUSE_TO_ID", "SPOUSE_FROM_ID"));
-        dbAssert.assertForeignKeyExists("TEST.FK_SPOUSE_TO", "TEST.TBL_SPOUSE", "TEST.TBL_PROFILE");
-        dbAssert.assertForeignKeyExists("TEST.FK_SPOUSE_FROM", "TEST.TBL_SPOUSE", "TEST.TBL_PROFILE");
-        dbAssert.assertUniqueKeyExists("TEST.UK_SPOUSE1_UNIQUE", createNameArray("SPOUSE_FROM_ID"));
-        dbAssert.assertUniqueKeyExists("TEST.UK_SPOUSE2_UNIQUE", createNameArray("SPOUSE_TO_ID"));
+        // Test TEST_SCHEMA.TBL_SPOUSE
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_SPOUSE", createNameArray("SPOUSE_TO_ID", "SPOUSE_FROM_ID"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_SPOUSE", createNameArray("SPOUSE_TO_ID", "SPOUSE_FROM_ID"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_SPOUSE_TO", "TEST_SCHEMA.TBL_SPOUSE", "TEST_SCHEMA.TBL_PROFILE");
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_SPOUSE_FROM", "TEST_SCHEMA.TBL_SPOUSE", "TEST_SCHEMA.TBL_PROFILE");
+        dbAssert.assertUniqueKeyExists("TEST_SCHEMA.UK_SPOUSE1_UNIQUE", createNameArray("SPOUSE_FROM_ID"));
+        dbAssert.assertUniqueKeyExists("TEST_SCHEMA.UK_SPOUSE2_UNIQUE", createNameArray("SPOUSE_TO_ID"));
         
-        // Test TEST.TBL_PERSON
-        dbAssert.assertTableExists("TEST.TBL_PERSON", createNameArray("FIRST_NAME", "LAST_NAME", "BIRTHDAY"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_PERSON", createNameArray("FIRST_NAME", "LAST_NAME"));
+        // Test TEST_SCHEMA.TBL_PERSON
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_PERSON", createNameArray("FIRST_NAME", "LAST_NAME", "BIRTHDAY"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_PERSON", createNameArray("FIRST_NAME", "LAST_NAME"));
         
-        // Test TEST.TBL_CUSTOMER
-        dbAssert.assertTableExists("TEST.TBL_CUSTOMER", createNameArray("FK_FIRST_NAME", "FK_LAST_NAME", "LOYALTY_POINTS"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_CUSTOMER", createNameArray("FK_FIRST_NAME", "FK_LAST_NAME"));
-        dbAssert.assertForeignKeyExists("TEST.FK_CUSTOMER_PERSON", "TEST.TBL_CUSTOMER", "TEST.TBL_PERSON");
+        // Test TEST_SCHEMA.TBL_CUSTOMER
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_CUSTOMER", createNameArray("FK_FIRST_NAME", "FK_LAST_NAME", "LOYALTY_POINTS"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_CUSTOMER", createNameArray("FK_FIRST_NAME", "FK_LAST_NAME"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_CUSTOMER_PERSON", "TEST_SCHEMA.TBL_CUSTOMER", "TEST_SCHEMA.TBL_PERSON");
         
-        // Test TEST.TBL_PASSPORT
-        dbAssert.assertTableExists("TEST.TBL_PASSPORT", createNameArray("PASSPORT_NR", "FK_FIRST_NAME", "FK_LAST_NAME", "EXPIRY_DATE"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_PASSPORT", createNameArray("PASSPORT_NR"));
-        dbAssert.assertUniqueKeyExists("TEST.UK_PASSPORT1_UNIQUE", createNameArray("FK_FIRST_NAME", "FK_LAST_NAME"));
-        dbAssert.assertForeignKeyExists("TEST.FK_PASSPORT_PERSON", "TEST.TBL_PASSPORT", "TEST.TBL_PERSON");
+        // Test TEST_SCHEMA.TBL_PASSPORT
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_PASSPORT", createNameArray("PASSPORT_NR", "FK_FIRST_NAME", "FK_LAST_NAME", "EXPIRY_DATE"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_PASSPORT", createNameArray("PASSPORT_NR"));
+        dbAssert.assertUniqueKeyExists("TEST_SCHEMA.UK_PASSPORT1_UNIQUE", createNameArray("FK_FIRST_NAME", "FK_LAST_NAME"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_PASSPORT_PERSON", "TEST_SCHEMA.TBL_PASSPORT", "TEST_SCHEMA.TBL_PERSON");
         
-        // Test TEST.TBL_ADDRESS
-        dbAssert.assertTableExists("TEST.TBL_ADDRESS", createNameArray("ADDRESS_ID", "HOUSE_NUMBER", "STREET_NAME", "POST_CODE"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_ADDRESS", createNameArray("ADDRESS_ID"));
-        dbAssert.assertUniqueKeyExists("TEST.UK_ADDRESS1_UNIQUE", createNameArray("HOUSE_NUMBER", "STREET_NAME"));
+        // Test TEST_SCHEMA.TBL_ADDRESS
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_ADDRESS", createNameArray("ADDRESS_ID", "HOUSE_NUMBER", "STREET_NAME", "POST_CODE"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_ADDRESS", createNameArray("ADDRESS_ID"));
+        dbAssert.assertUniqueKeyExists("TEST_SCHEMA.UK_ADDRESS1_UNIQUE", createNameArray("HOUSE_NUMBER", "STREET_NAME"));
         
-        // Test TEST.TBL_CONSIGNMENT
-        dbAssert.assertTableExists("TEST.TBL_CONSIGNMENT", createNameArray("CONSIGNMENT_ID", "FK_FIRST_NAME", "FK_LAST_NAME", "CONSIGNMENT_DATE", "FK_ADDRESS_ID"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_CONSIGNMENT", createNameArray("CONSIGNMENT_ID"));
-        dbAssert.assertUniqueKeyExists("TEST.UK_CONSIGNMENT1_UNIQUE", createNameArray("FK_FIRST_NAME","FK_LAST_NAME", "CONSIGNMENT_DATE"));
-        dbAssert.assertForeignKeyExists("TEST.FK_CONSIGNMENT_CUSTOMER", "TEST.TBL_CONSIGNMENT", "TEST.TBL_CUSTOMER");
-        dbAssert.assertForeignKeyExists("TEST.FK_CONSIGNMENT_ADDRESS", "TEST.TBL_CONSIGNMENT", "TEST.TBL_ADDRESS");
+        // Test TEST_SCHEMA.TBL_CONSIGNMENT
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_CONSIGNMENT", createNameArray("CONSIGNMENT_ID", "FK_FIRST_NAME", "FK_LAST_NAME", "CONSIGNMENT_DATE", "FK_ADDRESS_ID"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_CONSIGNMENT", createNameArray("CONSIGNMENT_ID"));
+        dbAssert.assertUniqueKeyExists("TEST_SCHEMA.UK_CONSIGNMENT1_UNIQUE", createNameArray("FK_FIRST_NAME","FK_LAST_NAME", "CONSIGNMENT_DATE"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_CONSIGNMENT_CUSTOMER", "TEST_SCHEMA.TBL_CONSIGNMENT", "TEST_SCHEMA.TBL_CUSTOMER");
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_CONSIGNMENT_ADDRESS", "TEST_SCHEMA.TBL_CONSIGNMENT", "TEST_SCHEMA.TBL_ADDRESS");
      
-        // Test TEST.TBL_ADDRESS
-        dbAssert.assertTableExists("TEST.TBL_TYPES");
-        //dbAssert.assertPrimaryKeyExists("TEST.PK_TYPES", createNameArray("TYPE_6"));
+        // Test TEST_SCHEMA.TBL_ADDRESS
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_TYPES");
+        //dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_TYPES", createNameArray("TYPE_6"));
         
-        // Test TEST.TBL_BUGS
-        dbAssert.assertTableExists("TEST.TBL_BUGS", createNameArray("BUG_ID", "OWNER", "REPORTER", "TITLE", "DESCRIPTION", "OPEN"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_BUGS", createNameArray("BUG_ID"));
-        dbAssert.assertForeignKeyExists("TEST.FK_BUGS_USER_OWNER", "TEST.TBL_BUGS", "TEST.TBL_USER");
-        dbAssert.assertForeignKeyExists("TEST.FK_BUGS_USER_REPORTER", "TEST.TBL_BUGS", "TEST.TBL_USER");
+        // Test TEST_SCHEMA.TBL_BUGS
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_BUGS", createNameArray("BUG_ID", "OWNER", "REPORTER", "TITLE", "DESCRIPTION", "OPEN"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_BUGS", createNameArray("BUG_ID"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_BUGS_USER_OWNER", "TEST_SCHEMA.TBL_BUGS", "TEST_SCHEMA.TBL_USER");
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_BUGS_USER_REPORTER", "TEST_SCHEMA.TBL_BUGS", "TEST_SCHEMA.TBL_USER");
      
-        // Test TEST.TBL_COMMENTS
-        dbAssert.assertTableExists("TEST.TBL_COMMENTS", createNameArray("COMMENT_ID", "BUG_ID", "USERNAME", "COMMENT"));
-        dbAssert.assertPrimaryKeyExists("TEST.PK_COMMENTS", createNameArray("COMMENT_ID"));
-        dbAssert.assertForeignKeyExists("TEST.FK_COMMENTS_BUGS", "TEST.TBL_COMMENTS", "TEST.TBL_BUGS");
-        dbAssert.assertForeignKeyExists("TEST.FK_COMMENTS_USER", "TEST.TBL_COMMENTS", "TEST.TBL_USER");
+        // Test TEST_SCHEMA.TBL_COMMENTS
+        dbAssert.assertTableExists("TEST_SCHEMA.TBL_COMMENTS", createNameArray("COMMENT_ID", "BUG_ID", "USERNAME", "COMMENT"));
+        dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_COMMENTS", createNameArray("COMMENT_ID"));
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_COMMENTS_BUGS", "TEST_SCHEMA.TBL_COMMENTS", "TEST_SCHEMA.TBL_BUGS");
+        dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_COMMENTS_USER", "TEST_SCHEMA.TBL_COMMENTS", "TEST_SCHEMA.TBL_USER");
      
     }	
 	

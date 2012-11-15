@@ -6,29 +6,22 @@ import java.util.List;
 import net.sourceforge.greenvine.model.api.ModelException;
 import net.sourceforge.greenvine.model.naming.EntityName;
 import net.sourceforge.greenvine.model.naming.Name;
-import net.sourceforge.greenvine.model.naming.NameValidator;
+import net.sourceforge.greenvine.model.naming.NameSegment;
 
 public class EntityNameImpl implements EntityName {
     
     private final String qualifiedName;
-    private final CamelCaseNameSegmentImpl schemaName;
+    private final LowerCaseNameSegmentImpl schemaName;
     private final CamelCaseNameSegmentImpl objectName;
     private static final Character separatorChar = '.';
     
     public EntityNameImpl(CharSequence schemaName, CharSequence objectName) throws ModelException {
         
-        // Validate object name 
-        validateNameComponent(objectName);
-        
-        // Validate schema name (if provided)
-        if (schemaName != null) {
-            validateNameComponent(schemaName);
-        }
         // Set names
         this.objectName = new CamelCaseNameSegmentImpl(objectName);
         StringBuilder qualifiedNameBuilder = new StringBuilder();
         if (schemaName != null) {
-            this.schemaName = new CamelCaseNameSegmentImpl(schemaName);
+            this.schemaName = new LowerCaseNameSegmentImpl(schemaName);
             qualifiedNameBuilder.append(schemaName);
             qualifiedNameBuilder.append(separatorChar);
         } else {
@@ -92,7 +85,7 @@ public class EntityNameImpl implements EntityName {
         return this.objectName;
     }
     
-    public CamelCaseNameSegmentImpl getNamespace() {
+    public LowerCaseNameSegmentImpl getNamespace() {
         return this.schemaName;
     }
 
@@ -111,13 +104,8 @@ public class EntityNameImpl implements EntityName {
         }
     }
     
-    private void validateNameComponent(CharSequence component) throws ModelException {
-        NameValidator<CharSequence> validator = new CamelCaseCharSequenceValidatorImpl();
-        validator.validateName(component);
-    }
-    
-    public List<CamelCaseNameSegmentImpl> getSegments() {
-        List<CamelCaseNameSegmentImpl> segments = new ArrayList<CamelCaseNameSegmentImpl>();
+    public List<NameSegment> getSegments() {
+        List<NameSegment> segments = new ArrayList<NameSegment>();
         if (schemaName != null) {
             segments.add(schemaName);
         }

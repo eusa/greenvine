@@ -109,117 +109,117 @@ public class ReverseEngineerImplIntegrationTest {
         mAssert.assertManyToManyAssociation("dbo.user", "groups", "dbo.group");
         
         // 8. Validate activity
-        mAssert.assertEntityExists("test.activity");
-        mAssert.assertSimpleIdentity("test.activity", "activityId", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.activity", "description", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.activity", "hours", PropertyType.BIG_DECIMAL);
-        mAssert.assertManyToOne("test.activity", "timesheet", "test.timesheet");
+        mAssert.assertEntityExists("testschema.activity");
+        mAssert.assertSimpleIdentity("testschema.activity", "activityId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.activity", "description", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.activity", "hours", PropertyType.BIG_DECIMAL);
+        mAssert.assertManyToOne("testschema.activity", "timesheet", "testschema.timesheet");
         
         // 9. Validate address
-        mAssert.assertEntityExists("test.address");
-        mAssert.assertSimpleIdentity("test.address", "addressId", PropertyType.INTEGER);
-        mAssert.assertComponentNaturalIdentity("test.address", "houseNumber", "streetName");
-        mAssert.assertSimpleProperty("test.address", "postCode", PropertyType.STRING);
-        mAssert.assertOneToMany("test.address", "consignments", "test.consignment");
+        mAssert.assertEntityExists("testschema.address");
+        mAssert.assertSimpleIdentity("testschema.address", "addressId", PropertyType.INTEGER);
+        mAssert.assertComponentNaturalIdentity("testschema.address", "houseNumber", "streetName");
+        mAssert.assertSimpleProperty("testschema.address", "postCode", PropertyType.STRING);
+        mAssert.assertOneToMany("testschema.address", "consignments", "testschema.consignment");
         
         // 10. Validate consignment
-        mAssert.assertEntityExists("test.consignment");
-        mAssert.assertSimpleIdentity("test.consignment", "consignmentId", PropertyType.INTEGER);
-        mAssert.assertComponentNaturalIdentity("test.consignment", "customer", "consignmentDate");
-        mAssert.assertManyToOne("test.consignment", "address", "test.address");
+        mAssert.assertEntityExists("testschema.consignment");
+        mAssert.assertSimpleIdentity("testschema.consignment", "consignmentId", PropertyType.INTEGER);
+        mAssert.assertComponentNaturalIdentity("testschema.consignment", "customer", "consignmentDate");
+        mAssert.assertManyToOne("testschema.consignment", "address", "testschema.address");
         
         // 11. Validate customer
-        mAssert.assertEntityExists("test.customer");
-        mAssert.assertOneToOneIdentity("test.customer", "person", "test.person");
-        mAssert.assertSimpleProperty("test.customer", "loyaltyPoints", PropertyType.INTEGER);
-        mAssert.assertOneToMany("test.customer", "consignments", "test.consignment");
+        mAssert.assertEntityExists("testschema.customer");
+        mAssert.assertOneToOneIdentity("testschema.customer", "person", "testschema.person");
+        mAssert.assertSimpleProperty("testschema.customer", "loyaltyPoints", PropertyType.INTEGER);
+        mAssert.assertOneToMany("testschema.customer", "consignments", "testschema.consignment");
         
         // 12. Validate parkingPermit
-        mAssert.assertEntityExists("test.parkingPermit");
-        mAssert.assertComponentIdentity("test.parkingPermit", "regNumber", "date"); 
-        mAssert.assertSimpleProperty("test.parkingPermit", "value", PropertyType.BIG_DECIMAL);
-        mAssert.assertManyToOne("test.parkingPermit", "vehicle", "test.vehicle");
-        mAssert.assertOneToOneParent("test.parkingPermit", "parkingPermitPayment", "test.parkingPermitPayment");
+        mAssert.assertEntityExists("testschema.parkingPermit");
+        mAssert.assertComponentIdentity("testschema.parkingPermit", "regNumber", "date"); 
+        mAssert.assertSimpleProperty("testschema.parkingPermit", "value", PropertyType.BIG_DECIMAL);
+        mAssert.assertManyToOne("testschema.parkingPermit", "vehicle", "testschema.vehicle");
+        mAssert.assertOneToOneParent("testschema.parkingPermit", "parkingPermitPayment", "testschema.parkingPermitPayment");
 
         // 13. Validate parkingPermitPayment
-        mAssert.assertEntityExists("test.parkingPermitPayment");
-        mAssert.assertOneToOneIdentity("test.parkingPermitPayment", "parkingPermit", "test.parkingPermit");
-        mAssert.assertSimpleProperty("test.parkingPermitPayment", "paymentDate", PropertyType.TIMESTAMP);
+        mAssert.assertEntityExists("testschema.parkingPermitPayment");
+        mAssert.assertOneToOneIdentity("testschema.parkingPermitPayment", "parkingPermit", "testschema.parkingPermit");
+        mAssert.assertSimpleProperty("testschema.parkingPermitPayment", "paymentDate", PropertyType.TIMESTAMP);
 
         // 14. Validate passport
-        mAssert.assertEntityExists("test.passport");
-        mAssert.assertSimpleIdentity("test.passport", "passportNr", PropertyType.STRING);
-        mAssert.assertOneToOneNaturalIdentity("test.passport", "person", "test.person");
-        mAssert.assertSimpleProperty("test.passport", "expiryDate", PropertyType.DATE);
+        mAssert.assertEntityExists("testschema.passport");
+        mAssert.assertSimpleIdentity("testschema.passport", "passportNr", PropertyType.STRING);
+        mAssert.assertOneToOneNaturalIdentity("testschema.passport", "person", "testschema.person");
+        mAssert.assertSimpleProperty("testschema.passport", "expiryDate", PropertyType.DATE);
         
         // 15. Validate person
-        mAssert.assertEntityExists("test.person");
-        mAssert.assertComponentIdentity("test.person", "firstName", "lastName");
-        mAssert.assertOneToOneParent("test.person", "customer", "test.customer");
-        mAssert.assertOneToOneParent("test.person", "passport", "test.passport");
-        mAssert.assertSimpleProperty("test.person", "birthday", PropertyType.DATE);
+        mAssert.assertEntityExists("testschema.person");
+        mAssert.assertComponentIdentity("testschema.person", "firstName", "lastName");
+        mAssert.assertOneToOneParent("testschema.person", "customer", "testschema.customer");
+        mAssert.assertOneToOneParent("testschema.person", "passport", "testschema.passport");
+        mAssert.assertSimpleProperty("testschema.person", "birthday", PropertyType.DATE);
 
         // 16. Validate profile
-        mAssert.assertEntityExists("test.profile");
-        mAssert.assertSimpleIdentity("test.profile", "profileId", PropertyType.INTEGER);
-        mAssert.assertOneToOneNaturalIdentity("test.profile", "user", "test.user");
-        mAssert.assertSimpleProperty("test.profile", "screenName", PropertyType.STRING);
-        mAssert.assertManyToManyAssociation("test.profile", "friendRequesters", "test.profile");
-        mAssert.assertManyToManyAssociation("test.profile", "friendRequestees", "test.profile");
-        mAssert.assertOneToOneAssociation("test.profile", "spouseTo", "test.profile");
-        mAssert.assertOneToOneAssociation("test.profile", "spouseFrom", "test.profile");
+        mAssert.assertEntityExists("testschema.profile");
+        mAssert.assertSimpleIdentity("testschema.profile", "profileId", PropertyType.INTEGER);
+        mAssert.assertOneToOneNaturalIdentity("testschema.profile", "user", "testschema.user");
+        mAssert.assertSimpleProperty("testschema.profile", "screenName", PropertyType.STRING);
+        mAssert.assertManyToManyAssociation("testschema.profile", "friendRequesters", "testschema.profile");
+        mAssert.assertManyToManyAssociation("testschema.profile", "friendRequestees", "testschema.profile");
+        mAssert.assertOneToOneAssociation("testschema.profile", "spouseTo", "testschema.profile");
+        mAssert.assertOneToOneAssociation("testschema.profile", "spouseFrom", "testschema.profile");
         
         // 17. Validate timesheet
-        mAssert.assertEntityExists("test.timesheet");
-        mAssert.assertComponentIdentity("test.timesheet", "employeeId", "date");
-        mAssert.assertOneToMany("test.timesheet", "activities", "test.activity");
-        mAssert.assertSimpleProperty("test.timesheet", "expectedHours", PropertyType.BIG_DECIMAL);
+        mAssert.assertEntityExists("testschema.timesheet");
+        mAssert.assertComponentIdentity("testschema.timesheet", "employeeId", "date");
+        mAssert.assertOneToMany("testschema.timesheet", "activities", "testschema.activity");
+        mAssert.assertSimpleProperty("testschema.timesheet", "expectedHours", PropertyType.BIG_DECIMAL);
      
         // 18. Validate types
-        mAssert.assertEntityExists("test.type");
-        mAssert.assertSimpleIdentity("test.type", "type6", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type1", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.type", "type2", PropertyType.BOOLEAN);
-        mAssert.assertSimpleProperty("test.type", "type3", PropertyType.BYTE);
-        mAssert.assertSimpleProperty("test.type", "type4", PropertyType.SHORT);
-        mAssert.assertSimpleProperty("test.type", "type5", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type7", PropertyType.BIG_DECIMAL);
-        mAssert.assertSimpleProperty("test.type", "type8", PropertyType.DOUBLE);
-        mAssert.assertSimpleProperty("test.type", "type9", PropertyType.FLOAT);
-        mAssert.assertSimpleProperty("test.type", "type10", PropertyType.TIME);
-        //mAssert.assertSimpleProperty("test.type", "type11", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type12", PropertyType.DATE);
-        mAssert.assertSimpleProperty("test.type", "type13", PropertyType.TIMESTAMP);
-        mAssert.assertSimpleProperty("test.type", "type14", PropertyType.BINARY);
-        //mAssert.assertSimpleProperty("test.type", "type15", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type16", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.type", "type17", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.type", "type18", PropertyType.BLOB);
-        mAssert.assertSimpleProperty("test.type", "type19", PropertyType.TEXT);
-        mAssert.assertSimpleProperty("test.type", "type20", PropertyType.STRING);
+        mAssert.assertEntityExists("testschema.type");
+        mAssert.assertSimpleIdentity("testschema.type", "type6", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type1", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.type", "type2", PropertyType.BOOLEAN);
+        mAssert.assertSimpleProperty("testschema.type", "type3", PropertyType.BYTE);
+        mAssert.assertSimpleProperty("testschema.type", "type4", PropertyType.SHORT);
+        mAssert.assertSimpleProperty("testschema.type", "type5", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type7", PropertyType.BIG_DECIMAL);
+        mAssert.assertSimpleProperty("testschema.type", "type8", PropertyType.DOUBLE);
+        mAssert.assertSimpleProperty("testschema.type", "type9", PropertyType.FLOAT);
+        mAssert.assertSimpleProperty("testschema.type", "type10", PropertyType.TIME);
+        //mAssert.assertSimpleProperty("testschema.type", "type11", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type12", PropertyType.DATE);
+        mAssert.assertSimpleProperty("testschema.type", "type13", PropertyType.TIMESTAMP);
+        mAssert.assertSimpleProperty("testschema.type", "type14", PropertyType.BINARY);
+        //mAssert.assertSimpleProperty("testschema.type", "type15", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type16", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.type", "type17", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.type", "type18", PropertyType.BLOB);
+        mAssert.assertSimpleProperty("testschema.type", "type19", PropertyType.TEXT);
+        mAssert.assertSimpleProperty("testschema.type", "type20", PropertyType.STRING);
 
         // 19. Validate user
-        mAssert.assertEntityExists("test.user");
-        mAssert.assertSimpleIdentity("test.user", "username", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.user", "password", PropertyType.STRING);
-        mAssert.assertOneToOneParent("test.user", "profile", "test.profile");
-        mAssert.assertOneToMany("test.user", "ownerBugs", "test.bug"); 
-        mAssert.assertOneToMany("test.user", "reporterBugs", "test.bug");
+        mAssert.assertEntityExists("testschema.user");
+        mAssert.assertSimpleIdentity("testschema.user", "username", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.user", "password", PropertyType.STRING);
+        mAssert.assertOneToOneParent("testschema.user", "profile", "testschema.profile");
+        mAssert.assertOneToMany("testschema.user", "ownerBugs", "testschema.bug"); 
+        mAssert.assertOneToMany("testschema.user", "reporterBugs", "testschema.bug");
     
         // 20. Validate vehicle
-        mAssert.assertEntityExists("test.vehicle");
-        mAssert.assertSimpleIdentity("test.vehicle", "regNumber", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.vehicle", "model", PropertyType.STRING);
-        mAssert.assertOneToMany("test.vehicle", "parkingPermits", "test.parkingPermit");
+        mAssert.assertEntityExists("testschema.vehicle");
+        mAssert.assertSimpleIdentity("testschema.vehicle", "regNumber", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.vehicle", "model", PropertyType.STRING);
+        mAssert.assertOneToMany("testschema.vehicle", "parkingPermits", "testschema.parkingPermit");
     
         // 21. Validate bugs
-        mAssert.assertEntityExists("test.bug");
-        mAssert.assertSimpleIdentity("test.bug", "bugId", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.bug", "title", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.bug", "description", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.bug", "open", PropertyType.BOOLEAN);
-        mAssert.assertManyToOne("test.bug", "owner", "test.user"); 
-        mAssert.assertManyToOne("test.bug", "reporter", "test.user");
+        mAssert.assertEntityExists("testschema.bug");
+        mAssert.assertSimpleIdentity("testschema.bug", "bugId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.bug", "title", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.bug", "description", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.bug", "open", PropertyType.BOOLEAN);
+        mAssert.assertManyToOne("testschema.bug", "owner", "testschema.user"); 
+        mAssert.assertManyToOne("testschema.bug", "reporter", "testschema.user");
     }
     
     @Test
@@ -303,127 +303,127 @@ public class ReverseEngineerImplIntegrationTest {
         mAssert.assertManyToManyAssociation("dbo.user", "groups", "dbo.group");
         
         // 8. Validate activity
-        mAssert.assertEntityExists("test.activity");
-        mAssert.assertSimpleIdentity("test.activity", "activityId", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.activity", "description", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.activity", "hours", PropertyType.BIG_DECIMAL);
-        mAssert.assertManyToOne("test.activity", "timesheet", "test.timesheet");
+        mAssert.assertEntityExists("testschema.activity");
+        mAssert.assertSimpleIdentity("testschema.activity", "activityId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.activity", "description", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.activity", "hours", PropertyType.BIG_DECIMAL);
+        mAssert.assertManyToOne("testschema.activity", "timesheet", "testschema.timesheet");
         
         // 9. Validate address
-        mAssert.assertEntityExists("test.address");
-        mAssert.assertSimpleIdentity("test.address", "addressId", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.address", "houseNumber", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.address", "streetName", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.address", "postCode", PropertyType.STRING);
-        mAssert.assertOneToMany("test.address", "consignments", "test.consignment");
+        mAssert.assertEntityExists("testschema.address");
+        mAssert.assertSimpleIdentity("testschema.address", "addressId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.address", "houseNumber", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.address", "streetName", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.address", "postCode", PropertyType.STRING);
+        mAssert.assertOneToMany("testschema.address", "consignments", "testschema.consignment");
         
         // 10. Validate consignment
-        mAssert.assertEntityExists("test.consignment");
-        mAssert.assertSimpleIdentity("test.consignment", "consignmentId", PropertyType.INTEGER);
-        mAssert.assertManyToOne("test.consignment", "customer", "test.customer");
-        mAssert.assertSimpleProperty("test.consignment", "consignmentDate", PropertyType.DATE);
-        mAssert.assertManyToOne("test.consignment", "address", "test.address");
+        mAssert.assertEntityExists("testschema.consignment");
+        mAssert.assertSimpleIdentity("testschema.consignment", "consignmentId", PropertyType.INTEGER);
+        mAssert.assertManyToOne("testschema.consignment", "customer", "testschema.customer");
+        mAssert.assertSimpleProperty("testschema.consignment", "consignmentDate", PropertyType.DATE);
+        mAssert.assertManyToOne("testschema.consignment", "address", "testschema.address");
         
         // 11. Validate customer
-        mAssert.assertEntityExists("test.customer");
-        mAssert.assertOneToOneIdentity("test.customer", "person", "test.person");
-        mAssert.assertSimpleProperty("test.customer", "loyaltyPoints", PropertyType.INTEGER);
-        mAssert.assertOneToMany("test.customer", "consignments", "test.consignment");
+        mAssert.assertEntityExists("testschema.customer");
+        mAssert.assertOneToOneIdentity("testschema.customer", "person", "testschema.person");
+        mAssert.assertSimpleProperty("testschema.customer", "loyaltyPoints", PropertyType.INTEGER);
+        mAssert.assertOneToMany("testschema.customer", "consignments", "testschema.consignment");
         
         // 12. Validate parkingPermit
-        mAssert.assertEntityExists("test.parkingPermit");
-        mAssert.assertComponentIdentity("test.parkingPermit", "regNumber", "date"); 
-        mAssert.assertSimpleProperty("test.parkingPermit", "value", PropertyType.BIG_DECIMAL);
-        mAssert.assertManyToOne("test.parkingPermit", "vehicle", "test.vehicle");
-        mAssert.assertOneToOneParent("test.parkingPermit", "parkingPermitPayment", "test.parkingPermitPayment");
+        mAssert.assertEntityExists("testschema.parkingPermit");
+        mAssert.assertComponentIdentity("testschema.parkingPermit", "regNumber", "date"); 
+        mAssert.assertSimpleProperty("testschema.parkingPermit", "value", PropertyType.BIG_DECIMAL);
+        mAssert.assertManyToOne("testschema.parkingPermit", "vehicle", "testschema.vehicle");
+        mAssert.assertOneToOneParent("testschema.parkingPermit", "parkingPermitPayment", "testschema.parkingPermitPayment");
 
         // 13. Validate parkingPermitPayment
-        mAssert.assertEntityExists("test.parkingPermitPayment");
-        mAssert.assertOneToOneIdentity("test.parkingPermitPayment", "parkingPermit", "test.parkingPermit");
-        mAssert.assertSimpleProperty("test.parkingPermitPayment", "paymentDate", PropertyType.TIMESTAMP);
+        mAssert.assertEntityExists("testschema.parkingPermitPayment");
+        mAssert.assertOneToOneIdentity("testschema.parkingPermitPayment", "parkingPermit", "testschema.parkingPermit");
+        mAssert.assertSimpleProperty("testschema.parkingPermitPayment", "paymentDate", PropertyType.TIMESTAMP);
 
         // 14. Validate passport
-        mAssert.assertEntityExists("test.passport");
-        mAssert.assertSimpleIdentity("test.passport", "passportNr", PropertyType.STRING);
-        mAssert.assertOneToOneChild("test.passport", "person", "test.person");
-        mAssert.assertSimpleProperty("test.passport", "expiryDate", PropertyType.DATE);
+        mAssert.assertEntityExists("testschema.passport");
+        mAssert.assertSimpleIdentity("testschema.passport", "passportNr", PropertyType.STRING);
+        mAssert.assertOneToOneChild("testschema.passport", "person", "testschema.person");
+        mAssert.assertSimpleProperty("testschema.passport", "expiryDate", PropertyType.DATE);
         
         // 15. Validate person
-        mAssert.assertEntityExists("test.person");
-        mAssert.assertComponentIdentity("test.person", "firstName", "lastName");
-        mAssert.assertOneToOneParent("test.person", "customer", "test.customer");
-        mAssert.assertOneToOneParent("test.person", "passport", "test.passport");
-        mAssert.assertSimpleProperty("test.person", "birthday", PropertyType.DATE);
+        mAssert.assertEntityExists("testschema.person");
+        mAssert.assertComponentIdentity("testschema.person", "firstName", "lastName");
+        mAssert.assertOneToOneParent("testschema.person", "customer", "testschema.customer");
+        mAssert.assertOneToOneParent("testschema.person", "passport", "testschema.passport");
+        mAssert.assertSimpleProperty("testschema.person", "birthday", PropertyType.DATE);
 
         // 16. Validate profile
-        mAssert.assertEntityExists("test.profile");
-        mAssert.assertSimpleIdentity("test.profile", "profileId", PropertyType.INTEGER);
-        mAssert.assertOneToOneChild("test.profile", "user", "test.user");
-        mAssert.assertSimpleProperty("test.profile", "screenName", PropertyType.STRING);
-        mAssert.assertManyToManyAssociation("test.profile", "friendRequesters", "test.profile");
-        mAssert.assertManyToManyAssociation("test.profile", "friendRequestees", "test.profile");
-        mAssert.assertOneToOneAssociation("test.profile", "spouseTo", "test.profile");
-        mAssert.assertOneToOneAssociation("test.profile", "spouseFrom", "test.profile");
+        mAssert.assertEntityExists("testschema.profile");
+        mAssert.assertSimpleIdentity("testschema.profile", "profileId", PropertyType.INTEGER);
+        mAssert.assertOneToOneChild("testschema.profile", "user", "testschema.user");
+        mAssert.assertSimpleProperty("testschema.profile", "screenName", PropertyType.STRING);
+        mAssert.assertManyToManyAssociation("testschema.profile", "friendRequesters", "testschema.profile");
+        mAssert.assertManyToManyAssociation("testschema.profile", "friendRequestees", "testschema.profile");
+        mAssert.assertOneToOneAssociation("testschema.profile", "spouseTo", "testschema.profile");
+        mAssert.assertOneToOneAssociation("testschema.profile", "spouseFrom", "testschema.profile");
         
         // 17. Validate timesheet
-        mAssert.assertEntityExists("test.timesheet");
-        mAssert.assertComponentIdentity("test.timesheet", "employeeId", "date");
-        mAssert.assertOneToMany("test.timesheet", "activities", "test.activity");
-        mAssert.assertSimpleProperty("test.timesheet", "expectedHours", PropertyType.BIG_DECIMAL);
+        mAssert.assertEntityExists("testschema.timesheet");
+        mAssert.assertComponentIdentity("testschema.timesheet", "employeeId", "date");
+        mAssert.assertOneToMany("testschema.timesheet", "activities", "testschema.activity");
+        mAssert.assertSimpleProperty("testschema.timesheet", "expectedHours", PropertyType.BIG_DECIMAL);
      
         // 18. Validate types
-        mAssert.assertEntityExists("test.type");
-        mAssert.assertSimpleIdentity("test.type", "type6", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type1", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.type", "type2", PropertyType.BOOLEAN);
-        mAssert.assertSimpleProperty("test.type", "type3", PropertyType.BYTE);
-        mAssert.assertSimpleProperty("test.type", "type4", PropertyType.SHORT);
-        mAssert.assertSimpleProperty("test.type", "type5", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type7", PropertyType.BIG_DECIMAL);
-        mAssert.assertSimpleProperty("test.type", "type8", PropertyType.DOUBLE);
-        mAssert.assertSimpleProperty("test.type", "type9", PropertyType.FLOAT);
-        mAssert.assertSimpleProperty("test.type", "type10", PropertyType.TIME);
-        //mAssert.assertSimpleProperty("test.type", "type11", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type12", PropertyType.DATE);
-        mAssert.assertSimpleProperty("test.type", "type13", PropertyType.TIMESTAMP);
-        mAssert.assertSimpleProperty("test.type", "type14", PropertyType.BINARY);
-        //mAssert.assertSimpleProperty("test.type", "type15", PropertyType.LONG);
-        mAssert.assertSimpleProperty("test.type", "type16", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.type", "type17", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.type", "type18", PropertyType.BLOB);
-        mAssert.assertSimpleProperty("test.type", "type19", PropertyType.TEXT);
-        mAssert.assertSimpleProperty("test.type", "type20", PropertyType.STRING);
+        mAssert.assertEntityExists("testschema.type");
+        mAssert.assertSimpleIdentity("testschema.type", "type6", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type1", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.type", "type2", PropertyType.BOOLEAN);
+        mAssert.assertSimpleProperty("testschema.type", "type3", PropertyType.BYTE);
+        mAssert.assertSimpleProperty("testschema.type", "type4", PropertyType.SHORT);
+        mAssert.assertSimpleProperty("testschema.type", "type5", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type7", PropertyType.BIG_DECIMAL);
+        mAssert.assertSimpleProperty("testschema.type", "type8", PropertyType.DOUBLE);
+        mAssert.assertSimpleProperty("testschema.type", "type9", PropertyType.FLOAT);
+        mAssert.assertSimpleProperty("testschema.type", "type10", PropertyType.TIME);
+        //mAssert.assertSimpleProperty("testschema.type", "type11", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type12", PropertyType.DATE);
+        mAssert.assertSimpleProperty("testschema.type", "type13", PropertyType.TIMESTAMP);
+        mAssert.assertSimpleProperty("testschema.type", "type14", PropertyType.BINARY);
+        //mAssert.assertSimpleProperty("testschema.type", "type15", PropertyType.LONG);
+        mAssert.assertSimpleProperty("testschema.type", "type16", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.type", "type17", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.type", "type18", PropertyType.BLOB);
+        mAssert.assertSimpleProperty("testschema.type", "type19", PropertyType.TEXT);
+        mAssert.assertSimpleProperty("testschema.type", "type20", PropertyType.STRING);
 
         // 19. Validate user
-        mAssert.assertEntityExists("test.user");
-        mAssert.assertSimpleIdentity("test.user", "username", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.user", "password", PropertyType.STRING);
-        mAssert.assertOneToOneParent("test.user", "profile", "test.profile");
-        mAssert.assertOneToMany("test.user", "ownerBugs", "test.bug"); 
-        mAssert.assertOneToMany("test.user", "reporterBugs", "test.bug");
+        mAssert.assertEntityExists("testschema.user");
+        mAssert.assertSimpleIdentity("testschema.user", "username", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.user", "password", PropertyType.STRING);
+        mAssert.assertOneToOneParent("testschema.user", "profile", "testschema.profile");
+        mAssert.assertOneToMany("testschema.user", "ownerBugs", "testschema.bug"); 
+        mAssert.assertOneToMany("testschema.user", "reporterBugs", "testschema.bug");
     
         // 20. Validate vehicle
-        mAssert.assertEntityExists("test.vehicle");
-        mAssert.assertSimpleIdentity("test.vehicle", "regNumber", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.vehicle", "model", PropertyType.STRING);
-        mAssert.assertOneToMany("test.vehicle", "parkingPermits", "test.parkingPermit");
+        mAssert.assertEntityExists("testschema.vehicle");
+        mAssert.assertSimpleIdentity("testschema.vehicle", "regNumber", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.vehicle", "model", PropertyType.STRING);
+        mAssert.assertOneToMany("testschema.vehicle", "parkingPermits", "testschema.parkingPermit");
     
         // 21. Validate bugs
-        mAssert.assertEntityExists("test.bug");
-        mAssert.assertSimpleIdentity("test.bug", "bugId", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.bug", "title", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.bug", "description", PropertyType.STRING);
-        mAssert.assertSimpleProperty("test.bug", "open", PropertyType.BOOLEAN);
-        mAssert.assertManyToOne("test.bug", "owner", "test.user"); 
-        mAssert.assertManyToOne("test.bug", "reporter", "test.user");
-        mAssert.assertOneToMany("test.bug", "comments", "test.comment");
+        mAssert.assertEntityExists("testschema.bug");
+        mAssert.assertSimpleIdentity("testschema.bug", "bugId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.bug", "title", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.bug", "description", PropertyType.STRING);
+        mAssert.assertSimpleProperty("testschema.bug", "open", PropertyType.BOOLEAN);
+        mAssert.assertManyToOne("testschema.bug", "owner", "testschema.user"); 
+        mAssert.assertManyToOne("testschema.bug", "reporter", "testschema.user");
+        mAssert.assertOneToMany("testschema.bug", "comments", "testschema.comment");
         
         // 21. Validate comments
-        mAssert.assertEntityExists("test.comment");
-        mAssert.assertSimpleIdentity("test.comment", "commentId", PropertyType.INTEGER);
-        mAssert.assertSimpleProperty("test.comment", "comment", PropertyType.STRING);
-        mAssert.assertManyToOne("test.comment", "bug", "test.bug"); 
-        mAssert.assertManyToOne("test.comment", "user", "test.user");
+        mAssert.assertEntityExists("testschema.comment");
+        mAssert.assertSimpleIdentity("testschema.comment", "commentId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("testschema.comment", "comment", PropertyType.STRING);
+        mAssert.assertManyToOne("testschema.comment", "bug", "testschema.bug"); 
+        mAssert.assertManyToOne("testschema.comment", "user", "testschema.user");
     
     }
     

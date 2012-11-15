@@ -2,7 +2,7 @@ drop all objects;
 
 -- Drop and recreate schema
 create schema "DBO";
-create schema "TEST";
+create schema "TEST_SCHEMA";
 
 create table "DBO"."TBL_CONTRACT" (
 	"FK_EMPLOYEE_ID" int not null, 
@@ -88,68 +88,68 @@ create table "DBO"."TBL_STAND_UMBRELLA" (
 	constraint "DBO"."PK_STAND_UMBRELLA" primary key ("FK_UMBRELLA_ID","FK_STAND_ID")
 );
 
-create table "TEST"."TBL_TIMESHEET" (
+create table "TEST_SCHEMA"."TBL_TIMESHEET" (
 	"FK_EMPLOYEE_ID" int not null, 
 	"DATE" date not null, 
 	"EXPECTED_HOURS" decimal(4,1) not null, 
-	constraint "TEST"."PK_TIMESHEET" primary key ("FK_EMPLOYEE_ID","DATE")
+	constraint "TEST_SCHEMA"."PK_TIMESHEET" primary key ("FK_EMPLOYEE_ID","DATE")
 );
 
-create table "TEST"."TBL_ACTIVITY" (
+create table "TEST_SCHEMA"."TBL_ACTIVITY" (
 	"ACTIVITY_ID" int not null, 
 	"FK_EMPLOYEE_ID" int not null, 
 	"FK_DATE" date not null, 
 	"DESCRIPTION" varchar(255) not null, 
 	"HOURS" decimal(4,1) not null, 
-	constraint "TEST"."PK_ACTIVITY" primary key ("ACTIVITY_ID")
+	constraint "TEST_SCHEMA"."PK_ACTIVITY" primary key ("ACTIVITY_ID")
 );
 
 /*
 Test many-to-one part of compound key
 */
-create table "TEST"."TBL_VEHICLE" (
+create table "TEST_SCHEMA"."TBL_VEHICLE" (
 	"REG_NUMBER" char(7) not null, 
 	"MODEL" varchar(400) not null, 
-	constraint "TEST"."PK_VEHICLE" primary key ("REG_NUMBER")
+	constraint "TEST_SCHEMA"."PK_VEHICLE" primary key ("REG_NUMBER")
 );
 
-create table "TEST"."TBL_PARKING_PERMIT" (
+create table "TEST_SCHEMA"."TBL_PARKING_PERMIT" (
 	"FK_REG_NUMBER" char(7) not null, 
 	"DATE" date not null, 
 	"VALUE" decimal(4,1) not null, 
-	constraint "TEST"."PK_PARKING_PERMIT" primary key ("FK_REG_NUMBER","DATE")
+	constraint "TEST_SCHEMA"."PK_PARKING_PERMIT" primary key ("FK_REG_NUMBER","DATE")
 );
 
 /*
 Test derived primary key one-to-one
 */
-create table "TEST"."TBL_PARKING_PERMIT_PAYMENT" (
+create table "TEST_SCHEMA"."TBL_PARKING_PERMIT_PAYMENT" (
 	"FK_REG_NUMBER" char(7) not null, 
 	"FK_PARKING_PERMIT_DATE" date not null, 
 	"PAYMENT_DATE" timestamp not null, 
-	constraint "TEST"."PK_PARKING_PERMIT_PAYMENT" primary key ("FK_REG_NUMBER","FK_PARKING_PERMIT_DATE")
+	constraint "TEST_SCHEMA"."PK_PARKING_PERMIT_PAYMENT" primary key ("FK_REG_NUMBER","FK_PARKING_PERMIT_DATE")
 );
 
 /*
 Test duplicate table name in different schema
 */
-create table "TEST"."TBL_USER" (
+create table "TEST_SCHEMA"."TBL_USER" (
 	"USERNAME" varchar(50) not null, 
 	"PASSWORD" varchar(50) not null, 
-	constraint "TEST"."PK_USER" primary key ("USERNAME")
+	constraint "TEST_SCHEMA"."PK_USER" primary key ("USERNAME")
 );
 
 /*
 Test multiple foreign keys between 2 tables
 */
-create table "TEST"."TBL_BUGS" (
+create table "TEST_SCHEMA"."TBL_BUGS" (
     "BUG_ID" int not null,
 	"OWNER" varchar(50) not null, 
 	"REPORTER" varchar(50) not null,
 	"TITLE" varchar(255) not null,
 	"DESCRIPTION" varchar(4000) not null,
 	"OPEN" bit not null,
-	constraint "TEST"."PK_BUGS" primary key ("BUG_ID")
+	constraint "TEST_SCHEMA"."PK_BUGS" primary key ("BUG_ID")
 );
 
 /*
@@ -157,96 +157,96 @@ Test what happens when the same
 table is a dependency of multiple tables
 (in this case, user)
 */
-create table "TEST"."TBL_COMMENTS" (
+create table "TEST_SCHEMA"."TBL_COMMENTS" (
 	"COMMENT_ID" int not null,
     "BUG_ID" int not null,
 	"USERNAME" varchar(50) not null, 
 	"COMMENT" varchar(4000) not null,
-	constraint "TEST"."PK_COMMENTS" primary key ("COMMENT_ID")
+	constraint "TEST_SCHEMA"."PK_COMMENTS" primary key ("COMMENT_ID")
 );
 
 /*
 Test one-to-one natural identity with simple key
 */
-create table "TEST"."TBL_PROFILE" (
+create table "TEST_SCHEMA"."TBL_PROFILE" (
     "PROFILE_ID" int not null,
 	"FK_USERNAME" varchar(50) not null, 
 	"SCREEN_NAME" varchar(100) not null, 
-	constraint "TEST"."PK_PROFILE" primary key ("PROFILE_ID")
+	constraint "TEST_SCHEMA"."PK_PROFILE" primary key ("PROFILE_ID")
 );
 
 /*
 Test many-to-many self-relation
 */
-create table "TEST"."TBL_FRIEND" (
+create table "TEST_SCHEMA"."TBL_FRIEND" (
 	"REQUESTER_ID" int not null, 
 	"REQUESTEE_ID" int not null, 
-	constraint "TEST"."PK_FRIEND" primary key ("REQUESTER_ID", "REQUESTEE_ID")
+	constraint "TEST_SCHEMA"."PK_FRIEND" primary key ("REQUESTER_ID", "REQUESTEE_ID")
 );
 
 /*
 Test one-to-one self-relation
 */
-create table "TEST"."TBL_SPOUSE" (
+create table "TEST_SCHEMA"."TBL_SPOUSE" (
 	"SPOUSE_TO_ID" int not null, 
 	"SPOUSE_FROM_ID" int not null, 
-	constraint "TEST"."PK_SPOUSE" primary key ("SPOUSE_TO_ID", "SPOUSE_FROM_ID")
+	constraint "TEST_SCHEMA"."PK_SPOUSE" primary key ("SPOUSE_TO_ID", "SPOUSE_FROM_ID")
 );
 
 /*
 Constrained compound identity with simple properties only
 */
-create table "TEST"."TBL_PERSON" (
+create table "TEST_SCHEMA"."TBL_PERSON" (
 	"FIRST_NAME" varchar(50) not null, 
 	"LAST_NAME" varchar(50) not null, 
 	"BIRTHDAY" date not null,
-	constraint "TEST"."PK_PERSON" primary key ("FIRST_NAME", "LAST_NAME")
+	constraint "TEST_SCHEMA"."PK_PERSON" primary key ("FIRST_NAME", "LAST_NAME")
 );
 
-create table "TEST"."TBL_CUSTOMER" (
+create table "TEST_SCHEMA"."TBL_CUSTOMER" (
 	"FK_FIRST_NAME" varchar(50) not null, 
 	"FK_LAST_NAME" varchar(50) not null, 
 	"LOYALTY_POINTS" integer not null,
-	constraint "TEST"."PK_CUSTOMER" primary key ("FK_FIRST_NAME", "FK_LAST_NAME")
+	constraint "TEST_SCHEMA"."PK_CUSTOMER" primary key ("FK_FIRST_NAME", "FK_LAST_NAME")
 );
 
 /*
 Test one-to-one natural identity with compound key
 */
-create table "TEST"."TBL_PASSPORT" (
+create table "TEST_SCHEMA"."TBL_PASSPORT" (
     "PASSPORT_NR" char(7) not null,
     "FK_FIRST_NAME" varchar(50) not null, 
 	"FK_LAST_NAME" varchar(50) not null,
 	"EXPIRY_DATE" date not null,
-	constraint "TEST"."PK_PASSPORT" primary key ("PASSPORT_NR") 
+	constraint "TEST_SCHEMA"."PK_PASSPORT" primary key ("PASSPORT_NR") 
 );
 
 /*
 Test component natural key with simple properties 
 */
-create table "TEST"."TBL_ADDRESS" (
+create table "TEST_SCHEMA"."TBL_ADDRESS" (
     "ADDRESS_ID"  int not null,
     "HOUSE_NUMBER" char(5) not null, 
 	"STREET_NAME" varchar(100) not null,
 	"POST_CODE" char(10) not null,
-	constraint "TEST"."PK_ADDRESS" primary key ("ADDRESS_ID") 
+	constraint "TEST_SCHEMA"."PK_ADDRESS" primary key ("ADDRESS_ID") 
 );
 
 
 /*
 Test component natural key with many-to-one and simple properties 
 */
-create table "TEST"."TBL_CONSIGNMENT" (
+create table "TEST_SCHEMA"."TBL_CONSIGNMENT" (
     "CONSIGNMENT_ID"  int not null,
     "FK_FIRST_NAME" varchar(50) not null, 
 	"FK_LAST_NAME" varchar(50) not null,
 	"CONSIGNMENT_DATE" date not null,
 --    "HOUSE_NUMBER" char(5) not null, 
 	"FK_ADDRESS_ID"  int not null,
-	constraint "TEST"."PK_CONSIGNMENT" primary key ("CONSIGNMENT_ID") 
+	constraint "TEST_SCHEMA"."PK_CONSIGNMENT" primary key ("CONSIGNMENT_ID") 
 );
 
-create table "TEST"."TBL_TYPES" (
+create table "TEST_SCHEMA"."TBL_TYPES" (
   "TYPE_1" INT not null,
   "TYPE_2" BOOLEAN not null,
   "TYPE_3" TINYINT not null,
@@ -267,7 +267,7 @@ create table "TEST"."TBL_TYPES" (
   "TYPE_19" CLOB(20) not null,
   "TYPE_20" UUID(20) not null, 
   --"TYPE_21" ARRAY, NB: CAN'T BE SUPPORTED YET
-  constraint "TEST"."PK_TYPES" primary key ("TYPE_6") 
+  constraint "TEST_SCHEMA"."PK_TYPES" primary key ("TYPE_6") 
 );
 
 /*
@@ -306,23 +306,23 @@ alter table "DBO"."TBL_DESK_EMPLOYEE"
 alter table "DBO"."TBL_STAND_UMBRELLA"
     add constraint "DBO"."UNIQUE_TBL_STAND_UMBRELLA_FK_UMBRELLA_ID" unique("FK_UMBRELLA_ID");
 
-alter table "TEST"."TBL_PROFILE"
-    add constraint "TEST"."UNIQUE_PROFILE_USERNAME" unique("FK_USERNAME");
+alter table "TEST_SCHEMA"."TBL_PROFILE"
+    add constraint "TEST_SCHEMA"."UNIQUE_PROFILE_USERNAME" unique("FK_USERNAME");
 
-alter table "TEST"."TBL_SPOUSE"
-    add constraint "TEST"."UNIQUE_SPOUSE_TO" unique("SPOUSE_TO_ID");
+alter table "TEST_SCHEMA"."TBL_SPOUSE"
+    add constraint "TEST_SCHEMA"."UNIQUE_SPOUSE_TO" unique("SPOUSE_TO_ID");
 
-alter table "TEST"."TBL_SPOUSE"
-    add constraint "TEST"."UNIQUE_SPOUSE_FROM" unique("SPOUSE_FROM_ID");    
+alter table "TEST_SCHEMA"."TBL_SPOUSE"
+    add constraint "TEST_SCHEMA"."UNIQUE_SPOUSE_FROM" unique("SPOUSE_FROM_ID");    
 
-alter table "TEST"."TBL_PASSPORT"
-    add constraint "TEST"."UNIQUE_TBL_PASSPORT_FIRST_NAME_LAST_NAME" unique("FK_FIRST_NAME","FK_LAST_NAME");
+alter table "TEST_SCHEMA"."TBL_PASSPORT"
+    add constraint "TEST_SCHEMA"."UNIQUE_TBL_PASSPORT_FIRST_NAME_LAST_NAME" unique("FK_FIRST_NAME","FK_LAST_NAME");
 
-alter table "TEST"."TBL_ADDRESS"
-    add constraint "TEST"."UNIQUE_ADDRESS_HOUSE_NUMBER_STREET" unique("HOUSE_NUMBER","STREET_NAME");
+alter table "TEST_SCHEMA"."TBL_ADDRESS"
+    add constraint "TEST_SCHEMA"."UNIQUE_ADDRESS_HOUSE_NUMBER_STREET" unique("HOUSE_NUMBER","STREET_NAME");
 
-alter table "TEST"."TBL_CONSIGNMENT"
-    add constraint "TEST"."UNIQUE_CONSIGNMENT_CUSTOMER_DATE" unique("FK_FIRST_NAME","FK_LAST_NAME", "CONSIGNMENT_DATE");
+alter table "TEST_SCHEMA"."TBL_CONSIGNMENT"
+    add constraint "TEST_SCHEMA"."UNIQUE_CONSIGNMENT_CUSTOMER_DATE" unique("FK_FIRST_NAME","FK_LAST_NAME", "CONSIGNMENT_DATE");
 
 
 /*
@@ -370,55 +370,55 @@ alter table "DBO"."TBL_STAND_UMBRELLA"
 alter table "DBO"."TBL_STAND_UMBRELLA"
     add constraint "DBO"."FK_STAND_UMBRELLA_STAND" foreign key ("FK_STAND_ID") references "DBO"."TBL_STAND"("STAND_ID");
 
-alter table "TEST"."TBL_PROFILE"
-    add constraint "TEST"."FK_PROFILE_USER" foreign key ("FK_USERNAME") references "TEST"."TBL_USER"("USERNAME");
+alter table "TEST_SCHEMA"."TBL_PROFILE"
+    add constraint "TEST_SCHEMA"."FK_PROFILE_USER" foreign key ("FK_USERNAME") references "TEST_SCHEMA"."TBL_USER"("USERNAME");
 
-alter table "TEST"."TBL_FRIEND"
-    add constraint "TEST"."FK_FRIEND_REQUESTER" foreign key ("REQUESTER_ID") references "TEST"."TBL_PROFILE"("PROFILE_ID");
+alter table "TEST_SCHEMA"."TBL_FRIEND"
+    add constraint "TEST_SCHEMA"."FK_FRIEND_REQUESTER" foreign key ("REQUESTER_ID") references "TEST_SCHEMA"."TBL_PROFILE"("PROFILE_ID");
 
-alter table "TEST"."TBL_FRIEND"
-   add constraint "TEST"."FK_FRIEND_REQUESTEE" foreign key ("REQUESTEE_ID") references "TEST"."TBL_PROFILE"("PROFILE_ID");
+alter table "TEST_SCHEMA"."TBL_FRIEND"
+   add constraint "TEST_SCHEMA"."FK_FRIEND_REQUESTEE" foreign key ("REQUESTEE_ID") references "TEST_SCHEMA"."TBL_PROFILE"("PROFILE_ID");
 
-alter table "TEST"."TBL_SPOUSE"
-    add constraint "TEST"."FK_SPOUSE_TO" foreign key ("SPOUSE_TO_ID") references "TEST"."TBL_PROFILE"("PROFILE_ID");
+alter table "TEST_SCHEMA"."TBL_SPOUSE"
+    add constraint "TEST_SCHEMA"."FK_SPOUSE_TO" foreign key ("SPOUSE_TO_ID") references "TEST_SCHEMA"."TBL_PROFILE"("PROFILE_ID");
 
-alter table "TEST"."TBL_SPOUSE"
-   add constraint "TEST"."FK_SPOUSE_FROM" foreign key ("SPOUSE_FROM_ID") references "TEST"."TBL_PROFILE"("PROFILE_ID");
+alter table "TEST_SCHEMA"."TBL_SPOUSE"
+   add constraint "TEST_SCHEMA"."FK_SPOUSE_FROM" foreign key ("SPOUSE_FROM_ID") references "TEST_SCHEMA"."TBL_PROFILE"("PROFILE_ID");
 
  
-alter table "TEST"."TBL_TIMESHEET"
-    add constraint "TEST"."FK_TIMESHEET_EMPLOYEE" foreign key ("FK_EMPLOYEE_ID") references "DBO"."TBL_EMPLOYEE"("EMPLOYEE_ID");
+alter table "TEST_SCHEMA"."TBL_TIMESHEET"
+    add constraint "TEST_SCHEMA"."FK_TIMESHEET_EMPLOYEE" foreign key ("FK_EMPLOYEE_ID") references "DBO"."TBL_EMPLOYEE"("EMPLOYEE_ID");
     
-alter table "TEST"."TBL_ACTIVITY"
-    add constraint "TEST"."FK_ACTIVITY_TIMESHEET" foreign key ("FK_EMPLOYEE_ID","FK_DATE") references "TEST"."TBL_TIMESHEET"("FK_EMPLOYEE_ID","DATE");
+alter table "TEST_SCHEMA"."TBL_ACTIVITY"
+    add constraint "TEST_SCHEMA"."FK_ACTIVITY_TIMESHEET" foreign key ("FK_EMPLOYEE_ID","FK_DATE") references "TEST_SCHEMA"."TBL_TIMESHEET"("FK_EMPLOYEE_ID","DATE");
 
-alter table "TEST"."TBL_PARKING_PERMIT"
-    add constraint "TEST"."FK_PARKING_PERMIT_VEHICLE" foreign key ("FK_REG_NUMBER") references "TEST"."TBL_VEHICLE"("REG_NUMBER");
+alter table "TEST_SCHEMA"."TBL_PARKING_PERMIT"
+    add constraint "TEST_SCHEMA"."FK_PARKING_PERMIT_VEHICLE" foreign key ("FK_REG_NUMBER") references "TEST_SCHEMA"."TBL_VEHICLE"("REG_NUMBER");
  
-alter table "TEST"."TBL_PARKING_PERMIT_PAYMENT"
-    add constraint "TEST"."FK_PARKING_PERMIT_PAYMENT_PARKING_PERMIT" foreign key ("FK_REG_NUMBER", "FK_PARKING_PERMIT_DATE") references "TEST"."TBL_PARKING_PERMIT"("FK_REG_NUMBER", "DATE");
+alter table "TEST_SCHEMA"."TBL_PARKING_PERMIT_PAYMENT"
+    add constraint "TEST_SCHEMA"."FK_PARKING_PERMIT_PAYMENT_PARKING_PERMIT" foreign key ("FK_REG_NUMBER", "FK_PARKING_PERMIT_DATE") references "TEST_SCHEMA"."TBL_PARKING_PERMIT"("FK_REG_NUMBER", "DATE");
 
-alter table "TEST"."TBL_CUSTOMER"
-    add constraint "TEST"."FK_CUSTOMER_PERSON" foreign key ("FK_FIRST_NAME", "FK_LAST_NAME") references "TEST"."TBL_PERSON"("FIRST_NAME", "LAST_NAME");
+alter table "TEST_SCHEMA"."TBL_CUSTOMER"
+    add constraint "TEST_SCHEMA"."FK_CUSTOMER_PERSON" foreign key ("FK_FIRST_NAME", "FK_LAST_NAME") references "TEST_SCHEMA"."TBL_PERSON"("FIRST_NAME", "LAST_NAME");
 
-alter table "TEST"."TBL_PASSPORT"
-    add constraint "TEST"."FK_PASSPORT_PERSON" foreign key ("FK_FIRST_NAME", "FK_LAST_NAME") references "TEST"."TBL_PERSON"("FIRST_NAME", "LAST_NAME");
+alter table "TEST_SCHEMA"."TBL_PASSPORT"
+    add constraint "TEST_SCHEMA"."FK_PASSPORT_PERSON" foreign key ("FK_FIRST_NAME", "FK_LAST_NAME") references "TEST_SCHEMA"."TBL_PERSON"("FIRST_NAME", "LAST_NAME");
    
-alter table "TEST"."TBL_CONSIGNMENT"
-    add constraint "TEST"."FK_CONSIGNMENT_CUSTOMER" foreign key ("FK_FIRST_NAME", "FK_LAST_NAME") references "TEST"."TBL_CUSTOMER"("FK_FIRST_NAME", "FK_LAST_NAME");
+alter table "TEST_SCHEMA"."TBL_CONSIGNMENT"
+    add constraint "TEST_SCHEMA"."FK_CONSIGNMENT_CUSTOMER" foreign key ("FK_FIRST_NAME", "FK_LAST_NAME") references "TEST_SCHEMA"."TBL_CUSTOMER"("FK_FIRST_NAME", "FK_LAST_NAME");
 
-alter table "TEST"."TBL_CONSIGNMENT"
-    add constraint "TEST"."FK_CONSIGNMENT_ADDRESS" foreign key ("FK_ADDRESS_ID") references "TEST"."TBL_ADDRESS"("ADDRESS_ID");
+alter table "TEST_SCHEMA"."TBL_CONSIGNMENT"
+    add constraint "TEST_SCHEMA"."FK_CONSIGNMENT_ADDRESS" foreign key ("FK_ADDRESS_ID") references "TEST_SCHEMA"."TBL_ADDRESS"("ADDRESS_ID");
     
-alter table "TEST"."TBL_BUGS"
-    add constraint "TEST"."FK_BUGS_USER_OWNER" foreign key ("OWNER") references "TEST"."TBL_USER"("USERNAME");
+alter table "TEST_SCHEMA"."TBL_BUGS"
+    add constraint "TEST_SCHEMA"."FK_BUGS_USER_OWNER" foreign key ("OWNER") references "TEST_SCHEMA"."TBL_USER"("USERNAME");
     
-alter table "TEST"."TBL_BUGS"
-    add constraint "TEST"."FK_BUGS_USER_REPORTER" foreign key ("REPORTER") references "TEST"."TBL_USER"("USERNAME");       
+alter table "TEST_SCHEMA"."TBL_BUGS"
+    add constraint "TEST_SCHEMA"."FK_BUGS_USER_REPORTER" foreign key ("REPORTER") references "TEST_SCHEMA"."TBL_USER"("USERNAME");       
  
-alter table "TEST"."TBL_COMMENTS"
-    add constraint "TEST"."FK_COMMENTS_BUGS" foreign key ("BUG_ID") references "TEST"."TBL_BUGS"("BUG_ID");
+alter table "TEST_SCHEMA"."TBL_COMMENTS"
+    add constraint "TEST_SCHEMA"."FK_COMMENTS_BUGS" foreign key ("BUG_ID") references "TEST_SCHEMA"."TBL_BUGS"("BUG_ID");
 
-alter table "TEST"."TBL_COMMENTS"
-    add constraint "TEST"."FK_COMMENTS_USER" foreign key ("USERNAME") references "TEST"."TBL_USER"("USERNAME");
+alter table "TEST_SCHEMA"."TBL_COMMENTS"
+    add constraint "TEST_SCHEMA"."FK_COMMENTS_USER" foreign key ("USERNAME") references "TEST_SCHEMA"."TBL_USER"("USERNAME");
 
