@@ -17,66 +17,66 @@ import net.sourceforge.greenvine.generator.template.TemplateFactory;
 import net.sourceforge.greenvine.model.api.Model;
 
 public class GeneratorRunnerImpl implements GeneratorRunner {
-    
-    private final GeneratorRunnerConfig generatorRunnerConfig;
-    
-    public GeneratorRunnerImpl(GeneratorRunnerConfig generatorRunnerConfig) {
-        this.generatorRunnerConfig = generatorRunnerConfig;
-    }
 
-    public GeneratorRunnerResult generate(Model model, File outputDirectory) throws InterruptedException, ExecutionException {
-        // Create the GeneratorTaskExecutor
-        GeneratorTaskExecutor executor = new GeneratorTaskExecutor(generatorRunnerConfig
-                .getGeneratorThreads(), generatorRunnerConfig.getTemplateThreads());
+	private final GeneratorRunnerConfig generatorRunnerConfig;
 
-        // Add the Generator tasks to the executor
-        for (GeneratorContext genImpl : generatorRunnerConfig.getGeneratorContexts()) {
-            submitGeneratorTask(model, outputDirectory, executor, genImpl);
-        }
+	public GeneratorRunnerImpl(GeneratorRunnerConfig generatorRunnerConfig) {
+		this.generatorRunnerConfig = generatorRunnerConfig;
+	}
 
-        // Get the results from the executor
-        Collection<GenerateResult> generateResults = new ArrayList<GenerateResult>();
-        Collection<MergeResult> mergeResults = new ArrayList<MergeResult>();
-        executor.getResults(generateResults, mergeResults);
+	public GeneratorRunnerResult generate(Model model, File outputDirectory) throws InterruptedException, ExecutionException {
+		// Create the GeneratorTaskExecutor
+		GeneratorTaskExecutor executor = new GeneratorTaskExecutor(generatorRunnerConfig
+				.getGeneratorThreads(), generatorRunnerConfig.getTemplateThreads());
 
-        return new GeneratorRunnerResult(generateResults, mergeResults);
+		// Add the Generator tasks to the executor
+		for (GeneratorContext genImpl : generatorRunnerConfig.getGeneratorContexts()) {
+			submitGeneratorTask(model, outputDirectory, executor, genImpl);
+		}
 
-    }
+		// Get the results from the executor
+		Collection<GenerateResult> generateResults = new ArrayList<GenerateResult>();
+		Collection<MergeResult> mergeResults = new ArrayList<MergeResult>();
+		executor.getResults(generateResults, mergeResults);
 
-    private void submitGeneratorTask(Model model, File outputDirectory,
-            GeneratorTaskExecutor executor, GeneratorContext genImpl) throws InterruptedException, ExecutionException
-           {
+		return new GeneratorRunnerResult(generateResults, mergeResults);
 
-       // Load the Generator class
-        Generator generator = genImpl.getGenerator();
+	}
 
-        // Load the TemplateFactory class
-        TemplateFactory templateFactory = genImpl.getTemplateFactory();
+	private void submitGeneratorTask(Model model, File outputDirectory,
+			GeneratorTaskExecutor executor, GeneratorContext genImpl) throws InterruptedException, ExecutionException
+			{
 
-        // Set up the export directory
-        String exportDirectory = createExportDirectory(outputDirectory, genImpl);
+		// Load the Generator class
+		Generator generator = genImpl.getGenerator();
 
-        // Get template from factory
-        Template template = templateFactory.assembleTemplate(genImpl
-                .getTemplatePath(), exportDirectory);
+		// Load the TemplateFactory class
+		TemplateFactory templateFactory = genImpl.getTemplateFactory();
 
-        // Generate code
-        executor.addGeneratorTask(generator, model, template);
+		// Set up the export directory
+		String exportDirectory = createExportDirectory(outputDirectory, genImpl);
 
-    }
+		// Get template from factory
+		Template template = templateFactory.assembleTemplate(genImpl
+				.getTemplatePath(), exportDirectory);
+
+		// Generate code
+		executor.addGeneratorTask(generator, model, template);
+
+	}
 
 
 
-   
-    private String createExportDirectory(File outputDirectory,
-            GeneratorContext genImpl) {
-        String exportDirectory = outputDirectory.getPath() + File.separatorChar
-                + genImpl.getExportDirectory();
-        File expDirFile = new File(exportDirectory);
-        if (!expDirFile.exists()) {
-            expDirFile.mkdirs();
-        }
-        return exportDirectory;
-    }
+
+	private String createExportDirectory(File outputDirectory,
+			GeneratorContext genImpl) {
+		String exportDirectory = outputDirectory.getPath() + File.separatorChar
+				+ genImpl.getExportDirectory();
+		File expDirFile = new File(exportDirectory);
+		if (!expDirFile.exists()) {
+			expDirFile.mkdirs();
+		}
+		return exportDirectory;
+	}
 
 }

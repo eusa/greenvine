@@ -3,7 +3,6 @@ package net.sourceforge.greenvine.generator.impl.java.data.dbunit;
 import java.util.List;
 
 import net.sourceforge.greenvine.generator.Generator;
-import net.sourceforge.greenvine.generator.helper.DataHelper;
 import net.sourceforge.greenvine.generator.helper.JavaHelper;
 import net.sourceforge.greenvine.generator.helper.JavaType;
 import net.sourceforge.greenvine.generator.helper.JdbcHelper;
@@ -15,21 +14,16 @@ import net.sourceforge.greenvine.generator.template.TemplateContext;
 import net.sourceforge.greenvine.model.api.Catalog;
 import net.sourceforge.greenvine.model.api.Column;
 import net.sourceforge.greenvine.model.api.ColumnConstraint;
-import net.sourceforge.greenvine.model.api.ColumnType;
 import net.sourceforge.greenvine.model.api.Database;
 import net.sourceforge.greenvine.model.api.Entity;
 import net.sourceforge.greenvine.model.api.ForeignKey;
 import net.sourceforge.greenvine.model.api.Model;
 import net.sourceforge.greenvine.model.api.ModelException;
 import net.sourceforge.greenvine.model.api.Table;
-import net.sourceforge.greenvine.model.naming.impl.DatabaseObjectNameImpl;
 
 
 public class IntegrationTestDataGenerator implements Generator {
 	
-    // TODO eventually remove DEBUG statements 
-	// if bug does not reappear
-
     private final SourceConfig sourceConfig;
     private final JdbcHelper jdbcHelper = new JdbcHelper();
     
@@ -162,7 +156,7 @@ public class IntegrationTestDataGenerator implements Generator {
     }
 
     private void populateDendendentTables(DataSet dataSet, List<? extends Table> tables) {
-        for (Table table : tables) {
+    	for (Table table : tables) {
             populateTableWithDefaultData(dataSet, table);
         }
         
@@ -189,23 +183,11 @@ public class IntegrationTestDataGenerator implements Generator {
     }
 
     private RowData getDefaultRowData(TableData table) {
-        DataHelper dataHelper = new DataHelper();
-        String defaultDate = dataHelper.getCreateDateString();
-        JdbcHelper jdbcHelper = new JdbcHelper();// DEBUG this could be the issue. Test further
+        JdbcHelper jdbcHelper = new JdbcHelper();
         RowData row = new RowData(table.getMetadata());
         for (Column column : table.getColumns()) {
             JdbcType type = jdbcHelper.getJdbcTypeForColumn(column);
             String value = type.getCreateData();
-            if (column.getColumnType().equals(ColumnType.DATE)) {
-                // DEBUG there seems to be a subtle, intermittent bug here
-                // Date values are occasionally random in the ActivityBeforeCreate
-                // data set. This check attempts to catch this issue 
-                // although it could be happening later in the template rendering
-                // for example
-                if (!value.equals(defaultDate)) {
-                    throw new RuntimeException("Somehow, the value has been set to something other than default. Please report this issue if encountered.");
-                }
-            }
             row.put(column.getName(), value);
         }
         return row;
@@ -226,7 +208,9 @@ public class IntegrationTestDataGenerator implements Generator {
         
         // Set immutable natural key columns (if not set already)
         for (Column column : table.getNaturalKeyColumns()) {
-            putCreateDataIfAbsent(row, column);
+            // TODO this breaks if NaturalIdentities are not enabled
+        	//putCreateDataIfAbsent(row, column);
+        	putUpdateDataIfAbsent(row, column);
         }
         
         // Set other columns (if not set already)
@@ -295,18 +279,6 @@ public class IntegrationTestDataGenerator implements Generator {
     private void createDataSetFile(Template template, TemplateTaskQueue queue,
             Database database, String directory,
             DataSet dataSet, String dataSetName, String entityName) throws ModelException {
-        
-        // DEBUG on intermittent data creation bug
-    	// Sometimes, it seems that a value other than
-    	// the default date occasionally gets set in 
-    	// the ActivityBeforeCreate dataset (in the timesheet).
-        if (entityName.equals("Activity") && !dataSetName.equals("FindAll")) {
-            TableData table = dataSet.getTable(DatabaseObjectNameImpl.parse("TEST.TBL_TIMESHEET"));
-            String value = table.getValue(0, "DATE");
-            if (!value.equals("2009-01-01")) {
-                throw new RuntimeException("Error rendering Activity" + dataSetName + ". A value other than the default date has been set.");
-            }
-        }
         
         // Create TemplateContext
         TemplateContext context = new TemplateContext();
