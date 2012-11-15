@@ -153,6 +153,19 @@ create table "TEST"."TBL_BUGS" (
 );
 
 /*
+Test what happens when the same 
+table is a dependency of multiple tables
+(in this case, user)
+*/
+create table "TEST"."TBL_COMMENTS" (
+	"COMMENT_ID" int not null,
+    "BUG_ID" int not null,
+	"USERNAME" varchar(50) not null, 
+	"COMMENT" varchar(4000) not null,
+	constraint "TEST"."PK_COMMENTS" primary key ("COMMENT_ID")
+);
+
+/*
 Test one-to-one natural identity with simple key
 */
 create table "TEST"."TBL_PROFILE" (
@@ -401,4 +414,11 @@ alter table "TEST"."TBL_BUGS"
     add constraint "TEST"."FK_BUGS_USER_OWNER" foreign key ("OWNER") references "TEST"."TBL_USER"("USERNAME");
     
 alter table "TEST"."TBL_BUGS"
-    add constraint "TEST"."FK_BUGS_USER_REPORTER" foreign key ("REPORTER") references "TEST"."TBL_USER"("USERNAME");        
+    add constraint "TEST"."FK_BUGS_USER_REPORTER" foreign key ("REPORTER") references "TEST"."TBL_USER"("USERNAME");       
+ 
+alter table "TEST"."TBL_COMMENTS"
+    add constraint "TEST"."FK_COMMENTS_BUGS" foreign key ("BUG_ID") references "TEST"."TBL_BUGS"("BUG_ID");
+
+alter table "TEST"."TBL_COMMENTS"
+    add constraint "TEST"."FK_COMMENTS_USER" foreign key ("USERNAME") references "TEST"."TBL_USER"("USERNAME");
+
