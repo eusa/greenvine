@@ -11,6 +11,7 @@ A tool for reverse-engineering a JPA 2.0 and/or Hibernate project from a JDBC da
  - Maven POM with all dependencies
  
 Basically, you reverse engineer the database using the Maven plug-in.
+mvn greenvine:revgen
 
 Then, go to the output directory and type mvn test.
 
