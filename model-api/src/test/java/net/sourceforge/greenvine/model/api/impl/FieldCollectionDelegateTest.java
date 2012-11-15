@@ -10,6 +10,7 @@ import net.sourceforge.greenvine.model.api.ColumnType;
 import net.sourceforge.greenvine.model.api.ColumnValueGenerationStrategy;
 import net.sourceforge.greenvine.model.api.Field;
 import net.sourceforge.greenvine.model.api.FieldCollection;
+import net.sourceforge.greenvine.model.api.FieldNamedObject;
 import net.sourceforge.greenvine.model.api.ModelException;
 import net.sourceforge.greenvine.model.api.NamedObject;
 import net.sourceforge.greenvine.model.api.PropertyType;
@@ -187,7 +188,7 @@ class MyField implements Field {
         return this.name;
     }
     
-    public int compareTo(NamedObject arg0) {
+    public int compareTo(FieldNamedObject arg0) {
         return 0;
     }
 }

@@ -10,7 +10,6 @@ import net.sourceforge.greenvine.model.api.ColumnType;
 import net.sourceforge.greenvine.model.api.ColumnValueGenerationStrategy;
 import net.sourceforge.greenvine.model.api.ForeignKey;
 import net.sourceforge.greenvine.model.api.ModelException;
-import net.sourceforge.greenvine.model.api.NamedObject;
 import net.sourceforge.greenvine.model.api.RdbmsNamedObject;
 import net.sourceforge.greenvine.model.api.Table;
 import net.sourceforge.greenvine.model.naming.ColumnName;
@@ -18,7 +17,7 @@ import net.sourceforge.greenvine.model.naming.impl.ColumnNameImpl;
 
 
 
-public class ColumnImpl implements RdbmsNamedObject, Column {
+public class ColumnImpl implements RdbmsNamedObject, Column, Comparable<ColumnImpl> {
 
     private final Table container;
     private final ColumnNameImpl name;
@@ -253,10 +252,14 @@ public class ColumnImpl implements RdbmsNamedObject, Column {
         return isPrimary;
     }
 
+    public String getQualifiedName() {
+    	return this.container.getName() + "." + this.getName();
+    }
 
 
-    public int compareTo(NamedObject obj) {
-        return this.name.compareTo(obj.getName());
+    public int compareTo(ColumnImpl obj) {
+        //return this.name.compareTo(obj.getName());
+        return this.getQualifiedName().compareTo(obj.getQualifiedName());
     }
 
     @Override

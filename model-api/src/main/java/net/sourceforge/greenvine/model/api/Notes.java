@@ -17,5 +17,13 @@ public interface Notes {
 	// TODO Handle reserved java keywords in name extractors
 	// TODO if a field in an entity has the same name as the entity, this could cause issues in some generated classes
 	// TODO Test with MySQL
+	// TODO package names should not be camel cased
+	
+	// Simplifications
+	// TODO get rid of Hibernate
+	// TODO get rid of DAOs
+	// TODO get rid of unneeded integration tests
+	// TODO get rid of NaturalIdentities
+	// TODO database name needs to be set in 3 locations - should just be once.
 	
 }

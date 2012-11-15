@@ -94,7 +94,7 @@ public class OneToOneChildIdentityImpl extends AbstractAggregationRelationField 
                 return candidate;
             }
         }
-        throw new ModelException(String.format("Cannot find column mapped to field %s id ConstrainedIdentity %s", simple, this));
+        throw new ModelException(String.format("Cannot find column mapped to field %s in ConstrainedIdentity %s", simple, this));
     }
 
     public Identity getUltimateNonConstrainedIdentity() {

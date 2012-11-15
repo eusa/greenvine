@@ -345,7 +345,14 @@ public class TableImpl extends AbstractDataContainer implements Table {
     
     private void addDependencyTables(TableImpl table, List<TableImpl> dependencies) {
         Collection<TableImpl> immediates = table.getReferencedTables();
-        dependencies.addAll(immediates);
+        for (TableImpl tab : immediates) {
+        	// Avoid duplicate tables 
+        	// but retain the correct ordering
+        	if (dependencies.contains(tab)) {
+        		dependencies.remove(tab);
+        	}
+        	dependencies.add(tab);
+        }
         for (TableImpl immediate : immediates) {
             addDependencyTables(immediate, dependencies);
         }

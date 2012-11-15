@@ -10,9 +10,9 @@ import net.sourceforge.greenvine.model.api.ColumnType;
 import net.sourceforge.greenvine.model.api.ColumnValueGenerationStrategy;
 import net.sourceforge.greenvine.model.api.Field;
 import net.sourceforge.greenvine.model.api.FieldCollection;
+import net.sourceforge.greenvine.model.api.FieldNamedObject;
 import net.sourceforge.greenvine.model.api.ManyToOneAggregationField;
 import net.sourceforge.greenvine.model.api.ModelException;
-import net.sourceforge.greenvine.model.api.NamedObject;
 import net.sourceforge.greenvine.model.api.PropertyType;
 import net.sourceforge.greenvine.model.api.RelationField;
 import net.sourceforge.greenvine.model.api.Table;
@@ -210,7 +210,7 @@ class DummyManyToOne implements ManyToOneAggregationField {
         return true;
     }
     
-    public int compareTo(NamedObject arg0) {
+    public int compareTo(FieldNamedObject arg0) {
         return 0;
     }
     
