@@ -50,7 +50,7 @@ public class ReverseEngineerImplIntegrationTest {
         // Validate catalog
         CatalogImpl catalog = model.getCatalog(0);
         Assert.assertEquals("greenvine", catalog.getName().toString());
-        Assert.assertEquals(21, catalog.getEntityCount());
+        Assert.assertEquals(22, catalog.getEntityCount());
         
         // Create ModelAssert object to test entities
         ModelAssert mAssert = new ModelAssert(catalog);
@@ -244,7 +244,7 @@ public class ReverseEngineerImplIntegrationTest {
         // Validate catalog
         CatalogImpl catalog = model.getCatalog(0);
         Assert.assertEquals("greenvine", catalog.getName().toString());
-        Assert.assertEquals(21, catalog.getEntityCount());
+        Assert.assertEquals(22, catalog.getEntityCount());
         
         // Create ModelAssert object to test entities
         ModelAssert mAssert = new ModelAssert(catalog);
@@ -416,6 +416,15 @@ public class ReverseEngineerImplIntegrationTest {
         mAssert.assertSimpleProperty("test.bug", "open", PropertyType.BOOLEAN);
         mAssert.assertManyToOne("test.bug", "owner", "test.user"); 
         mAssert.assertManyToOne("test.bug", "reporter", "test.user");
+        mAssert.assertOneToMany("test.bug", "comments", "test.comment");
+        
+        // 21. Validate comments
+        mAssert.assertEntityExists("test.comment");
+        mAssert.assertSimpleIdentity("test.comment", "commentId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("test.comment", "comment", PropertyType.STRING);
+        mAssert.assertManyToOne("test.comment", "bug", "test.bug"); 
+        mAssert.assertManyToOne("test.comment", "user", "test.user");
+    
     }
     
 }
