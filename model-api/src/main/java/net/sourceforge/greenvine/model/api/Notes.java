@@ -9,20 +9,24 @@ package net.sourceforge.greenvine.model.api;
  */
 public interface Notes {
     
-    // TODO fix bug in DBUnit comparisons for binary data types and remove @Ignore attribute in integration tests
-    // TODO [minor] add support for ARRAY and OTHER JDBC types
-    // TODO [minor] Use the Builder pattern approach taken for ComponentIdentity on ComponentNaturalIdentity etc 
-    // TODO [minor] add table/column/foreign-key overrides to reveng.xml to control names and types of generated fields
-
-	// TODO Handle reserved java keywords in name extractors
-	// TODO if a field in an entity has the same name as the entity, this could cause issues in some generated classes
+	// TODO minor bugfixes
+    // Fix bug in DBUnit comparisons for binary data types and remove @Ignore attribute in integration tests
+    // Add support for ARRAY and OTHER JDBC types
+    // Use the Builder pattern approach taken for ComponentIdentity on ComponentNaturalIdentity etc 
+    
+	// TODO naming improvements
+	// Refactor the naming classes - too complex
+	// Add table/column/foreign-key overrides to reveng.xml to control names and types of generated fields
+	// Handle reserved java keywords in name extractors
+	// If a field in an entity has the same name as the entity, this could cause issues in some generated classes
+	
 	// TODO Test with MySQL
 	
-	// Simplifications
-	// TODO get rid of Hibernate
-	// TODO get rid of DAOs
-	// TODO get rid of unneeded integration tests
-	// TODO get rid of NaturalIdentities
-	// TODO database name needs to be set in 3 locations - should just be once.
+	// TODO simplifications
+	// Get rid of Hibernate
+	// Get rid of DAOs
+	// Get rid of unneeded integration tests
+	// Get rid of NaturalIdentities
+	// Database name needs to be set in 3 locations - should just be once.
 	
 }
