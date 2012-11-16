@@ -12,6 +12,7 @@ import net.sourceforge.greenvine.reveng.testutils.TestModelExtractor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.maven.it.Verifier;
 import org.junit.Test;
 
 public class GeneratorRunnerTest {
@@ -55,6 +56,34 @@ public class GeneratorRunnerTest {
 		if (errorCount > 0) {
 		    Assert.fail("Either some generators or templates failed, see logs for details.");
 		}
+	}
+	
+	@Test
+	public void testMaven() throws Exception {
+		
+		// Get the runner config
+        GeneratorRunnerConfigFactory factory = new GeneratorRunnerConfigFactory("src/test/resources/generator-ctx.xml");
+        GeneratorRunnerConfig generatorConfig = factory.getGeneratorRunnerConfig();
+	    
+	    // Create GeneratorRunner
+		GeneratorRunner runner = new GeneratorRunnerImpl(generatorConfig);
+		
+		// Create model
+		Model model = TestModelExtractor.getTestModel("../database-extractor/src/test/resources/test-schema-h2.sql");
+		
+		// Create output directory
+		File outputDirectory = new File("target/greenvine-maven");
+		if (outputDirectory.exists()) {
+			outputDirectory.delete();
+			outputDirectory.createNewFile();
+		}
+		
+		// Execute the runner
+		runner.generate(model, outputDirectory);
+		
+		// Run a maven build
+		Verifier verifier = new Verifier(outputDirectory.getAbsolutePath());
+		verifier.executeGoal("test");
 	}
 
 }
