@@ -19,7 +19,7 @@ public class TestModelExtractor {
         // Set up RevengConfig
         RevengConfig revengConfig = new RevengConfig();
         revengConfig.setModelName("model");
-        revengConfig.setCreateNaturalIdentities(true);
+        revengConfig.setCreateNaturalIdentities(false);
         
         // Create ReverseEngineer
         ReverseEngineerImpl reveng = new ReverseEngineerImpl(revengConfig);
