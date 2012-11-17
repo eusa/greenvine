@@ -1,7 +1,9 @@
 DROP ALL OBJECTS;
 
 #foreach($schema in $database.schemaNames)
+#if($schema != "PUBLIC")
 CREATE SCHEMA "$schema";
+#end
 #end
 
 ##create tables
