@@ -50,7 +50,7 @@ public class ReverseEngineerImplIntegrationTest {
         // Validate catalog
         CatalogImpl catalog = model.getCatalog(0);
         Assert.assertEquals("greenvine", catalog.getName().toString());
-        Assert.assertEquals(22, catalog.getEntityCount());
+        Assert.assertEquals(23, catalog.getEntityCount());
         
         // Create ModelAssert object to test entities
         ModelAssert mAssert = new ModelAssert(catalog);
@@ -220,6 +220,14 @@ public class ReverseEngineerImplIntegrationTest {
         mAssert.assertSimpleProperty("testschema.bug", "open", PropertyType.BOOLEAN);
         mAssert.assertManyToOne("testschema.bug", "owner", "testschema.user"); 
         mAssert.assertManyToOne("testschema.bug", "reporter", "testschema.user");
+        
+        // 23. Validate noSchema
+        mAssert.assertEntityExists("noSchema");
+        mAssert.assertSimpleIdentity("noSchema", "noSchemaId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("noSchema", "label", PropertyType.STRING);
+        mAssert.assertSimpleProperty("noSchema", "flag", PropertyType.BOOLEAN);
+        mAssert.assertManyToOne("noSchema", "user", "testschema.user");
+        
     }
     
     @Test
@@ -244,7 +252,7 @@ public class ReverseEngineerImplIntegrationTest {
         // Validate catalog
         CatalogImpl catalog = model.getCatalog(0);
         Assert.assertEquals("greenvine", catalog.getName().toString());
-        Assert.assertEquals(22, catalog.getEntityCount());
+        Assert.assertEquals(23, catalog.getEntityCount());
         
         // Create ModelAssert object to test entities
         ModelAssert mAssert = new ModelAssert(catalog);
@@ -418,12 +426,19 @@ public class ReverseEngineerImplIntegrationTest {
         mAssert.assertManyToOne("testschema.bug", "reporter", "testschema.user");
         mAssert.assertOneToMany("testschema.bug", "comments", "testschema.comment");
         
-        // 21. Validate comments
+        // 22. Validate comments
         mAssert.assertEntityExists("testschema.comment");
         mAssert.assertSimpleIdentity("testschema.comment", "commentId", PropertyType.INTEGER);
         mAssert.assertSimpleProperty("testschema.comment", "comment", PropertyType.STRING);
         mAssert.assertManyToOne("testschema.comment", "bug", "testschema.bug"); 
         mAssert.assertManyToOne("testschema.comment", "user", "testschema.user");
+        
+        // 23. Validate noSchema
+        mAssert.assertEntityExists("noSchema");
+        mAssert.assertSimpleIdentity("noSchema", "noSchemaId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("noSchema", "label", PropertyType.STRING);
+        mAssert.assertSimpleProperty("noSchema", "flag", PropertyType.BOOLEAN);
+        mAssert.assertManyToOne("noSchema", "user", "testschema.user");
     
     }
     
