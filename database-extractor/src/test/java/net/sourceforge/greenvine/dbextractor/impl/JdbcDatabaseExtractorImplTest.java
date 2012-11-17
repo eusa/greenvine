@@ -92,7 +92,7 @@ public class JdbcDatabaseExtractorImplTest {
 
 		// Test database
 		Assert.assertNotNull(database);
-		Assert.assertEquals(Integer.valueOf(28), Integer.valueOf(database.getTableCount()));
+		Assert.assertEquals(Integer.valueOf(29), Integer.valueOf(database.getTableCount()));
 		
 		// Create DatabaseAssert instance
 		final DatabaseAssert dbAssert = new DatabaseAssert(database);
@@ -256,6 +256,11 @@ public class JdbcDatabaseExtractorImplTest {
         dbAssert.assertPrimaryKeyExists("TEST_SCHEMA.PK_COMMENTS", createNameArray("COMMENT_ID"));
         dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_COMMENTS_BUGS", "TEST_SCHEMA.TBL_COMMENTS", "TEST_SCHEMA.TBL_BUGS");
         dbAssert.assertForeignKeyExists("TEST_SCHEMA.FK_COMMENTS_USER", "TEST_SCHEMA.TBL_COMMENTS", "TEST_SCHEMA.TBL_USER");
+     
+        // Test TBL_NO_SCHEMA
+        dbAssert.assertTableExists("PUBLIC.TBL_NO_SCHEMA", createNameArray("NO_SCHEMA_ID", "FLAG", "LABEL", "USERNAME"));
+        dbAssert.assertPrimaryKeyExists("PUBLIC.PK_NO_SCHEMA", createNameArray("NO_SCHEMA_ID"));
+        dbAssert.assertForeignKeyExists("PUBLIC.FK_NO_SCHEMA_USER", "PUBLIC.TBL_NO_SCHEMA", "TEST_SCHEMA.TBL_USER");
      
     }	
 	

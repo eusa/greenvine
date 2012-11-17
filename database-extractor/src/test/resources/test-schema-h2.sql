@@ -270,6 +270,14 @@ create table "TEST_SCHEMA"."TBL_TYPES" (
   constraint "TEST_SCHEMA"."PK_TYPES" primary key ("TYPE_6") 
 );
 
+create table "TBL_NO_SCHEMA" (
+  "NO_SCHEMA_ID" INT not null,
+  "FLAG" BOOLEAN not null,
+  "LABEL" VARCHAR(255) not null,
+  "USERNAME" varchar(50) not null, 
+  constraint "PK_NO_SCHEMA" primary key ("NO_SCHEMA_ID") 
+);
+
 /*
 Create unique keys
 */
@@ -421,4 +429,7 @@ alter table "TEST_SCHEMA"."TBL_COMMENTS"
 
 alter table "TEST_SCHEMA"."TBL_COMMENTS"
     add constraint "TEST_SCHEMA"."FK_COMMENTS_USER" foreign key ("USERNAME") references "TEST_SCHEMA"."TBL_USER"("USERNAME");
+
+alter table "TBL_NO_SCHEMA"
+    add constraint "FK_NO_SCHEMA_USER" foreign key ("USERNAME") references "TEST_SCHEMA"."TBL_USER"("USERNAME");
 
