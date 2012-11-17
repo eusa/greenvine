@@ -246,7 +246,7 @@ public class JavaHelper {
         pack = pack + ".entity";
         EntityName name = entity.getName();
         
-        String schemaPackage = name.getNamespace().toString();
+        CharSequence schemaPackage = name.getNamespace();
         if (schemaPackage != null) {
             pack = pack + "." + schemaPackage;
         }
@@ -256,7 +256,7 @@ public class JavaHelper {
     public String getDaoPackage(Entity entity) {
         String pack = getRootPackage(entity);
         pack = pack + ".dao";
-        String schemaPackage = entity.getName().getNamespace().toString();
+        CharSequence schemaPackage = entity.getName().getNamespace();
         if (schemaPackage != null) {
             pack = pack + "." + schemaPackage;
         }
@@ -391,11 +391,22 @@ public class JavaHelper {
         SortedSet<AbstractJavaType> props = new TreeSet<AbstractJavaType>();
         Set<? extends Entity> relations = entity.getAllRelatedEntities();
         for (Entity relation : relations) {
-            if (!relation.getName().getNamespace().equals(entity.getName().getNamespace())) {
-                props.add(getEntityType(relation));
+        	if (!namespacesEqual(entity.getName(), relation.getName())) {
+            	props.add(getEntityType(relation));
             }
         }
         return props;
+    }
+    
+    private boolean namespacesEqual(EntityName entity, EntityName relation) {
+    	CharSequence entityNamespace = entity.getNamespace();
+    	CharSequence relationNamespace = relation.getNamespace();
+    	if (entityNamespace != null && relationNamespace != null) {
+    		if (entityNamespace.equals(relationNamespace)) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     public SortedSet<JavaType> getDependentRelatedEntityImportsForEntity(
@@ -403,8 +414,8 @@ public class JavaHelper {
         SortedSet<JavaType> props = new TreeSet<JavaType>();
         Set<? extends Entity> relations = entity.getUniqueDependentEntities();
         for (Entity relation : relations) {
-            if (!relation.getName().getNamespace().equals(entity.getName().getNamespace())) {
-                props.add(getEntityType(relation));
+        	if (!namespacesEqual(entity.getName(), relation.getName())) {
+        		props.add(getEntityType(relation));
             }
         }
         return props;
@@ -461,8 +472,8 @@ public class JavaHelper {
         SortedSet<ManyToOneIdentityField> manyToOnes = component.getManyToOnes();
         for (ManyToOneIdentityField field : manyToOnes) {
             Entity relation = field.getRelatedEntity();
-            if (!relation.getName().getNamespace().equals(entity.getName().getNamespace())) {
-                props.add(getEntityType(relation));
+            if (!namespacesEqual(entity.getName(), relation.getName())) {
+            	props.add(getEntityType(relation));
             }
         }
         return props;
