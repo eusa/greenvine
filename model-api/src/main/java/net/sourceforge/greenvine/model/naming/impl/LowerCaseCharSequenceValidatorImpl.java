@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import net.sourceforge.greenvine.model.api.ModelException;
 import net.sourceforge.greenvine.model.naming.NameValidator;
+import net.sourceforge.greenvine.model.naming.ReservedWords;
 
 public class LowerCaseCharSequenceValidatorImpl implements NameValidator<CharSequence> {
 
@@ -21,6 +22,10 @@ public class LowerCaseCharSequenceValidatorImpl implements NameValidator<CharSeq
             throw new ModelException(String.format("Cannot create a namepace with an invalid name: " + name + " - must be a lower cased alphanumeric string."));
         }
         
+        // Check it's not a reserved word
+        if (ReservedWords.isReserved(name)) {
+        	throw new ModelException(String.format("Cannot create a model object with an invalid name " + name + ". This is a reserved keyword.", name));
+        }
     }
 
 }

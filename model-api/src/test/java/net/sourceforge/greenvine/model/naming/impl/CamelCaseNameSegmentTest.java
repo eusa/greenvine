@@ -11,6 +11,18 @@ public class CamelCaseNameSegmentTest {
     public void testCreateValid() throws ModelException {
         CamelCaseNameSegmentImpl test = new CamelCaseNameSegmentImpl("test");
         Assert.assertEquals("test", test.toString());
+        CamelCaseNameSegmentImpl test2 = new CamelCaseNameSegmentImpl("testTest");
+        Assert.assertEquals("testTest", test2.toString());
+    }
+    
+    @Test(expected = ModelException.class)
+    public void testCreateInvalid() throws ModelException {
+        new CamelCaseNameSegmentImpl("TEST");
+    }
+    
+    @Test(expected = ModelException.class)
+    public void testCreateReserved() throws ModelException {
+        new CamelCaseNameSegmentImpl("public");
     }
     
     @Test

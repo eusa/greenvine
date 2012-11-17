@@ -20,7 +20,10 @@ public class EntityTableNameExtractor extends AbstractNameExtractor<Table, Catal
         
         // Get the namespace from the schema
         if (source.getName().getSchemaName() != null) {
-            namespace = helper.extractNameSpace(source.getName().getSchemaName());
+        	// TODO temporary workaround due to H2 default namespace being reserved word
+        	if (!source.getName().getSchemaName().equals("PUBLIC")) {
+        		namespace = helper.extractNameSpace(source.getName().getSchemaName());
+        	}
         }
         
         // Get the name from the table name
