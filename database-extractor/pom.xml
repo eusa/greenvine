@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>project</artifactId>
 		<groupId>net.sourceforge.greenvine</groupId>
@@ -9,37 +10,39 @@
 	<name>database-extractor</name>
 	<packaging>jar</packaging>
 	<dependencies>
-	
+
 		<!-- JUnit -->
 		<dependency>
-      		<groupId>junit</groupId>
-      		<artifactId>junit</artifactId>
-      		<version>4.8</version>
-    	</dependency>
-    	
-	    <!-- Model -->
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8</version>
+		</dependency>
+
+		<!-- Model -->
 		<dependency>
 			<groupId>net.sourceforge.greenvine</groupId>
 			<artifactId>model-api</artifactId>
 			<version>0.5.2-SNAPSHOT</version>
 		</dependency>
-		
-		<!-- h2 in memory database  -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.2.136</version>
-        </dependency>
-        
-        <!-- Microsoft JDBC Driver
-        <dependency>
-            <groupId>com.microsoft</groupId>
-            <artifactId>sqljdbc</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        -->
-        
-        <!-- Spring Context -->
+
+		<!-- h2 in memory database -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.2.136</version>
+		</dependency>
+
+		<!-- MySQL database -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.21</version>
+		</dependency>
+
+		<!-- Microsoft JDBC Driver <dependency> <groupId>com.microsoft</groupId> 
+			<artifactId>sqljdbc</artifactId> <version>1.2.0</version> </dependency> -->
+
+		<!-- Spring Context -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>

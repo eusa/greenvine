@@ -21,6 +21,7 @@ public class H2DatabaseUtil {
     private static final String DB_DELAY_URL = ";DB_CLOSE_DELAY=-1";
     private static final String JDBC_DRIVER = "org.h2.Driver";
     
+    // TODO switch to use ScriptRunner utility
     
     public static void createDatabase(String schemaFile, String catalog)
             throws FileNotFoundException, SQLException, ClassNotFoundException {
