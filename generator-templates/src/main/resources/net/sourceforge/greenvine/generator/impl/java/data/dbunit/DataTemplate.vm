@@ -2,15 +2,19 @@
 <dataset 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:noNamespaceSchemaLocation="target/xsd/dataset.xsd" 
+#if($database.schemaNames.size() > 0)
 #foreach($schema in $database.schemaNames)
     xmlns:$schema="$schema"#if($velocityHasNext)
     
 #else>
 #end
 #end
+#else
+    xmlns:PUBLIC="PUBLIC">
+#end
 #foreach($table in $dataSet.tables)
 #foreach($row in $table.rows)
-    <#if($table.name.schemaName)${table.name.schemaName}:#end${table.name.objectName} #foreach($col in $table.columns)#if($col.notNull)${col.name}="${row.getValue($col.name)}" #end#end/>
+    <#if($table.name.schemaName)${table.name.schemaName}#{else}PUBLIC#{end}:${table.name.objectName} #foreach($col in $table.columns)#if($col.notNull)${col.name}="${row.getValue($col.name)}" #end#end/>
 #end
 #end
 </dataset>

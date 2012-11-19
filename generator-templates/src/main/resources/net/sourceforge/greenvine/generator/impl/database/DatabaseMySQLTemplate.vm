@@ -1,13 +1,13 @@
 ##drop tables
 #foreach ($table in $reversedTables)
-drop table if exists "${database.Name}"."${table.name.objectName}";
+drop table if exists `${database.Name}`.`${table.name.objectName}`;
 
 #end
 ##create tables
 #foreach ($table in $database.tables)
-create table "${database.Name}"."${table.name.objectName}" (
+create table `${database.Name}`.`${table.name.objectName}` (
 #foreach($column in $table.columns)
-	${column.name} ${column.columnType} ${column.specification}#if($column.notNull) not null#end#if($velocityHasNext), 
+	`${column.name}` ${column.columnType} ${column.specification}#if($column.notNull) not null#end#if($velocityHasNext), 
 #end
 #end
 ) ENGINE=InnoDB;
@@ -17,24 +17,24 @@ create table "${database.Name}"."${table.name.objectName}" (
 ##create primary key constraints for tables
 #foreach ($table in $database.tables)
 #if ($table.primaryKey)
-alter table "${database.name}"."${table.name.objectName}"
-    add constraint "${table.primaryKey.name.objectName}" primary key (#foreach($column in $table.primaryKey.columns)"$column.name"#if($velocityHasNext),#end#end);
+alter table `${database.name}`.`${table.name.objectName}`
+    add constraint `${table.primaryKey.name.objectName}` primary key (#foreach($column in $table.primaryKey.columns)`$column.name`#if($velocityHasNext),#end#end);
 
 #end
 #end
 ##create unique constraints for tables
 #foreach ($table in $database.tables)
 #foreach ($uniqueKey in $table.uniqueKeys)
-alter table "${database.name}"."${table.name.objectName}"
-    add constraint "${uniqueKey.name.objectName}" unique(#foreach($column in $uniqueKey.columns)"$column.name"#if($velocityHasNext),#end#end);
+alter table `${database.name}`.`${table.name.objectName}`
+    add constraint `${uniqueKey.name.objectName}` unique(#foreach($column in $uniqueKey.columns)`$column.name`#if($velocityHasNext),#end#end);
 
 #end
 #end
 ##create foreign keys from relationships
 #foreach ($table in $database.tables)
 #foreach ($foreignKey in $table.importedForeignKeys)
-alter table "${database.name}"."${table.name.objectName}"
-    add constraint "${foreignKey.name.objectName}" foreign key (#foreach($columnConstraint in $foreignKey.columnConstraints)"$columnConstraint.referencingColumn.name"#if($velocityHasNext),#end#end) references "${database.name}"."${foreignKey.referencedTable.name.objectName}"(#foreach($columnConstraint in $foreignKey.columnConstraints)"$columnConstraint.referencedColumn.name"#if($velocityHasNext),#end#end);
+alter table `${database.name}`.`${table.name.objectName}`
+    add constraint `${foreignKey.name.objectName}` foreign key (#foreach($columnConstraint in $foreignKey.columnConstraints)`$columnConstraint.referencingColumn.name`#if($velocityHasNext),#end#end) references `${database.name}`.`${foreignKey.referencedTable.name.objectName}`(#foreach($columnConstraint in $foreignKey.columnConstraints)`$columnConstraint.referencedColumn.name`#if($velocityHasNext),#end#end);
 
 #end
 #end
