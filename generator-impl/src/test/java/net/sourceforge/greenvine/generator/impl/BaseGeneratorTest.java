@@ -35,7 +35,7 @@ public abstract class BaseGeneratorTest {
 		this.executor = new GeneratorTaskExecutor(2, 2);
 		
 		// Create model
-		this.model = TestModelExtractor.getTestModel("../database-extractor/src/test/resources/test-schema-h2.sql");
+		this.model = TestModelExtractor.getH2Model("../database-extractor/src/test/resources/test-schema-h2.sql");
 		
 		// Create source config
 		this.sourceConfig = new SourceConfig();
