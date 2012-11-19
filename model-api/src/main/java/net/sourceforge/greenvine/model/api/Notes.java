@@ -20,8 +20,6 @@ public interface Notes {
 	// Handle reserved java keywords in name extractors
 	// If a field in an entity has the same name as the entity, this could cause issues in some generated classes
 	
-	// TODO Test with MySQL
-	
 	// TODO simplifications
 	// Get rid of Hibernate
 	// Get rid of DAOs

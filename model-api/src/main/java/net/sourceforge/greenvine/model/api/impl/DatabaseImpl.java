@@ -302,7 +302,9 @@ public class DatabaseImpl implements RdbmsNamedObject, NameContainer, Database {
     public SortedSet<RdbmsNameSegmentImpl> getSchemaNames() {
         SortedSet<RdbmsNameSegmentImpl> schemaNames = new TreeSet<RdbmsNameSegmentImpl>();
         for (TableImpl table : this.getTables()) {
-            schemaNames.add(table.getName().getSchemaName());
+        	if (table.getName().getSchemaName() != null) {
+                schemaNames.add(table.getName().getSchemaName());
+        	}
         }
         return schemaNames;
     }
