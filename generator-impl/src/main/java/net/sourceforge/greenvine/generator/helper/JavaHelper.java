@@ -235,9 +235,10 @@ public class JavaHelper {
     private String getRootPackage(Entity entity) {
         String basePackage = sourceConfig.getBasePackage();
 	    String dataPackage = sourceConfig.getDataPackage();
-	    String catalogPackage = entity.getCatalog().getName().toString().toLowerCase();
-	    String pack = basePackage + "." + dataPackage + "." + catalogPackage;
-	    
+	    // TODO experimenting with removing catalog name from package
+	    //String catalogPackage = entity.getCatalog().getName().toString().toLowerCase();
+	    //String pack = basePackage + "." + dataPackage + "." + catalogPackage;
+	    String pack = basePackage + "." + dataPackage;
         return pack;
     }
 
