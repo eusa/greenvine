@@ -18,7 +18,7 @@ import net.sourceforge.greenvine.reveng.testutils.TestDatabaseExtractor;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ReverseEngineerImplIntegrationTest {
+public class ReverseEngineerImplITCase {
     
 	private static Database h2 = null;
 	private static Database mysql = null;

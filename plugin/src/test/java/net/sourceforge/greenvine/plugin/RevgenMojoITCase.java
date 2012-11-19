@@ -6,7 +6,7 @@ import net.sourceforge.greenvine.dbextractor.testutils.H2DatabaseUtil;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 
-public class RevgenMojoTest extends AbstractMojoTestCase {
+public class RevgenMojoITCase extends AbstractMojoTestCase {
 
 	protected void setUp() throws Exception {
 

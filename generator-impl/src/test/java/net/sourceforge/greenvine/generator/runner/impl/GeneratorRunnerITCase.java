@@ -16,9 +16,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.maven.it.Verifier;
 import org.junit.Test;
 
-public class GeneratorRunnerTest {
+public class GeneratorRunnerITCase {
 
-	private static Log logger = LogFactory.getLog(GeneratorRunnerTest.class);
+	private static Log logger = LogFactory.getLog(GeneratorRunnerITCase.class);
 
 	@Test
 	public void testGeneratorRunnerH2() throws Exception {

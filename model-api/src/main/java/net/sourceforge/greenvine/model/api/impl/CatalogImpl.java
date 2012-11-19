@@ -277,7 +277,6 @@ public class CatalogImpl implements Catalog, Comparable<CatalogImpl> {
 
 	@Override
 	public int compareTo(CatalogImpl arg0) {
-		System.out.println("Hello");
 		return this.name.compareTo(arg0.getName());
 	}
     
