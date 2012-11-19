@@ -29,7 +29,7 @@ import net.sourceforge.greenvine.model.naming.Name;
 import net.sourceforge.greenvine.model.naming.impl.EntityNameImpl;
 import net.sourceforge.greenvine.model.naming.impl.ModelNameImpl;
 
-public class CatalogImpl implements Catalog {
+public class CatalogImpl implements Catalog, Comparable<CatalogImpl> {
 
     private final ModelNameImpl name;
     private final Map<EntityName, EntityImpl> entities;
@@ -274,5 +274,11 @@ public class CatalogImpl implements Catalog {
     public SortedSet<Name> getNames() {
         return Collections.unmodifiableSortedSet(new TreeSet<Name>(this.entities.keySet()));
     }
+
+	@Override
+	public int compareTo(CatalogImpl arg0) {
+		System.out.println("Hello");
+		return this.name.compareTo(arg0.getName());
+	}
     
 }
