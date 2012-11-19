@@ -1,26 +1,18 @@
 package net.sourceforge.greenvine.dbextractor.impl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import junit.framework.Assert;
 import net.sourceforge.greenvine.dbextractor.DatabaseExtractor;
 import net.sourceforge.greenvine.dbextractor.DatabaseExtractorException;
 import net.sourceforge.greenvine.dbextractor.testutils.DatabaseAssert;
 import net.sourceforge.greenvine.dbextractor.testutils.DatabaseExtractorConfigFactory;
+import net.sourceforge.greenvine.dbextractor.testutils.H2DatabaseUtil;
+import net.sourceforge.greenvine.dbextractor.testutils.MySqlDatabaseUtil;
 import net.sourceforge.greenvine.model.api.Database;
 import net.sourceforge.greenvine.model.api.ModelException;
 import net.sourceforge.greenvine.model.naming.CaseStrategy;
 import net.sourceforge.greenvine.model.naming.RdbmsNamingConvention;
 import net.sourceforge.greenvine.model.naming.RdbmsNamingConventions;
 
-import org.h2.util.ScriptReader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,52 +20,23 @@ public class JdbcDatabaseExtractorImplTest {
 
     private static final String VALIDATION_REGEX = "^([A-Za-z_0-9]+)*$";
     private static final String CATALOG = "GREENVINE_DB";
-	private static final String JDBC_URL = "jdbc:h2:mem:~/" + CATALOG + ";DB_CLOSE_DELAY=-1";
-    private static final String JDBC_DRIVER = "org.h2.Driver";
 
     @Before
 	public void setUp() throws Exception {
 		
-		// Get database connection
-		Class.forName(JDBC_DRIVER);
-		final Connection connection = DriverManager.getConnection(JDBC_URL);
-
-		// Create schema
-		try {
-		    createDatabase(connection, "src/test/resources/test-schema-h2.sql");
-		    connection.commit();
-		} finally {
-		    // Note: need to delay database close
-		    // See JDBC_URL parameter
-		    connection.close();
-		}
-        		
+    	// Create H2 database
+		H2DatabaseUtil.createDatabase("src/test/resources/test-schema-h2.sql", CATALOG);
+        
+		// Create MySQL database
+		MySqlDatabaseUtil.createDatabase("src/test/resources/test-schema-mysql.sql", CATALOG);	
 	}
 
-    private void createDatabase(final Connection connection, final String schemaFile)
-            throws FileNotFoundException, SQLException {
-        final File ddlFile = new File(schemaFile);
-		final Reader reader = new FileReader(ddlFile);
-		final ScriptReader scriptReader = new ScriptReader(reader);
-		while (true) {
-			final String statement = scriptReader.readStatement();
-		    if (statement == null) {
-		        break;
-		    } 
-		    final PreparedStatement sqlStatement = connection.prepareStatement(statement);
-		    try {
-		        sqlStatement.execute();
-		    } finally {
-		        sqlStatement.close();
-		    }
-		}
-    }
 	
 	@Test
 	public void testExtractDatabaseH2() throws DatabaseExtractorException, ModelException {
 		
 		// Get DatabaseExtractorConfig
-		final JdbcDatabaseExtractorConfig config = DatabaseExtractorConfigFactory.getTestDatabaseExtractorConfig();
+		final JdbcDatabaseExtractorConfig config = DatabaseExtractorConfigFactory.getH2Configuration();
 		
 		// Get DatabaseNamingConvention
 		final RdbmsNamingConventions conventions = getTestNamingConvention();
@@ -84,6 +47,26 @@ public class JdbcDatabaseExtractorImplTest {
 		
 		// Validate
 		validateDatabase(database); 
+		
+	}
+	
+	@Test
+	public void testExtractDatabaseMySql() throws DatabaseExtractorException, ModelException {
+		
+		// Get DatabaseExtractorConfig
+		final JdbcDatabaseExtractorConfig config = DatabaseExtractorConfigFactory.getMySqlConfiguration();
+		
+		// Get DatabaseNamingConvention
+		final RdbmsNamingConventions conventions = getTestNamingConvention();
+		
+		// Extract database
+		final DatabaseExtractor dbExtractor = new JdbcDatabaseExtractorImpl(config, conventions);
+		final Database database = dbExtractor.extractDatabase();
+		
+		// Validate
+		//validateDatabase(database); 
+		// TODO validate MySQL database
+		Assert.assertNotNull(database);
 		
 	}
 	
