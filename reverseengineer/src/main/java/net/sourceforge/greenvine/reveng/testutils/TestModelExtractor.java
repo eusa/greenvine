@@ -1,6 +1,6 @@
 package net.sourceforge.greenvine.reveng.testutils;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import net.sourceforge.greenvine.dbextractor.DatabaseExtractorException;
@@ -12,19 +12,35 @@ import net.sourceforge.greenvine.reveng.impl.ReverseEngineerImpl;
 
 public class TestModelExtractor {
 
-    public static Model getTestModel(String schemaFile) throws ModelException, FileNotFoundException, SQLException, ClassNotFoundException, DatabaseExtractorException {
+    public static Model getH2Model(String schemaFile) throws ModelException, SQLException, ClassNotFoundException, DatabaseExtractorException, IOException {
         // Create test database
-        Database dbs = TestDatabaseExtractor.extractTestDatase(schemaFile);
+        Database dbs = TestDatabaseExtractor.extractH2Database(schemaFile);
         
         // Set up RevengConfig
-        RevengConfig revengConfig = new RevengConfig();
+        ReverseEngineerImpl reveng = getReverseEngineer();
+        
+        // Reverse engineer
+        return reveng.reverseEngineer(dbs);
+    }
+
+    public static Model getMySqlModel(String schemaFile) throws ModelException, SQLException, ClassNotFoundException, DatabaseExtractorException, IOException {
+        // Create test database
+        Database dbs = TestDatabaseExtractor.extractMySqlDatabase(schemaFile);
+        
+        // Set up RevengConfig
+        ReverseEngineerImpl reveng = getReverseEngineer();
+        
+        // Reverse engineer
+        return reveng.reverseEngineer(dbs);
+    }
+    
+	private static ReverseEngineerImpl getReverseEngineer() {
+		RevengConfig revengConfig = new RevengConfig();
         revengConfig.setModelName("model");
         revengConfig.setCreateNaturalIdentities(false);
         
         // Create ReverseEngineer
         ReverseEngineerImpl reveng = new ReverseEngineerImpl(revengConfig);
-        
-        // Reverse engineer
-        return reveng.reverseEngineer(dbs);
-    }
+		return reveng;
+	}
 }

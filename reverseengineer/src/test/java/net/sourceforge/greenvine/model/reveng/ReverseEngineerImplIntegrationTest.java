@@ -1,6 +1,6 @@
 package net.sourceforge.greenvine.model.reveng;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import junit.framework.Assert;
@@ -15,21 +15,22 @@ import net.sourceforge.greenvine.reveng.impl.ReverseEngineerImpl;
 import net.sourceforge.greenvine.reveng.testutils.ModelAssert;
 import net.sourceforge.greenvine.reveng.testutils.TestDatabaseExtractor;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ReverseEngineerImplIntegrationTest {
     
-	private Database database = null;
+	private static Database h2 = null;
+	private static Database mysql = null;
 	
-	@Before
-	public void before() throws FileNotFoundException, SQLException, ClassNotFoundException, DatabaseExtractorException {
-		database = TestDatabaseExtractor.extractTestDatase("../database-extractor/src/test/resources/test-schema-h2.sql");
-	       
+	@BeforeClass
+	public static void before() throws SQLException, ClassNotFoundException, DatabaseExtractorException, IOException {
+		h2 = TestDatabaseExtractor.extractH2Database("../database-extractor/src/test/resources/test-schema-h2.sql");
+		mysql = TestDatabaseExtractor.extractMySqlDatabase("../database-extractor/src/test/resources/test-schema-mysql.sql");
 	}
        
     @Test
-    public void testReverseEngineer() throws ModelException {
+    public void testReverseEngineerH2() throws ModelException {
     	
         // Set up RevengConfig
         RevengConfig revengConfig = new RevengConfig();
@@ -40,7 +41,7 @@ public class ReverseEngineerImplIntegrationTest {
         ReverseEngineerImpl reveng = new ReverseEngineerImpl(revengConfig);
         
         // Reverse engineer
-        ModelImpl model = reveng.reverseEngineer(database);
+        ModelImpl model = reveng.reverseEngineer(h2);
         
         // Validate model
         Assert.assertNotNull(model);
@@ -231,7 +232,7 @@ public class ReverseEngineerImplIntegrationTest {
     }
     
     @Test
-    public void testReverseEngineerWithoutNaturalIdentities() throws ModelException {
+    public void testReverseEngineerH2WithoutNaturalIdentities() throws ModelException {
     	
         // Set up RevengConfig
         RevengConfig revengConfig = new RevengConfig();
@@ -242,7 +243,7 @@ public class ReverseEngineerImplIntegrationTest {
         ReverseEngineerImpl reveng = new ReverseEngineerImpl(revengConfig);
         
         // Reverse engineer
-        ModelImpl model = reveng.reverseEngineer(database);
+        ModelImpl model = reveng.reverseEngineer(h2);
         
         // Validate model
         Assert.assertNotNull(model);
@@ -440,6 +441,43 @@ public class ReverseEngineerImplIntegrationTest {
         mAssert.assertSimpleProperty("noSchema", "flag", PropertyType.BOOLEAN);
         mAssert.assertManyToOne("noSchema", "user", "testschema.user");
     
+    }
+    
+    @Test
+    public void testReverseEngineerMySql() throws ModelException {
+    	
+        // Set up RevengConfig
+        RevengConfig revengConfig = new RevengConfig();
+        revengConfig.setModelName("model");
+        revengConfig.setCreateNaturalIdentities(false);
+        
+        // Create ReverseEngineer
+        ReverseEngineerImpl reveng = new ReverseEngineerImpl(revengConfig);
+        
+        // Reverse engineer
+        ModelImpl model = reveng.reverseEngineer(mysql);
+        
+     // Validate model
+        Assert.assertNotNull(model);
+        Assert.assertNotNull(model.getCatalogs());
+        Assert.assertEquals(1, model.getCatalogCount());
+        
+        // Validate catalog
+        CatalogImpl catalog = model.getCatalog(0);
+        Assert.assertEquals("greenvine", catalog.getName().toString());
+        Assert.assertEquals(6, catalog.getEntityCount());
+        
+        // Create ModelAssert object to test entities
+        ModelAssert mAssert = new ModelAssert(catalog);
+        
+        // 1. Validate user
+        mAssert.assertEntityExists("user");
+        mAssert.assertSimpleIdentity("user", "userId", PropertyType.INTEGER);
+        mAssert.assertSimpleProperty("user", "username", PropertyType.STRING);
+        mAssert.assertSimpleProperty("user", "password", PropertyType.STRING);
+        
+        // TODO more assertions
+        
     }
     
 }
