@@ -48,15 +48,6 @@ create table "DBO"."TBL_DESK" (
 	constraint "DBO"."PK_DESK" primary key ("DESK_ID")
 );
 
-/*
-create table "DBO"."TBL_MAILBOX" (
-	"MAILBOX_ID" int not null, 
-	"FK_EMAIL" varchar(255) not null, 
-	"NAME" varchar(255) not null, 
-	constraint "DBO"."PK_MAILBOX" primary key ("MAILBOX_ID")
-);
-*/
-
 create table "DBO"."TBL_UMBRELLA" (
 	"UMBRELLA_ID" int not null, 
 	"FK_EMPLOYEE_ID" int not null, 
@@ -299,12 +290,6 @@ alter table "DBO"."TBL_EMPLOYEE_MENTOR"
 alter table "DBO"."TBL_GROUP"
     add constraint "DBO"."UNIQUE_TBL_GROUP_GROUPNAME" unique("GROUPNAME");
 
-/*
-This doesn't work as Hibernate JPA doesn't support non primary key based relations
-alter table "DBO"."TBL_MAILBOX"
-    add constraint "DBO"."UNIQUE_TBL_MAILBOX_FK_EMAIL" unique("FK_EMAIL");
-*/
-
 alter table "DBO"."TBL_DESK_EMPLOYEE"
     add constraint "DBO"."UNIQUE_TBL_DESK_EMPLOYEE_FK_EMPLOYEE_ID" unique("FK_EMPLOYEE_ID");
 
@@ -350,12 +335,6 @@ alter table "DBO"."TBL_EMPLOYEE_MENTOR"
 
 alter table "DBO"."TBL_EMPLOYEE_MENTOR"
     add constraint "DBO"."FK_EMPLOYEE_MENTOR" foreign key ("MENTOR_ID") references "DBO"."TBL_EMPLOYEE"("EMPLOYEE_ID");
-
-/*
-Commented because Hibernate JPA does not support non-primary foreign keys
-alter table "DBO"."TBL_MAILBOX"
-    add constraint "DBO"."FK_MAILBOX_EMPLOYEE" foreign key ("FK_EMAIL") references "DBO"."TBL_EMPLOYEE"("EMAIL");
-*/
 
 alter table "DBO"."TBL_UMBRELLA"
     add constraint "DBO"."FK_UMBRELLA_EMPLOYEE" foreign key ("FK_EMPLOYEE_ID") references "DBO"."TBL_EMPLOYEE"("EMPLOYEE_ID");
