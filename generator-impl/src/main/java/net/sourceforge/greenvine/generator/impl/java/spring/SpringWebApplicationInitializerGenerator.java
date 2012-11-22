@@ -1,4 +1,4 @@
-package net.sourceforge.greenvine.generator.impl.java.entity.springjpa;
+package net.sourceforge.greenvine.generator.impl.java.spring;
 
 import net.sourceforge.greenvine.generator.Generator;
 import net.sourceforge.greenvine.generator.helper.JavaHelper;
@@ -8,14 +8,14 @@ import net.sourceforge.greenvine.generator.template.Template;
 import net.sourceforge.greenvine.generator.template.TemplateContext;
 import net.sourceforge.greenvine.model.api.Model;
 
-public class SpringJpaAnnotationContextGenerator implements Generator {
+public class SpringWebApplicationInitializerGenerator implements Generator {
 
 	private final SourceConfig sourceConfig;
 
-	public SpringJpaAnnotationContextGenerator(SourceConfig sourceConfig) {
+	public SpringWebApplicationInitializerGenerator(SourceConfig sourceConfig) {
 		this.sourceConfig = sourceConfig;
 	}
-
+	
 	public void generate(Model model, Template template, TemplateTaskQueue queue) throws Exception {
 
 		// Create utility helper class
@@ -23,7 +23,6 @@ public class SpringJpaAnnotationContextGenerator implements Generator {
 
 		// Create package
 		String configPackage = javaHelper.getConfigPackage();
-		String dataPackage = javaHelper.getDataPackage();
 
 		// Get the directory path
 		String directory = javaHelper.packageToFolder(configPackage);
@@ -31,10 +30,10 @@ public class SpringJpaAnnotationContextGenerator implements Generator {
 		// Create TemplateContext
 		TemplateContext context = new TemplateContext();
 		context.put("model", model);
-		context.put("dataPackage", dataPackage);
 		context.put("configPackage", configPackage);
 
 		// Add to the template processing queue
-		queue.enqueue(template, context, directory, "JpaConfig.java");
+		queue.enqueue(template, context, directory, "SpringWebApplicationInitializer.java");
 	}
+
 }

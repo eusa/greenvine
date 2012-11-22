@@ -207,6 +207,22 @@
 		<property name="templateFactory" ref="templateFactory" />
 	</bean>
 	
+	<!-- Spring web application initializer generator -->
+	<bean class="net.sourceforge.greenvine.generator.GeneratorContext">
+		<property name="templatePath"
+			value="net/sourceforge/greenvine/generator/impl/java/spring/SpringWebApplicationInitializerTemplate.vm" />
+		<property name="exportDirectory" value="src/main/java/" />
+		<property name="generator">
+			<bean
+				class="net.sourceforge.greenvine.generator.impl.java.spring.SpringWebApplicationInitializerGenerator">
+				<constructor-arg>
+					<ref bean="sourceConfig" />
+				</constructor-arg>
+			</bean>
+		</property>
+		<property name="templateFactory" ref="templateFactory" />
+	</bean>
+	
 	<!-- Spring Data Repository generator for JPA -->
 	<bean class="net.sourceforge.greenvine.generator.GeneratorContext">
 		<property name="templatePath"

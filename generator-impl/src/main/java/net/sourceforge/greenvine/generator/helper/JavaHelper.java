@@ -243,6 +243,12 @@ public class JavaHelper {
         return pack;
     }
     
+    public String getConfigPackage() {
+        String basePackage = getRootPackage();
+	    String pack = basePackage + ".config";
+        return pack;
+    }
+    
     public String getEntityPackage(Entity entity) {
         String pack = getDataPackage();
         pack = pack + ".entity";
