@@ -11,11 +11,11 @@ public class FunctionalTestDataGeneratorTest extends BaseGeneratorTest {
 	public void testGenerate() throws Exception {
 		
 		// Export directory
-		String exportDirectory = "target/greenvine/src/test/resources";
+		String exportDirectory = "target/greenvine/src/main/resources";
 		createExportDirectory(exportDirectory);
 		
 		// Create template
-		Template template = this.factory.assembleTemplate("net/sourceforge/greenvine/generator/impl/java/data/dbunit/DataTemplate.vm", exportDirectory);
+		Template template = this.factory.assembleTemplate("net/sourceforge/greenvine/generator/impl/database/DmlTemplate.vm", exportDirectory);
 		
 		// Create generator and configure
 		FunctionalTestDataGenerator generator = new FunctionalTestDataGenerator(100);

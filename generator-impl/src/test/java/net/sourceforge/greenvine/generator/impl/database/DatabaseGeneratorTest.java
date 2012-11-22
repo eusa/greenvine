@@ -19,7 +19,7 @@ public class DatabaseGeneratorTest extends BaseGeneratorTest {
 		Template template = this.factory.assembleTemplate("net/sourceforge/greenvine/generator/impl/database/DatabaseH2Template.vm", exportDirectory);
 		
 		// Create generator and configure
-		DatabaseGenerator generator = new DatabaseGenerator();
+		DatabaseGenerator generator = new DatabaseGenerator("001_initial.sql");
 		
 		// Execute generator task
 		this.executor.addGeneratorTask(generator, model, template);
@@ -37,7 +37,7 @@ public class DatabaseGeneratorTest extends BaseGeneratorTest {
         Template template = this.factory.assembleTemplate("net/sourceforge/greenvine/generator/impl/database/DatabaseMySQLTemplate.vm", exportDirectory);
         
         // Create generator and configure
-        DatabaseGenerator generator = new DatabaseGenerator();
+        DatabaseGenerator generator = new DatabaseGenerator("001_initial.sql");
         
         // Execute generator task
         this.executor.addGeneratorTask(generator, model, template);
