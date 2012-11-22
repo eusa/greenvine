@@ -4,7 +4,7 @@
 	<groupId>net.sourceforge.greenvine</groupId>
 	<artifactId>project</artifactId>
 	<packaging>pom</packaging>
-	<version>0.5.3-SNAPSHOT</version>
+	<version>0.6.0-RELEASE</version>
 	<name>greenvine</name>
 	<url>http://eusa.github.com/greenvine</url>
 
