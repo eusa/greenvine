@@ -66,6 +66,7 @@ public abstract class AbstractAssociationRelationFieldNameExtractor implements N
     
     protected CharSequence extractPluralNameFromTable(Table source) throws ModelException {
         CamelCaseNameSegmentBuilder builder = new CamelCaseNameSegmentBuilderImpl(extractNameFromTable(source));
+        //builder.depluralise(); // In case already a plural
         return builder.pluralise();
     }
     

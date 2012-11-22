@@ -16,21 +16,23 @@ public class OneToManyNameExtractor extends ParentNameExtractor {
     public FieldNameImpl extractName(Component container, ForeignKey source) throws ModelException {
         
         // Generate name
-        CharSequence defaultName;
+    	CharSequence name;
+        CharSequence defaultName = getDefaultName(source);
         if (!source.otherSimilarRelationsExist()) {
             // Use default strategy (related table name)
-            defaultName = getDefaultName(source);
+            name = defaultName;
         } else {
             // More than one matching key
-            defaultName = getFallbackName(source);
+            name = getFallbackName(source);
         }
        
-        return new FieldNameImpl(defaultName);
+        return new FieldNameImpl(name);
     }   
     
     private CharSequence getDefaultName(ForeignKey source) throws ModelException {
         CharSequence fname = extractNameFromRelatedTable(source.getReferencingTable());
         CamelCaseNameSegmentBuilder builder = new CamelCaseNameSegmentBuilderImpl(fname);
+        builder.depluralise(); // In case already a plural
         return builder.pluralise();
     }
 

@@ -9,6 +9,7 @@ package net.sourceforge.greenvine.model.api;
  */
 public interface Notes {
     
+	// TODO set build encoding to UTF-8 on POMs
 	// TODO minor bugfixes
     // Fix bug in DBUnit comparisons for binary data types and remove @Ignore attribute in integration tests
     // Add support for ARRAY and OTHER JDBC types
