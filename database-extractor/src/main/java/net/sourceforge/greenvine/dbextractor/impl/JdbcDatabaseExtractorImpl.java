@@ -379,8 +379,10 @@ public class JdbcDatabaseExtractorImpl implements DatabaseExtractor {
 		// Get the column names
 		while (primaryKeys.next()) {
 		    // NOTE: Primary key schema is same as table schema
-			// TODO MySQL always calls primary keys PRIMARY
+			// MySQL always calls primary keys PRIMARY
 			// so we override this with the default name 
+			// We used to get it from the database, but this MySQL behaviour 
+			// breaks it for other databases
 			//pkName = new DatabaseObjectNameImpl(primaryKeys.getString(TABLE_SCHEMA), primaryKeys.getString("PK_NAME"));
 			String columnName = primaryKeys.getString("COLUMN_NAME");
 			primaryKeyColumnNames.add(columnName);
