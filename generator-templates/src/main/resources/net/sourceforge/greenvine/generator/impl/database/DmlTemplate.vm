@@ -1,0 +1,6 @@
+#foreach($table in $dataSet.tables)
+#foreach($row in $table.rows)
+INSERT INTO #if($table.name.schemaName)"${table.name.schemaName}"#{else}"PUBLIC"#{end}."${table.name.objectName}" (#foreach($col in $table.columns)#if($col.notNull)"${col.name}"#if($velocityHasNext), #end#end#end)
+    VALUES (#foreach($col in $table.columns)#if($col.notNull)#if($jdbcHelper.getJdbcTypeForColumn($col).enquoteLiterals)'#{end}${row.getValue($col.name)}#if($jdbcHelper.getJdbcTypeForColumn($col).enquoteLiterals)'#{end}#if($velocityHasNext), #end#end#end);
+#end
+#end

@@ -13,10 +13,9 @@
 			<property name="hibernate.mapping.precedence" value="class" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
 			<property name="hibernate.cache.use_query_cache" value="true" />
 			<property name="hibernate.cache.use_second_level_cache" value="true" />
-            <property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.EhCacheRegionFactory" />
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
 			<property name="net.sf.ehcache.configurationResourceName" value="/${catalog.name}-ehcache.xml" />
 			<property name="hibernate.generate_statistics" value="true" />
 		</properties>

@@ -17,6 +17,6 @@ dbMaintainer.generateDataSetStructure.enabled=true
 dataSetStructureGenerator.xsd.dirName=target/xsd
 dbMaintainer.autoCreateExecutedScriptsTable=true
 org.unitils.dbmaintainer.script.ScriptSource.implClassName=org.unitils.dbmaintainer.script.impl.DefaultScriptSource
-dbMaintainer.script.locations=src/main/database/h2/${catalog.database.name}/
+dbMaintainer.script.locations=src/main/database/h2/
 dbMaintainer.script.fileExtensions=sql
 dbMaintainer.keepRetryingAfterError.enabled=true
