@@ -1,0 +1,60 @@
+package ${daoType.packageName};
+
+import java.util.List;
+import ${entityType.packageName}.${entityType.className};
+import ${identityType.packageName}.${identityType.className};
+
+import javax.annotation.Generated;
+
+@Generated("net.sourceforge.greenvine.generator.impl.java.dao.DaoGenerator")
+public interface ${daoType.className} {
+	
+    /**
+	 * Returns the ${entityType.className} with the specified identity
+	 * or throws an unchecked {@link RuntimeException}  
+	 * if an entity with matching identity not found
+	 *	 
+	 * @param ${entity.identity.name} the value of the identity
+	 * @return ${entityType.className} with matching identity
+	 */
+	public abstract ${entityType.className} load${entityType.className}(${identityType.className} ${entity.identity.name});
+    
+    /**
+	 * Returns the ${entityType.className} with the specified identity
+	 * or null if an entity with matching identity not found
+     *
+	 * @param ${entity.identity.name} the value of the identity
+	 * @return ${entityType.className} with matching identity (or null)
+	 */
+	public abstract ${entityType.className} find${entityType.className}(${identityType.className} ${entity.identity.name});
+  
+	/**
+	 * Retrieve all ${entityType.className} objects
+	 * 
+	 * @return List<${entityType.className}>of all ${entityType.className} 
+	 * objects in the database. 
+	 */
+	public abstract List<${entityType.className}> findAll${entityType.className}s();
+			
+#if (!$entity.readOnly)
+	/**
+	 * Update a supplied ${entityType.className} loaded in a separate transaction
+	 * @param ${entity.name.objectName} the ${entityType.className} to update
+	 */
+	public abstract void update${entityType.className}(${entityType.className} ${entity.name.objectName});
+	
+	/**
+	 * Create a supplied ${entityType.className} object
+	 * @param ${entity.name.objectName} the ${entityType.className} to create
+	 */
+	public abstract void create${entityType.className}(${entityType.className} ${entity.name.objectName});
+    
+    /**
+	 * Remove the ${entityType.className} with the specified identity
+	 * @param ${entity.identity.name} the value of the identity
+	 */
+	public abstract void remove${entityType.className}(${identityType.className} ${entity.identity.name});
+	
+#end
+
+}

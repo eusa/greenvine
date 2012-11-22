@@ -8,16 +8,24 @@ public class BooleanJdbcType extends AbstractJdbcType {
         super(column);
     }
 
+    @Override
     public String getCreateData() {
         return dataHelper.getCreateBoolean();
     }
 
+    @Override
     public String getUpdateData() {
         return dataHelper.getUpdateBoolean();
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomBoolean();
+    }
+    
+    @Override
+    public Boolean getEnquoteLiterals() {
+    	return false;
     }
 
 }

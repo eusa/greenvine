@@ -8,16 +8,24 @@ public class TextJdbcType extends AbstractJdbcType {
         super(column);
     }
 
+    @Override
     public String getCreateData() {
         return dataHelper.getCreateString();
     }
     
+    @Override
     public String getUpdateData() {
         return dataHelper.getUpdateString();
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomString(column.getPrecision());
+    }
+    
+    @Override
+    public Boolean getEnquoteLiterals() {
+    	return true;
     }
 
 }

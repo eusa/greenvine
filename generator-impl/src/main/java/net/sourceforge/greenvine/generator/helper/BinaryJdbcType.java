@@ -8,16 +8,24 @@ public class BinaryJdbcType extends AbstractJdbcType {
         super(column);
     }
 
+    @Override
     public String getCreateData() {
         return dataHelper.getCreateBinaryBase64();
     }
 
+    @Override
     public String getUpdateData() {
         return dataHelper.getUpdateBinaryBase64();
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomBinaryBase64(column.getPrecision());
+    }
+    
+    @Override
+    public Boolean getEnquoteLiterals() {
+    	return true;
     }
 
 }

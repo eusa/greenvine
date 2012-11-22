@@ -8,6 +8,7 @@ public class IntegerJdbcType extends AbstractIntegerJdbcType {
         super(column);
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomInteger();
     }

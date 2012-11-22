@@ -8,16 +8,24 @@ public class DateJdbcType extends AbstractJdbcType {
         super(column);
     }
 
+    @Override
     public String getCreateData() {
         return dataHelper.getCreateDateString();
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomDateString();
     }
 
+    @Override
     public String getUpdateData() {
         return dataHelper.getUpdateDateString();
+    }
+    
+    @Override
+    public Boolean getEnquoteLiterals() {
+    	return true;
     }
 
 }

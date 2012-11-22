@@ -14,6 +14,12 @@ import net.sourceforge.greenvine.model.api.Table;
 
 public class DatabaseGenerator implements Generator {
 
+	private final String fileName;
+	
+	public DatabaseGenerator(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public void generate(Model model, Template template, TemplateTaskQueue queue) throws Exception {
 		
 	    for (Catalog catalog : model.getCatalogs()) {
@@ -32,7 +38,7 @@ public class DatabaseGenerator implements Generator {
     		context.put("generator", this);
     
     		// Add to the merge queue
-    		queue.enqueue(template, context, database.getName().toString(), "001_initial.sql");
+    		queue.enqueue(template, context, null, fileName);
 	    }
 
 	}

@@ -8,16 +8,24 @@ public class TimestampJdbcType extends AbstractJdbcType {
         super(column);
     }
 
+    @Override
     public String getCreateData() {
         return dataHelper.getCreateTimestampString();
     }
 
+    @Override
     public String getUpdateData() {
         return dataHelper.getUpdateTimestampString();
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomTimestampString();
+    }
+    
+    @Override
+    public Boolean getEnquoteLiterals() {
+    	return true;
     }
 
 }

@@ -8,16 +8,24 @@ public class TimeJdbcType extends AbstractJdbcType {
         super(column);
     }
 
+    @Override
     public String getCreateData() {
         return dataHelper.getCreateTimeString();
     }
 
+    @Override
     public String getUpdateData() {
         return dataHelper.getUpdateTimeString();
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomTimeString();
+    }
+    
+    @Override
+    public Boolean getEnquoteLiterals() {
+    	return true;
     }
 
 }

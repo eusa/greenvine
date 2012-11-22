@@ -232,18 +232,19 @@ public class JavaHelper {
         }
     }
 	
-    private String getRootPackage(Entity entity) {
-        String basePackage = sourceConfig.getBasePackage();
+	public String getRootPackage() {
+        return sourceConfig.getBasePackage();
+    }
+	
+    public String getDataPackage() {
+        String basePackage = getRootPackage();
 	    String dataPackage = sourceConfig.getDataPackage();
-	    // TODO experimenting with removing catalog name from package
-	    //String catalogPackage = entity.getCatalog().getName().toString().toLowerCase();
-	    //String pack = basePackage + "." + dataPackage + "." + catalogPackage;
 	    String pack = basePackage + "." + dataPackage;
         return pack;
     }
-
+    
     public String getEntityPackage(Entity entity) {
-        String pack = getRootPackage(entity);
+        String pack = getDataPackage();
         pack = pack + ".entity";
         EntityName name = entity.getName();
         
@@ -254,9 +255,20 @@ public class JavaHelper {
         return pack;
     }
     
+    @Deprecated
     public String getDaoPackage(Entity entity) {
-        String pack = getRootPackage(entity);
+        String pack = getDataPackage();
         pack = pack + ".dao";
+        CharSequence schemaPackage = entity.getName().getNamespace();
+        if (schemaPackage != null) {
+            pack = pack + "." + schemaPackage;
+        }
+        return pack;
+    }
+    
+    public String getRepositoryPackage(Entity entity) {
+        String pack = getDataPackage();
+        pack = pack + ".repository";
         CharSequence schemaPackage = entity.getName().getNamespace();
         if (schemaPackage != null) {
             pack = pack + "." + schemaPackage;
@@ -278,7 +290,15 @@ public class JavaHelper {
         JavaType type = new ReferenceJavaType(pack + "." + name);
         return type;
     }
+    
+    public JavaType getRepositoryType(Entity entity) {
+        String pack = getRepositoryPackage(entity);
+        String name = firstToUpperCase(entity.getName().getObjectName().toString());
+        JavaType type = new ReferenceJavaType(pack + "." + name + "Repository");
+        return type;
+    }
 
+    @Deprecated
     public JavaType getDaoType(Entity entity) {
         String pack = getDaoPackage(entity);
         String name = firstToUpperCase(entity.getName().getObjectName().toString());
@@ -286,6 +306,7 @@ public class JavaHelper {
         return type;
     }
     
+    @Deprecated
     public JavaType getDaoImplType(Entity entity, String implementation) {
         String pack = getDaoPackage(entity);
         String name = firstToUpperCase(entity.getName().getObjectName().toString());

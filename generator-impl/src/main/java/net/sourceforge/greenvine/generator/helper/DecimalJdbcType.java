@@ -8,16 +8,24 @@ public class DecimalJdbcType extends AbstractJdbcType {
         super(column);
     }
 
+    @Override
     public String getCreateData() {
         return dataHelper.getCreateDecimal(column.getScale(), column.getPrecision());
     }
 
+    @Override
     public String getRandomData() {
         return dataHelper.getRandomDecimal(column.getScale(), column.getPrecision());
     }
 
+    @Override
     public String getUpdateData() {
         return dataHelper.getUpdateDecimal(column.getScale(), column.getPrecision());
+    }
+    
+    @Override
+    public Boolean getEnquoteLiterals() {
+    	return false;
     }
 
 }

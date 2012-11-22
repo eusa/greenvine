@@ -16,7 +16,7 @@ import net.sourceforge.greenvine.model.api.ForeignKey;
 import net.sourceforge.greenvine.model.api.Model;
 import net.sourceforge.greenvine.model.api.Table;
 
-
+// TODO this is in the wrong package!
 public class FunctionalTestDataGenerator implements Generator {
 
     private final JdbcHelper jdbcHelper = new JdbcHelper();
@@ -35,9 +35,9 @@ public class FunctionalTestDataGenerator implements Generator {
     		Database db = catalog.getDatabase();
     		
             // Find all method data set
-            DataSet findAll = getDataSet(db.getTablesInDependencyOrder());
+            DataSet data = getDataSet(db.getTablesInDependencyOrder());
             createDataSetFile(template, queue, db,
-                    findAll, "FunctionalTest");
+                    data);
         }
 	}
 	
@@ -96,14 +96,15 @@ public class FunctionalTestDataGenerator implements Generator {
 
     private void createDataSetFile(Template template, TemplateTaskQueue queue,
             Database database,
-            DataSet dataSet, String dataSetName) {
+            DataSet dataSet) {
         
         // Create TemplateContext
         TemplateContext context = new TemplateContext();
         context.put("dataSet", dataSet);
         context.put("database", database);
+        context.put("jdbcHelper", jdbcHelper);
         
         // Merge the template
-        queue.enqueue(template, context, null, dataSetName + "DataSet.xml");
+        queue.enqueue(template, context, null, "data.sql");
     }
 }
